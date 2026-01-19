@@ -4,6 +4,25 @@ import { DexResponse, DexPair } from '../types';
 const DEX_API_URL = 'https://api.dexscreener.com/latest/dex/tokens/';
 
 /**
+ * Helper to safely get the API Key in a Vite/Browser environment
+ */
+const getApiKey = (): string | undefined => {
+  // 1. Try Vite environment variable (Most likely for this project)
+  // @ts-ignore - import.meta is standard in Vite
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
+    // @ts-ignore
+    return import.meta.env.VITE_API_KEY;
+  }
+  
+  // 2. Fallback to process.env (if polyfilled or different build system)
+  if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+    return process.env.API_KEY;
+  }
+  
+  return undefined;
+};
+
+/**
  * Extracts a Solana address from a string (URL or raw address)
  */
 const extractAddress = (input: string): string | null => {
@@ -65,8 +84,14 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
  */
 export const generateAnalysis = async (pair: DexPair): Promise<string> => {
   try {
-    // Initialize AI inside try/catch to handle potential env errors gracefully
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const apiKey = getApiKey();
+
+    if (!apiKey) {
+      throw new Error("Missing API Key. Please ensure VITE_API_KEY is set in your Vercel environment variables.");
+    }
+
+    // Initialize AI with the retrieved key
+    const ai = new GoogleGenAI({ apiKey: apiKey });
     
     // Pump.fun tokens usually end in 'pump'
     const isPumpFun = pair.baseToken.address.toLowerCase().endsWith('pump');
@@ -118,6 +143,6 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
   } catch (error: any) {
     console.error("Gemini API Error:", error);
     // Return a visible error message to the UI instead of crashing/hanging
-    return `⚠️ **SYSTEM MALFUNCTION** \n\nThe AI Analyst could not process this request. \n\n**Reason:** ${error?.message || 'Unknown Connection Error'}. \n\n**Advice:** Check your API Key configuration or try again later.`;
+    return `⚠️ **SYSTEM MALFUNCTION** \n\nThe AI Analyst could not process this request. \n\n**Reason:** ${error?.message || 'Unknown Connection Error'}. \n\n**Advice:** Check your Vercel Environment Variables. Ensure 'VITE_API_KEY' is set correctly.`;
   }
 };

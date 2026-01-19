@@ -12,7 +12,7 @@ export const Header: React.FC = () => {
         MARKET ANALYTICS: ONLINE
       </div>
       <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter">
-        Financial Advisor <span className="text-fap-600">Pussy</span>
+        Financial Advisor <span className="text-[#8B4513]">Pussy</span>
       </h1>
       <p className="mt-3 text-lg text-slate-500 font-medium max-w-xl mx-auto font-sans leading-relaxed">
         Advanced Algorithmic Memecoin Analysis & Advisory Terminal
