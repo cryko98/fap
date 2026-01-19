@@ -7,19 +7,55 @@ import { AnalysisBox } from './components/AnalysisBox';
 import { DexPair, AnalysisStatus } from './types';
 import { fetchTokenData, generateAnalysis } from './services/api';
 
-// Floating background element component
-const FloatingIndex = ({ type, delay, left, duration }: { type: 'up' | 'down', delay: string, left: string, duration: string }) => {
+// Background Chart Lines SVG
+const ChartBackground = () => (
+  <svg className="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-[0.03] overflow-hidden" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="gradGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="transparent" />
+        <stop offset="50%" stopColor="#22c55e" />
+        <stop offset="100%" stopColor="transparent" />
+      </linearGradient>
+      <linearGradient id="gradRed" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="transparent" />
+        <stop offset="50%" stopColor="#ef4444" />
+        <stop offset="100%" stopColor="transparent" />
+      </linearGradient>
+    </defs>
+    {/* Abstract Up Trend Line */}
+    <path 
+      d="M-200 800 L 100 700 L 300 750 L 500 500 L 700 600 L 1000 300 L 1200 400 L 1600 100 L 2000 50" 
+      fill="none" 
+      stroke="url(#gradGreen)" 
+      strokeWidth="10" 
+      className="animate-pulse"
+      style={{ animationDuration: '6s' }}
+    />
+    {/* Abstract Down Trend Line */}
+    <path 
+      d="M-200 100 L 200 300 L 400 200 L 700 600 L 900 500 L 1200 800 L 1400 750 L 1800 900" 
+      fill="none" 
+      stroke="url(#gradRed)" 
+      strokeWidth="10" 
+      className="animate-pulse"
+      style={{ animationDuration: '8s', opacity: 0.7 }}
+    />
+  </svg>
+);
+
+// Floating Ticker Component
+const FloatingTicker = ({ type, text, delay, left, duration }: { type: 'up' | 'down', text: string, delay: string, left: string, duration: string }) => {
   const isUp = type === 'up';
   return (
     <div 
-      className={`fixed z-0 pointer-events-none font-black text-2xl md:text-4xl opacity-0 ${isUp ? 'text-green-500/20 animate-float-up' : 'text-red-500/20 animate-float-down'}`}
+      className={`fixed z-0 pointer-events-none font-mono font-black text-xl md:text-3xl opacity-0 whitespace-nowrap ${isUp ? 'text-green-500/10 animate-float-up' : 'text-red-500/10 animate-float-down'}`}
       style={{ 
         left, 
         animationDelay: delay,
         animationDuration: duration
       }}
     >
-      {isUp ? <ArrowUp /> : <ArrowDown />}
+      {text}
     </div>
   );
 };
@@ -62,16 +98,20 @@ const App: React.FC = () => {
   const isPumpFun = data?.baseToken.address.toLowerCase().endsWith('pump');
 
   return (
-    <div className="min-h-screen flex flex-col font-sans overflow-x-hidden selection:bg-fap-200 relative">
+    <div className="min-h-screen flex flex-col font-sans overflow-x-hidden selection:bg-fap-200 relative bg-slate-50/50">
       
-      {/* Floating Indices Background */}
-      <FloatingIndex type="up" left="5%" delay="0s" duration="18s" />
-      <FloatingIndex type="down" left="15%" delay="5s" duration="20s" />
-      <FloatingIndex type="up" left="25%" delay="2s" duration="15s" />
-      <FloatingIndex type="down" left="80%" delay="1s" duration="22s" />
-      <FloatingIndex type="up" left="90%" delay="7s" duration="17s" />
-      <FloatingIndex type="down" left="60%" delay="3s" duration="19s" />
-      <FloatingIndex type="up" left="40%" delay="8s" duration="25s" />
+      {/* Background Layer */}
+      <ChartBackground />
+      
+      {/* Floating Tickers Background */}
+      <FloatingTicker type="up" text="+$420.69" left="5%" delay="0s" duration="18s" />
+      <FloatingTicker type="down" text="-12.5%" left="15%" delay="5s" duration="20s" />
+      <FloatingTicker type="up" text="+500x" left="25%" delay="2s" duration="15s" />
+      <FloatingTicker type="down" text="-$69.00" left="80%" delay="1s" duration="22s" />
+      <FloatingTicker type="up" text="+0.5 SOL" left="90%" delay="7s" duration="17s" />
+      <FloatingTicker type="down" text="-99%" left="60%" delay="3s" duration="19s" />
+      <FloatingTicker type="up" text="MOON" left="40%" delay="8s" duration="25s" />
+      <FloatingTicker type="down" text="RUGGED" left="70%" delay="12s" duration="21s" />
 
       <TopBar />
       

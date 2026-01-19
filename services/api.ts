@@ -65,6 +65,7 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
  * Generates AI Analysis using Gemini
  */
 export const generateAnalysis = async (pair: DexPair): Promise<string> => {
+  // Use process.env.API_KEY as per guidelines.
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   // Pump.fun tokens usually end in 'pump'
@@ -107,6 +108,6 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     return response.text || "Meow? I couldn't analyze this coin. Try again later.";
   } catch (error) {
     console.error("Gemini API Error:", error);
-    return "Hiss! My brain is fuzzy. I couldn't generate advice right now.";
+    return "Hiss! My brain is fuzzy. I couldn't generate advice right now. (Check API Key Quota)";
   }
 };
