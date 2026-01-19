@@ -41,22 +41,22 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
   return (
     <div className="w-full flex flex-col">
        <div className="flex items-center gap-2 mb-3">
-         <div className="p-1 bg-white border border-slate-200 rounded shadow-sm">
+         <div className="p-1 bg-slate-50 border border-slate-200 rounded shadow-sm">
            <Zap size={14} className="text-fap-600" />
          </div>
-         <h3 className="text-sm font-bold text-slate-700 uppercase tracking-widest">Coin Datas</h3>
+         <h3 className="text-sm font-bold text-slate-700 uppercase tracking-widest">Live Market Data</h3>
        </div>
        
-       <div className="grid grid-cols-2 gap-3 flex-1">
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         <StatCard 
-          label="PRICE" 
+          label="PRICE (USD)" 
           value={`$${pair.priceUsd}`} 
           icon={<DollarSign size={16} />} 
           trend={pair.priceChange.h24}
           delay={0}
         />
         <StatCard 
-          label="MCAP" 
+          label="MARKET CAP" 
           value={formatCurrency(mcap)} 
           icon={<Users size={16} />} 
           delay={100}
@@ -68,7 +68,7 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
           delay={200}
         />
         <StatCard 
-          label="VOLUME" 
+          label="24H VOLUME" 
           value={formatCurrency(pair.volume.h24)} 
           icon={<Activity size={16} />} 
           delay={300}

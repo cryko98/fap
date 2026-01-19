@@ -143,7 +143,7 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Results Section - Fixed Layout */}
+        {/* Results Section */}
         {data && (
           <div className="animate-slide-up pb-20 border-t border-slate-200/50 pt-10">
             
@@ -168,41 +168,41 @@ const App: React.FC = () => {
                 </div>
             </div>
 
-            {/* MAIN GRID LAYOUT: Fixed height on desktop to maintain proportions */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[600px]">
+            {/* Layout Block */}
+            <div className="space-y-6">
               
-              {/* Left Column: Chart (Takes 2/3 width) - Stretches to full height of parent grid on desktop */}
-              <div className="lg:col-span-8 bg-white border border-slate-200 shadow-xl h-[500px] lg:h-full relative flex flex-col">
-                 {/* Chart Header */}
-                 <div className="bg-slate-50 px-4 py-2 border-b border-slate-200 flex items-center gap-2 flex-shrink-0">
-                    <Radio size={14} className="text-red-500 animate-pulse" />
-                    <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">Live Chart Feed</span>
-                 </div>
-                 <div className="flex-1 relative">
-                    <iframe
-                      src={`https://dexscreener.com/solana/${data.pairAddress}?embed=1&theme=light&trades=0&info=0`}
-                      title="DexScreener Chart"
-                      className="w-full h-full border-0 absolute inset-0"
-                    ></iframe>
-                 </div>
+              {/* TOP: Coin Data Grid (Full Width) */}
+              <div className="w-full bg-white border border-slate-200 p-4 shadow-lg rounded-xl">
+                 <StatsGrid pair={data} />
               </div>
 
-              {/* Right Column: Split Top/Bottom (Takes 1/3 width) */}
-              <div className="lg:col-span-4 flex flex-col gap-4 h-full">
+              {/* BOTTOM: Split View (Chart | Analysis) */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[650px]">
                 
-                {/* Top Box: Coin Datas - Auto height based on content */}
-                <div className="flex-shrink-0 bg-white border border-slate-200 p-4 shadow-lg flex flex-col">
-                   <StatsGrid pair={data} />
+                {/* Left: Chart (Larger width) */}
+                <div className="lg:col-span-8 bg-white border border-slate-200 shadow-xl h-[500px] lg:h-full relative flex flex-col rounded-lg overflow-hidden">
+                   {/* Chart Header */}
+                   <div className="bg-slate-50 px-4 py-2 border-b border-slate-200 flex items-center gap-2 flex-shrink-0">
+                      <Radio size={14} className="text-red-500 animate-pulse" />
+                      <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">Live Chart Feed</span>
+                   </div>
+                   <div className="flex-1 relative">
+                      <iframe
+                        src={`https://dexscreener.com/solana/${data.pairAddress}?embed=1&theme=light&trades=0&info=0`}
+                        title="DexScreener Chart"
+                        className="w-full h-full border-0 absolute inset-0"
+                      ></iframe>
+                   </div>
                 </div>
 
-                {/* Bottom Box: Prediction/Advice - Takes remaining space and scrolls */}
-                <div className="flex-grow min-h-0 bg-white shadow-lg rounded-lg">
+                {/* Right: Analysis (Smaller width, same height, scrollable) */}
+                <div className="lg:col-span-4 h-full bg-white shadow-lg rounded-lg overflow-hidden">
                    <AnalysisBox analysis={analysis} status={status} />
                 </div>
 
               </div>
-              
             </div>
+
           </div>
         )}
       </main>
