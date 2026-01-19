@@ -108,7 +108,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
              <div className="relative">
                 <div className="w-16 h-16 rounded-full border-4 border-slate-100 border-t-fap-600 animate-spin"></div>
                 <img 
-                  src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/fap.png" 
+                  src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/fap%20(1).png" 
                   className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full border-2 border-white shadow-sm" 
                   alt="Loading"
                 />

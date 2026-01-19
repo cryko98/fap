@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Financial Advisor Pussy ($FAP)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/png" href="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/fap.png" />
+    <link rel="icon" type="image/png" href="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/fap%20(1).png" />
     <script>
       tailwind.config = {
         theme: {
@@ -35,6 +35,8 @@
               'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
               'float-up': 'floatUp 15s linear infinite',
               'float-down': 'floatDown 15s linear infinite',
+              'chart-flow': 'chartFlow 20s linear infinite',
+              'chart-flow-reverse': 'chartFlowReverse 25s linear infinite',
             },
             keyframes: {
               fadeIn: {
@@ -56,6 +58,14 @@
                 '10%': { opacity: '0.4' },
                 '90%': { opacity: '0.4' },
                 '100%': { transform: 'translateY(100vh) scale(0.8)', opacity: '0' },
+              },
+              chartFlow: {
+                '0%': { transform: 'translateX(-50%)' },
+                '100%': { transform: 'translateX(0%)' },
+              },
+              chartFlowReverse: {
+                '0%': { transform: 'translateX(0%)' },
+                '100%': { transform: 'translateX(-50%)' },
               }
             }
           },

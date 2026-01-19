@@ -9,7 +9,7 @@ import { fetchTokenData, generateAnalysis } from './services/api';
 
 // Background Chart Lines SVG
 const ChartBackground = () => (
-  <svg className="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-[0.03] overflow-hidden" xmlns="http://www.w3.org/2000/svg">
+  <svg className="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-[0.04] overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
     <defs>
       <linearGradient id="gradGreen" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stopColor="transparent" />
@@ -22,23 +22,23 @@ const ChartBackground = () => (
         <stop offset="100%" stopColor="transparent" />
       </linearGradient>
     </defs>
-    {/* Abstract Up Trend Line */}
+    
+    {/* Abstract Up Trend Line - Moving Right */}
     <path 
-      d="M-200 800 L 100 700 L 300 750 L 500 500 L 700 600 L 1000 300 L 1200 400 L 1600 100 L 2000 50" 
+      d="M-1000 800 L -800 700 L -600 750 L -400 500 L -200 600 L 0 400 L 200 500 L 400 300 L 600 400 L 800 200 L 1000 300 L 1200 100 L 1400 200 L 1600 50 L 1800 150 L 2000 50 L 2200 200 L 2400 100 L 2600 300 L 2800 150 L 3000 250" 
       fill="none" 
       stroke="url(#gradGreen)" 
-      strokeWidth="10" 
-      className="animate-pulse"
-      style={{ animationDuration: '6s' }}
+      strokeWidth="8" 
+      className="animate-chart-flow"
     />
-    {/* Abstract Down Trend Line */}
+    
+    {/* Abstract Down Trend Line - Moving Left (Reverse) or Slightly Different Pace */}
     <path 
-      d="M-200 100 L 200 300 L 400 200 L 700 600 L 900 500 L 1200 800 L 1400 750 L 1800 900" 
+      d="M-1000 200 L -800 400 L -600 300 L -400 600 L -200 500 L 0 800 L 200 700 L 400 900 L 600 800 L 800 950 L 1000 800 L 1200 900 L 1400 850 L 1600 1000 L 1800 900 L 2000 1100 L 2200 950 L 2400 1050 L 2600 800 L 2800 900 L 3000 800" 
       fill="none" 
       stroke="url(#gradRed)" 
-      strokeWidth="10" 
-      className="animate-pulse"
-      style={{ animationDuration: '8s', opacity: 0.7 }}
+      strokeWidth="8" 
+      className="animate-chart-flow-reverse opacity-70"
     />
   </svg>
 );
@@ -77,22 +77,30 @@ const App: React.FC = () => {
     setData(null);
     setAnalysis('');
 
-    // Fetch DexScreener Data
-    const tokenData = await fetchTokenData(address.trim());
+    try {
+      // Fetch DexScreener Data
+      const tokenData = await fetchTokenData(address.trim());
 
-    if (!tokenData) {
-      setError("Asset not found. Please provide a valid Solana CA or Pump.fun URL.");
+      if (!tokenData) {
+        setError("Asset not found. Please provide a valid Solana CA or Pump.fun URL.");
+        setStatus(AnalysisStatus.ERROR);
+        return;
+      }
+
+      setData(tokenData);
+      setStatus(AnalysisStatus.ANALYZING);
+
+      // Fetch AI Analysis with safety wrapper
+      const aiResponse = await generateAnalysis(tokenData);
+      setAnalysis(aiResponse);
+      setStatus(AnalysisStatus.COMPLETE);
+
+    } catch (err: any) {
+      console.error("Critical Application Error:", err);
+      // Ensure we don't get stuck in loading state
+      setError(`System Error: ${err.message || "Unknown error occurred"}`);
       setStatus(AnalysisStatus.ERROR);
-      return;
     }
-
-    setData(tokenData);
-    setStatus(AnalysisStatus.ANALYZING);
-
-    // Fetch AI Analysis
-    const aiResponse = await generateAnalysis(tokenData);
-    setAnalysis(aiResponse);
-    setStatus(AnalysisStatus.COMPLETE);
   };
 
   const isPumpFun = data?.baseToken.address.toLowerCase().endsWith('pump');
@@ -131,7 +139,7 @@ const App: React.FC = () => {
              <div className="relative group">
                 {/* The Cat Image */}
                 <img 
-                  src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/fap.png" 
+                  src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/fap%20(1).png" 
                   alt="$FAP Analyst"
                   className="w-80 md:w-[450px] object-cover transform translate-y-8 relative z-10 drop-shadow-2xl transition-all duration-700 hover:scale-105"
                 />

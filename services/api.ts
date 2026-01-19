@@ -40,7 +40,6 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
       const bestPair = sortedPairs[0];
 
       // Sanitize the pair object to prevent crashes in UI components
-      // if specific nested objects are missing from the API response
       if (!bestPair.liquidity) {
         bestPair.liquidity = { usd: 0, base: 0, quote: 0 };
       }
@@ -65,49 +64,60 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
  * Generates AI Analysis using Gemini
  */
 export const generateAnalysis = async (pair: DexPair): Promise<string> => {
-  // Use process.env.API_KEY as per guidelines.
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  
-  // Pump.fun tokens usually end in 'pump'
-  const isPumpFun = pair.baseToken.address.toLowerCase().endsWith('pump');
-
-  const prompt = `
-    You are "Financial Advisor Pussy" (Ticker: $FAP), a professional, high-frequency trading cat analyst on Wall Street. You use professional financial jargon mixed with cat behavior.
-    
-    Analyze the following asset based on this real-time market data:
-    
-    **Asset Profile:**
-    - Name: ${pair.baseToken.name} ($${pair.baseToken.symbol})
-    - Address: ${pair.baseToken.address}
-    - Origin: ${isPumpFun ? 'Pump.fun 💊 (High Risk/Bonding Curve)' : 'Standard Solana SPL'}
-    
-    **Market Metrics:**
-    - Price: $${pair.priceUsd}
-    - Market Cap: $${pair.marketCap || pair.fdv}
-    - Liquidity Pool: $${pair.liquidity?.usd || 0}
-    - 24h Volume: $${pair.volume?.h24 || 0}
-    - 24h Momentum: ${pair.priceChange?.h24 || 0}%
-    
-    **Instructions:**
-    1. **Tone:** Professional, analytical, but slightly condescending (like a senior banker cat). Use terms like "bullish divergence," "liquidity crunch," "sentiment analysis," and "meow-mentum."
-    2. **Risk Assessment:**
-       ${isPumpFun 
-        ? "- CRITICAL: Pump.fun asset. Check if Mcap > $60k (Bonding Curve Graduate). If low liquidity, flag as high rug risk." 
-        : "- Check Liquidity to Mcap ratio. If liquidity is < $10k, flag as 'Liquidity Crisis'."}
-    3. **Volume Analysis:** Is the volume high compared to Mcap? If yes, mention "High speculative interest."
-    4. **Verdict:** End with a clear recommendation: "BUY POSITION", "HOLD", or "LIQUIDATE IMMEDIATELY".
-    5. **Format:** Keep it under 150 words. Use emojis sparingly but effectively (📉, 📈, 🚨, 😺).
-  `;
-
   try {
-    const response = await ai.models.generateContent({
+    // Initialize AI inside try/catch to handle potential env errors gracefully
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    
+    // Pump.fun tokens usually end in 'pump'
+    const isPumpFun = pair.baseToken.address.toLowerCase().endsWith('pump');
+
+    const prompt = `
+      You are "Financial Advisor Pussy" (Ticker: $FAP), a professional, high-frequency trading cat analyst on Wall Street. You use professional financial jargon mixed with cat behavior.
+      
+      Analyze the following asset based on this real-time market data:
+      
+      **Asset Profile:**
+      - Name: ${pair.baseToken.name} ($${pair.baseToken.symbol})
+      - Address: ${pair.baseToken.address}
+      - Origin: ${isPumpFun ? 'Pump.fun 💊 (High Risk/Bonding Curve)' : 'Standard Solana SPL'}
+      
+      **Market Metrics:**
+      - Price: $${pair.priceUsd}
+      - Market Cap: $${pair.marketCap || pair.fdv}
+      - Liquidity Pool: $${pair.liquidity?.usd || 0}
+      - 24h Volume: $${pair.volume?.h24 || 0}
+      - 24h Momentum: ${pair.priceChange?.h24 || 0}%
+      
+      **Instructions:**
+      1. **Tone:** Professional, analytical, but slightly condescending (like a senior banker cat). Use terms like "bullish divergence," "liquidity crunch," "sentiment analysis," and "meow-mentum."
+      2. **Risk Assessment:**
+         ${isPumpFun 
+          ? "- CRITICAL: Pump.fun asset. Check if Mcap > $60k (Bonding Curve Graduate). If low liquidity, flag as high rug risk." 
+          : "- Check Liquidity to Mcap ratio. If liquidity is < $10k, flag as 'Liquidity Crisis'."}
+      3. **Volume Analysis:** Is the volume high compared to Mcap? If yes, mention "High speculative interest."
+      4. **Verdict:** End with a clear recommendation: "BUY POSITION", "HOLD", or "LIQUIDATE IMMEDIATELY".
+      5. **Format:** Keep it under 150 words. Use emojis sparingly but effectively (📉, 📈, 🚨, 😺).
+    `;
+
+    // Create a timeout promise to prevent hanging forever
+    const timeoutPromise = new Promise<string>((_, reject) => {
+      setTimeout(() => reject(new Error("Analysis Request Timed Out (15s)")), 15000);
+    });
+
+    // Create the actual API request promise
+    const apiPromise = ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
-    });
+    }).then(response => response.text || "Meow? I analyzed the data but couldn't write the report.");
+
+    // Race them: whichever finishes first wins
+    const result = await Promise.race([apiPromise, timeoutPromise]);
     
-    return response.text || "Meow? I couldn't analyze this coin. Try again later.";
-  } catch (error) {
+    return result as string;
+
+  } catch (error: any) {
     console.error("Gemini API Error:", error);
-    return "Hiss! My brain is fuzzy. I couldn't generate advice right now. (Check API Key Quota)";
+    // Return a visible error message to the UI instead of crashing/hanging
+    return `⚠️ **SYSTEM MALFUNCTION** \n\nThe AI Analyst could not process this request. \n\n**Reason:** ${error?.message || 'Unknown Connection Error'}. \n\n**Advice:** Check your API Key configuration or try again later.`;
   }
 };
