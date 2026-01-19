@@ -93,8 +93,18 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     // Initialize AI with the retrieved key
     const ai = new GoogleGenAI({ apiKey: apiKey });
     
-    // Pump.fun tokens usually end in 'pump'
+    // Pump.fun detection and Bonding Curve Logic
     const isPumpFun = pair.baseToken.address.toLowerCase().endsWith('pump');
+    const liquidityValue = pair.liquidity?.usd || 0;
+    const marketCapValue = pair.marketCap || pair.fdv || 0;
+
+    // Logic: If it's Pump.fun and has low liquidity OR low Mcap, it's likely still on the Bonding Curve.
+    // Standard graduation is around $60k-$69k Mcap.
+    const isOnBondingCurve = isPumpFun && (liquidityValue < 3000 || marketCapValue < 65000);
+
+    const liquidityDisplay = isOnBondingCurve 
+      ? "Bonding Curve Phase (Liquidity not yet seeded on PumpSwap)" 
+      : `$${liquidityValue}`;
 
     const prompt = `
       You are "Financial Advisor Pussy" (Ticker: $FAP), a professional, high-frequency trading cat analyst on Wall Street. You use professional financial jargon mixed with cat behavior.
@@ -104,21 +114,25 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       **Asset Profile:**
       - Name: ${pair.baseToken.name} ($${pair.baseToken.symbol})
       - Address: ${pair.baseToken.address}
-      - Origin: ${isPumpFun ? 'Pump.fun 💊 (High Risk/Bonding Curve)' : 'Standard Solana SPL'}
+      - Origin: ${isPumpFun ? 'Pump.fun 💊' : 'Standard Solana SPL'}
+      - Status: ${isOnBondingCurve ? '⚠️ PRE-BONDING (Still on Curve)' : 'Active Market'}
       
       **Market Metrics:**
       - Price: $${pair.priceUsd}
-      - Market Cap: $${pair.marketCap || pair.fdv}
-      - Liquidity Pool: $${pair.liquidity?.usd || 0}
+      - Market Cap: $${marketCapValue}
+      - Liquidity Pool: ${liquidityDisplay}
       - 24h Volume: $${pair.volume?.h24 || 0}
       - 24h Momentum: ${pair.priceChange?.h24 || 0}%
       
       **Instructions:**
       1. **Tone:** Professional, analytical, but slightly condescending (like a senior banker cat). Use terms like "bullish divergence," "liquidity crunch," "sentiment analysis," and "meow-mentum."
       2. **Risk Assessment:**
-         ${isPumpFun 
-          ? "- CRITICAL: Pump.fun asset. Check if Mcap > $60k (Bonding Curve Graduate). If low liquidity, flag as high rug risk." 
-          : "- Check Liquidity to Mcap ratio. If liquidity is < $10k, flag as 'Liquidity Crisis'."}
+         ${isOnBondingCurve 
+          ? "- IMPORTANT: This token is on the Pump.fun BONDING CURVE. Zero/Low Liquidity is NORMAL in this phase. Do NOT flag '0 Liquidity' as a rug risk or bearish. Liquidity will be seeded on PumpSwap upon graduation. Judge solely on Volume and potential to graduate (reach $69k Mcap)." 
+          : isPumpFun 
+            ? "- Pump.fun Graduate. Check if liquidity > $10k. If not, flag as dangerous."
+            : "- Check Liquidity to Mcap ratio. If liquidity is < $10k, flag as 'Liquidity Crisis'."
+         }
       3. **Volume Analysis:** Is the volume high compared to Mcap? If yes, mention "High speculative interest."
       4. **Verdict:** End with a clear recommendation: "BUY POSITION", "HOLD", or "LIQUIDATE IMMEDIATELY".
       5. **Format:** Keep it under 150 words. Use emojis sparingly but effectively (📉, 📈, 🚨, 😺).
