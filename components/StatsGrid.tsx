@@ -1,6 +1,6 @@
 import React from 'react';
 import { DexPair } from '../types';
-import { DollarSign, Users, Droplets, TrendingUp, TrendingDown, Clock, BarChart2, Hash, ArrowUpRight } from 'lucide-react';
+import { DollarSign, Users, Droplets, TrendingUp, TrendingDown, Clock, BarChart2, Cat, Milk, Fish, Skull } from 'lucide-react';
 
 interface StatsGridProps {
   pair: DexPair;
@@ -15,7 +15,7 @@ const formatCurrency = (value: number) => {
 
 const formatPrice = (price: string) => {
     const p = parseFloat(price);
-    if (p < 0.000001) return price; // Scientific notation or very small
+    if (p < 0.000001) return price; 
     return `$${p.toFixed(8)}`;
 };
 
@@ -26,43 +26,25 @@ const TimeframeRow = ({ label, change, vol, buys, sells }: { label: string, chan
   const sellPercentage = total > 0 ? (sells / total) * 100 : 0;
   
   return (
-    <tr className="border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors group">
-      <td className="py-3 px-4 font-mono text-xs font-bold text-slate-500">{label}</td>
-      <td className={`py-3 px-4 font-mono text-xs font-bold ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+    <tr className="border-b border-slate-800 last:border-0 hover:bg-slate-800/50 transition-colors group">
+      <td className="py-3 px-4 font-mono text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider">{label}</td>
+      <td className={`py-3 px-4 font-mono text-xs font-bold ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
         <div className="flex items-center gap-1">
           {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
           {Math.abs(change).toFixed(2)}%
         </div>
       </td>
-      <td className="py-3 px-4 font-mono text-xs text-slate-700">{formatCurrency(vol)}</td>
-      <td className="py-3 px-4 min-w-[160px]">
+      <td className="py-3 px-4 font-mono text-xs text-slate-400">{formatCurrency(vol)}</td>
+      <td className="py-3 px-4 min-w-[140px]">
         <div className="flex flex-col gap-1.5 w-full">
-           <div className="flex justify-between text-[10px] font-mono font-medium">
-             <span className="text-green-600 flex items-center gap-1">
-                {buys} 
-                <span className="text-[9px] opacity-70 bg-green-50 px-1 rounded tracking-tight">{(buyPercentage).toFixed(0)}%</span>
-             </span>
-             <span className="text-red-600 flex items-center gap-1">
-                <span className="text-[9px] opacity-70 bg-red-50 px-1 rounded tracking-tight">{(sellPercentage).toFixed(0)}%</span>
-                {sells}
-             </span>
+           <div className="flex justify-between text-[9px] font-mono font-medium text-slate-500">
+             <span className="text-green-500 flex items-center gap-1">B: {buys}</span>
+             <span className="text-red-500 flex items-center gap-1">S: {sells}</span>
            </div>
            
-           <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden flex relative shadow-inner">
-             {/* Buy Bar (Green Gradient) */}
-             <div 
-               className="h-full bg-gradient-to-r from-green-500 to-green-400 transition-all duration-500 ease-out" 
-               style={{ width: `${buyPercentage}%` }}
-             ></div>
-             
-             {/* Sell Bar (Red Gradient) */}
-             <div 
-               className="h-full bg-gradient-to-l from-red-500 to-red-400 transition-all duration-500 ease-out" 
-               style={{ width: `${sellPercentage}%` }}
-             ></div>
-             
-             {/* Middle separator line marker for visual balance */}
-             <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-white/40 z-10 mix-blend-overlay"></div>
+           <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden flex relative">
+             <div className="h-full bg-green-500 shadow-[0_0_5px_#22c55e]" style={{ width: `${buyPercentage}%` }}></div>
+             <div className="h-full bg-red-500 shadow-[0_0_5px_#ef4444]" style={{ width: `${sellPercentage}%` }}></div>
            </div>
         </div>
       </td>
@@ -80,81 +62,103 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
   return (
     <div className="w-full flex flex-col gap-4 animate-slide-up">
        
-       {/* Top Metrics Row */}
+       {/* Top Metrics Row - Dark Tech Cards */}
        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="bg-slate-900 text-white p-4 rounded-xl shadow-lg relative overflow-hidden group">
-             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
-               <DollarSign size={48} />
+          
+          {/* Price Card */}
+          <div className="bg-slate-900 border border-slate-700/50 p-4 rounded-xl shadow-lg relative overflow-hidden group hover:border-green-500/30 transition-all">
+             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 group-hover:scale-110 transition-transform">
+               <DollarSign size={64} />
              </div>
-             <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Price USD</p>
-             <p className="text-xl md:text-2xl font-mono font-black tracking-tight">{formatPrice(pair.priceUsd)}</p>
-             <div className="flex items-center gap-1 mt-1">
-                <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${dropFromHigh < -20 ? 'bg-red-500/20 text-red-300' : 'bg-slate-700 text-slate-300'}`}>
-                    High: {formatCurrency(high24h)}
+             <div className="flex items-center gap-2 mb-2 text-slate-500">
+                <Fish size={14} className="text-fap-400" />
+                <p className="text-[10px] font-bold uppercase tracking-widest">Current Purr-ice</p>
+             </div>
+             <p className="text-xl md:text-2xl font-mono font-black tracking-tight text-white drop-shadow-md">
+                {formatPrice(pair.priceUsd)}
+             </p>
+             <div className="flex items-center gap-1 mt-2">
+                <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${dropFromHigh < -20 ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-green-500/10 border-green-500/20 text-green-400'}`}>
+                    ATH Drop: {dropFromHigh.toFixed(1)}%
                 </span>
              </div>
           </div>
 
-          <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-all">
-             <div className="flex items-center gap-2 mb-1 text-slate-400">
-               <Users size={14} />
-               <p className="text-xs font-bold uppercase tracking-widest">Market Cap</p>
+          {/* Market Cap Card */}
+          <div className="bg-slate-900 border border-slate-700/50 p-4 rounded-xl shadow-lg relative overflow-hidden group hover:border-blue-500/30 transition-all">
+             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-transform">
+               <Cat size={64} />
              </div>
-             <p className="text-xl font-mono font-black text-slate-800">{formatCurrency(mcap)}</p>
-             <p className="text-[10px] text-slate-400 font-mono mt-1">
-                FDV: {formatCurrency(pair.fdv)}
+             <div className="flex items-center gap-2 mb-2 text-slate-500">
+               <Users size={14} className="text-blue-400" />
+               <p className="text-[10px] font-bold uppercase tracking-widest">Market Cat</p>
+             </div>
+             <p className="text-xl font-mono font-black text-white">{formatCurrency(mcap)}</p>
+             <p className="text-[9px] text-slate-500 font-mono mt-1">
+                Fully Diluted Paws: {formatCurrency(pair.fdv)}
              </p>
           </div>
 
-          <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-all">
-             <div className="flex items-center gap-2 mb-1 text-slate-400">
-               <Droplets size={14} />
-               <p className="text-xs font-bold uppercase tracking-widest">Liquidity</p>
+          {/* Liquidity Card */}
+          <div className="bg-slate-900 border border-slate-700/50 p-4 rounded-xl shadow-lg relative overflow-hidden group hover:border-cyan-500/30 transition-all">
+             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-transform">
+               <Milk size={64} />
              </div>
-             <p className="text-xl font-mono font-black text-slate-800">{formatCurrency(pair.liquidity.usd)}</p>
-             <p className="text-[10px] text-slate-400 mt-1 font-mono">
-                Ratio: <span className={liqRatio < 5 ? 'text-red-500 font-bold' : 'text-green-500 font-bold'}>{liqRatio.toFixed(1)}%</span> of MC
+             <div className="flex items-center gap-2 mb-2 text-slate-500">
+               <Droplets size={14} className="text-cyan-400" />
+               <p className="text-[10px] font-bold uppercase tracking-widest">Milk Bowl Depth</p>
+             </div>
+             <p className="text-xl font-mono font-black text-white">{formatCurrency(pair.liquidity.usd)}</p>
+             <div className="mt-2 w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                <div 
+                    className={`h-full ${liqRatio < 5 ? 'bg-red-500' : 'bg-cyan-400'} shadow-[0_0_10px_currentColor]`} 
+                    style={{width: `${Math.min(liqRatio * 2, 100)}%`}}
+                ></div>
+             </div>
+             <p className="text-[9px] text-slate-500 mt-1 font-mono text-right">
+                Health: {liqRatio.toFixed(1)}%
              </p>
           </div>
 
-          <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm hover:shadow-md transition-all">
-             <div className="flex items-center gap-2 mb-1 text-slate-400">
-               <Clock size={14} />
-               <p className="text-xs font-bold uppercase tracking-widest">Token Age</p>
+          {/* Age Card */}
+          <div className="bg-slate-900 border border-slate-700/50 p-4 rounded-xl shadow-lg relative overflow-hidden group hover:border-amber-500/30 transition-all">
+             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-transform">
+               <Clock size={64} />
              </div>
-             <p className="text-sm font-mono font-bold text-slate-800">
+             <div className="flex items-center gap-2 mb-2 text-slate-500">
+               <Clock size={14} className="text-amber-400" />
+               <p className="text-[10px] font-bold uppercase tracking-widest">Lives Used</p>
+             </div>
+             <p className="text-sm font-mono font-bold text-white mt-1">
                 {new Date(pair.pairCreatedAt).toLocaleDateString()}
              </p>
-             <p className="text-[10px] text-slate-400 font-mono">
-                {new Date(pair.pairCreatedAt).toLocaleTimeString()}
+             <p className="text-[9px] text-amber-500/80 font-mono mt-1 uppercase tracking-wider">
+                Since Genesis Block
              </p>
           </div>
        </div>
 
        {/* Detailed Data Table */}
-       <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-         <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+       <div className="bg-slate-900 border border-slate-700/50 rounded-xl shadow-lg overflow-hidden">
+         <div className="px-4 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-2">
-                <BarChart2 size={16} className="text-fap-600" />
-                <h3 className="text-xs font-bold text-slate-700 uppercase tracking-widest">Volume & Momentum</h3>
+                <BarChart2 size={16} className="text-fap-400" />
+                <h3 className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Momentum & Claws</h3>
             </div>
             {pair.high24h && (
-               <div className="text-[10px] text-slate-400 font-mono flex items-center gap-2">
-                  <span>ATH(24h): {formatCurrency(pair.high24h)}</span>
-                  <span className={dropFromHigh < -50 ? 'text-red-500 font-bold' : 'text-slate-500'}>
-                     ({dropFromHigh.toFixed(1)}%)
-                  </span>
+               <div className="text-[9px] text-slate-500 font-mono flex items-center gap-2">
+                  <span>24H PEAK: {formatCurrency(pair.high24h)}</span>
                </div>
             )}
          </div>
          <div className="overflow-x-auto">
            <table className="w-full text-left border-collapse">
              <thead>
-               <tr className="bg-white border-b border-slate-100">
-                 <th className="py-2 px-4 text-[10px] uppercase text-slate-400 font-bold tracking-wider">Timeframe</th>
-                 <th className="py-2 px-4 text-[10px] uppercase text-slate-400 font-bold tracking-wider">Price Chg</th>
-                 <th className="py-2 px-4 text-[10px] uppercase text-slate-400 font-bold tracking-wider">Volume</th>
-                 <th className="py-2 px-4 text-[10px] uppercase text-slate-400 font-bold tracking-wider w-1/3">Buys / Sells (Pressure)</th>
+               <tr className="bg-slate-900/50 border-b border-slate-800">
+                 <th className="py-2 px-4 text-[9px] uppercase text-slate-500 font-bold tracking-wider">Timeframe</th>
+                 <th className="py-2 px-4 text-[9px] uppercase text-slate-500 font-bold tracking-wider">Price Action</th>
+                 <th className="py-2 px-4 text-[9px] uppercase text-slate-500 font-bold tracking-wider">Volume (Treats)</th>
+                 <th className="py-2 px-4 text-[9px] uppercase text-slate-500 font-bold tracking-wider w-1/3">Buys vs Sells</th>
                </tr>
              </thead>
              <tbody>
