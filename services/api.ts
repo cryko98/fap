@@ -33,6 +33,22 @@ const extractAddress = (input: string): string | null => {
 };
 
 /**
+ * Calculates human-readable time since creation
+ */
+const getTimeSinceCreation = (timestamp: number): string => {
+  if (!timestamp) return "Unknown";
+  const now = Date.now();
+  const diff = now - timestamp;
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (days > 0) return `${days} days, ${hours % 24} hours`;
+  if (hours > 0) return `${hours} hours, ${minutes % 60} mins`;
+  return `${minutes} minutes`;
+};
+
+/**
  * Fetches token data from DexScreener
  */
 export const fetchTokenData = async (input: string): Promise<DexPair | null> => {
@@ -68,6 +84,26 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
       if (!bestPair.priceChange) {
         bestPair.priceChange = { m5: 0, h1: 0, h6: 0, h24: 0 };
       }
+      if (!bestPair.txns) {
+        // @ts-ignore
+        bestPair.txns = { m5: {buys:0, sells:0}, h1: {buys:0, sells:0}, h6: {buys:0, sells:0}, h24: {buys:0, sells:0} };
+      }
+
+      // CALCULATE 24H HIGH / LOW (ATH Estimation)
+      // If Price is 100 and Change is +50%, then Open was 66.6. High >= 100.
+      // If Price is 50 and Change is -50%, then Open was 100. High >= 100.
+      const currentPrice = parseFloat(bestPair.priceUsd);
+      const change24h = bestPair.priceChange.h24;
+      
+      let estimatedHigh24h = currentPrice;
+      
+      if (change24h !== 0) {
+         const openPrice = currentPrice / (1 + (change24h / 100));
+         // If price dropped, the high was at least the open price (or higher)
+         estimatedHigh24h = Math.max(currentPrice, openPrice);
+      }
+      
+      bestPair.high24h = estimatedHigh24h;
 
       return bestPair;
     }
@@ -93,49 +129,86 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     // Initialize AI with the retrieved key
     const ai = new GoogleGenAI({ apiKey: apiKey });
     
-    // Pump.fun detection and Bonding Curve Logic
-    const isPumpFun = pair.baseToken.address.toLowerCase().endsWith('pump');
+    // --- ADVANCED MARKET STATE DETECTION ---
+
     const liquidityValue = pair.liquidity?.usd || 0;
     const marketCapValue = pair.marketCap || pair.fdv || 0;
+    const dexId = pair.dexId?.toLowerCase() || 'unknown';
+    const ageString = getTimeSinceCreation(pair.pairCreatedAt);
+    
+    // CRITICAL FIX: Bonding Curve Logic based on DEX ID
+    // 'pump' usually indicates the internal bonding curve.
+    // 'pumpswap', 'raydium', 'orca', 'meteora' indicate it has GRADUATED.
+    
+    const isBondingCurveDex = dexId === 'pump' || dexId === 'moonshot';
+    const isGraduatedDex = dexId.includes('pumpswap') || dexId.includes('raydium') || dexId.includes('orca') || dexId.includes('meteora');
+    
+    let marketStatus = 'Unknown';
+    let specificWarning = '';
 
-    // Logic: If it's Pump.fun and has low liquidity OR low Mcap, it's likely still on the Bonding Curve.
-    // Standard graduation is around $60k-$69k Mcap.
-    const isOnBondingCurve = isPumpFun && (liquidityValue < 3000 || marketCapValue < 65000);
+    const estimatedATH = pair.high24h || parseFloat(pair.priceUsd);
+    
+    // NOTE: Drawdown logic removed as per user request.
 
-    const liquidityDisplay = isOnBondingCurve 
-      ? "Bonding Curve Phase (Liquidity not yet seeded on PumpSwap)" 
-      : `$${liquidityValue}`;
+    if (isGraduatedDex) {
+        if (marketCapValue < 25000) {
+             marketStatus = '📉 LOW CAP GRADUATE';
+             specificWarning = "Market cap is very low for a graduated token.";
+        } else {
+             marketStatus = `✅ LIVE ON ${dexId.toUpperCase()}`;
+        }
+    } else if (isBondingCurveDex) {
+        marketStatus = '⚠️ BONDING CURVE (Pump.fun)';
+        specificWarning = "Still on the internal bonding curve. Needs to hit ~$60k MC to migrate.";
+    }
+
+    const volumeAnalysis = `
+      5m: $${pair.volume.m5} Vol (${pair.priceChange.m5}%)
+      1h: $${pair.volume.h1} Vol (${pair.priceChange.h1}%)
+      6h: $${pair.volume.h6} Vol (${pair.priceChange.h6}%)
+      24h: $${pair.volume.h24} Vol (${pair.priceChange.h24}%)
+    `;
+
+    const txnsAnalysis = `
+      5m Txns: ${pair.txns.m5.buys} Buys / ${pair.txns.m5.sells} Sells
+      1h Txns: ${pair.txns.h1.buys} Buys / ${pair.txns.h1.sells} Sells
+    `;
 
     const prompt = `
-      You are "Financial Advisor Pussy" (Ticker: $FAP), a professional, high-frequency trading cat analyst on Wall Street. You use professional financial jargon mixed with cat behavior.
+      You are "Financial Advisor Pussy" (Ticker: $FAP), a Wall Street cat analyst. 
+      Analyze this Solana token based on these detailed metrics.
       
-      Analyze the following asset based on this real-time market data:
-      
-      **Asset Profile:**
+      **IDENTIFICATION:**
       - Name: ${pair.baseToken.name} ($${pair.baseToken.symbol})
-      - Address: ${pair.baseToken.address}
-      - Origin: ${isPumpFun ? 'Pump.fun 💊' : 'Standard Solana SPL'}
-      - Status: ${isOnBondingCurve ? '⚠️ PRE-BONDING (Still on Curve)' : 'Active Market'}
+      - Dex ID: ${dexId.toUpperCase()} (Status: ${isGraduatedDex ? 'GRADUATED' : 'BONDING'})
+      - Token Age: ${ageString}
+      - Market Status: ${marketStatus}
       
-      **Market Metrics:**
+      **PRICE ACTION (Crucial):**
       - Price: $${pair.priceUsd}
+      - 24h High (Est): $${estimatedATH}
       - Market Cap: $${marketCapValue}
-      - Liquidity Pool: ${liquidityDisplay}
-      - 24h Volume: $${pair.volume?.h24 || 0}
-      - 24h Momentum: ${pair.priceChange?.h24 || 0}%
+      - Liquidity: $${liquidityValue}
       
-      **Instructions:**
-      1. **Tone:** Professional, analytical, but slightly condescending (like a senior banker cat). Use terms like "bullish divergence," "liquidity crunch," "sentiment analysis," and "meow-mentum."
-      2. **Risk Assessment:**
-         ${isOnBondingCurve 
-          ? "- IMPORTANT: This token is on the Pump.fun BONDING CURVE. Zero/Low Liquidity is NORMAL in this phase. Do NOT flag '0 Liquidity' as a rug risk or bearish. Liquidity will be seeded on PumpSwap upon graduation. Judge solely on Volume and potential to graduate (reach $69k Mcap)." 
-          : isPumpFun 
-            ? "- Pump.fun Graduate. Check if liquidity > $10k. If not, flag as dangerous."
-            : "- Check Liquidity to Mcap ratio. If liquidity is < $10k, flag as 'Liquidity Crisis'."
-         }
-      3. **Volume Analysis:** Is the volume high compared to Mcap? If yes, mention "High speculative interest."
-      4. **Verdict:** End with a clear recommendation: "BUY POSITION", "HOLD", or "LIQUIDATE IMMEDIATELY".
-      5. **Format:** Keep it under 150 words. Use emojis sparingly but effectively (📉, 📈, 🚨, 😺).
+      **VOLUME:**
+      ${volumeAnalysis}
+      
+      **ORDER FLOW:**
+      ${txnsAnalysis}
+      
+      **STRICT ANALYSIS RULES:**
+      1. **CHECK FOR QUALITY:** If Market Cap is low (<$20k) and liquidity is extremely low, be cautious.
+      2. **BONDING vs GRADUATED:** 
+         - If DEX is 'RAYDIUM' or 'PUMPSWAP', it is GRADUATED.
+         - If it is GRADUATED but Mcap is <$15k, it is likely a failed project.
+      3. **FORMATTING:** Use Markdown bolding (**) for ALL monetary values, percentages, and key metrics (e.g. **$420**, **+69%**). This is critical for the display.
+      
+      **OUTPUT:**
+      - Tone: Sassy, professional, cat-themed.
+      - Verdict: "BUY", "HOLD", or "LIQUIDATE".
+      - Length: < 150 words.
+      
+      ${specificWarning}
     `;
 
     // Create a timeout promise to prevent hanging forever
@@ -149,14 +222,11 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       contents: prompt,
     }).then(response => response.text || "Meow? I analyzed the data but couldn't write the report.");
 
-    // Race them: whichever finishes first wins
     const result = await Promise.race([apiPromise, timeoutPromise]);
-    
     return result as string;
 
   } catch (error: any) {
     console.error("Gemini API Error:", error);
-    // Return a visible error message to the UI instead of crashing/hanging
-    return `⚠️ **SYSTEM MALFUNCTION** \n\nThe AI Analyst could not process this request. \n\n**Reason:** ${error?.message || 'Unknown Connection Error'}. \n\n**Advice:** Check your Vercel Environment Variables. Ensure 'VITE_API_KEY' is set correctly.`;
+    return `⚠️ **SYSTEM MALFUNCTION** \n\nThe AI Analyst could not process this request. \n\n**Reason:** ${error?.message || 'Unknown Connection Error'}. \n\n**Advice:** Check your Vercel Environment Variables.`;
   }
 };

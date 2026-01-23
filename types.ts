@@ -41,6 +41,8 @@ export interface DexPair {
   fdv: number;
   marketCap: number;
   pairCreatedAt: number;
+  high24h?: number; // Calculated field
+  low24h?: number;  // Calculated field
 }
 
 export interface DexResponse {
