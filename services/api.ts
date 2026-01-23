@@ -205,7 +205,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       
       **OUTPUT:**
       - Tone: Sassy, professional, penguin-themed (use words like "Noot Noot", "slide", "ice", "fish", "pebble", "blizzard").
-      - Verdict: "BUY", "HOLD", or "LIQUIDATE".
+      - Verdict: "BUY", "HOLD", or "SELL".
       - Length: < 150 words.
       
       ${specificWarning}

@@ -262,34 +262,33 @@ const App: React.FC = () => {
               {/* BOTTOM: Split View (Chart | Analysis) */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[650px]">
                 
-                {/* Left: Chart (Larger width) */}
-                <div className="lg:col-span-8 bg-white border border-slate-200 shadow-xl h-[500px] lg:h-full relative flex flex-col rounded-xl overflow-hidden group">
-                   <div className="absolute inset-0 border-2 border-transparent group-hover:border-fap-200 pointer-events-none transition-colors rounded-xl z-20"></div>
+                {/* Left: Chart (Larger width) - DARK MODE */}
+                <div className="lg:col-span-8 bg-slate-900 border border-slate-700 shadow-xl h-[500px] lg:h-full relative flex flex-col rounded-xl overflow-hidden group">
+                   <div className="absolute inset-0 border-2 border-transparent group-hover:border-fap-900/50 pointer-events-none transition-colors rounded-xl z-20"></div>
                    
                    {/* Chart Header */}
-                   <div className="bg-slate-50 px-4 py-2 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
+                   <div className="bg-slate-950 px-4 py-2 border-b border-slate-800 flex items-center justify-between flex-shrink-0">
                       <div className="flex items-center gap-2">
                          <Radio size={14} className="text-red-500 animate-pulse" />
-                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Live DexScreener Terminal</span>
+                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Live DexScreener Terminal</span>
                       </div>
                       <div className="flex gap-1">
-                         <div className="w-2 h-2 rounded-full bg-red-400/50"></div>
-                         <div className="w-2 h-2 rounded-full bg-yellow-400/50"></div>
-                         <div className="w-2 h-2 rounded-full bg-green-400/50"></div>
+                         <div className="w-2 h-2 rounded-full bg-red-500/20"></div>
+                         <div className="w-2 h-2 rounded-full bg-yellow-500/20"></div>
+                         <div className="w-2 h-2 rounded-full bg-green-500/20"></div>
                       </div>
                    </div>
                    <div className="flex-1 relative z-10">
-                      {/* Embed - Note: DexScreener embed supports dark/light theme, we switch to light if available, but usually 'light' theme is standard white */}
                       <iframe
-                        src={`https://dexscreener.com/solana/${data.pairAddress}?embed=1&theme=light&trades=1&info=0`}
+                        src={`https://dexscreener.com/solana/${data.pairAddress}?embed=1&theme=dark&trades=1&info=0`}
                         title="DexScreener Chart"
                         className="w-full h-full border-0 absolute inset-0"
                       ></iframe>
                    </div>
                 </div>
 
-                {/* Right: Analysis (Smaller width, same height, scrollable) */}
-                <div className="lg:col-span-4 h-full bg-white shadow-xl rounded-xl overflow-hidden border border-slate-200">
+                {/* Right: Analysis (Smaller width, same height, scrollable) - DARK MODE */}
+                <div className="lg:col-span-4 h-full bg-slate-900 shadow-xl rounded-xl overflow-hidden border border-slate-700">
                    <AnalysisBox analysis={analysis} status={status} />
                 </div>
 
