@@ -9,6 +9,10 @@ const NEWS_ITEMS = [
   "TECHNICAL ANALYSIS: Chart pattern confirms 'Dead Cat Bounce' is actually 'Alive Cat Jump'.",
   "SEC UPDATE: Gary Gensler hissed at by local stray.",
   "LIQUIDITY: Milk bowl depths reaching critical levels.",
+  "RUMOR: Ethereum devs distracted by laser pointer, merge delayed.",
+  "STRATEGY: Buy high, sell meow. It's the only way.",
+  "SECURITY: 2FA now requires belly rub verification.",
+  "ECONOMY: Kibble inflation creates panic in the kitchen sector.",
 ];
 
 export const Header: React.FC = () => {
@@ -23,8 +27,9 @@ export const Header: React.FC = () => {
         </div>
         
         {/* Scroller Area */}
-        <div className="relative flex-1 h-8 overflow-hidden">
-           <div className="absolute top-1/2 -translate-y-1/2 w-full animate-ticker whitespace-nowrap">
+        <div className="relative flex-1 h-8 overflow-hidden bg-slate-950/30">
+           {/* Fixed vertical alignment: Used flexbox for centering instead of transform translateY to avoid conflict with animate-ticker */}
+           <div className="absolute inset-y-0 flex items-center animate-ticker whitespace-nowrap will-change-transform [animation-duration:60s]">
              {NEWS_ITEMS.map((item, i) => (
                <span key={i} className="text-[10px] font-mono text-slate-300 mx-8 inline-flex items-center">
                  <span className="w-1.5 h-1.5 bg-slate-600 rounded-full mr-2"></span>
