@@ -28,9 +28,10 @@ export const Header: React.FC = () => {
         
         {/* Scroller Area */}
         <div className="relative flex-1 h-8 overflow-hidden bg-slate-950/30">
-           {/* Fixed vertical alignment: Used flexbox for centering instead of transform translateY to avoid conflict with animate-ticker */}
-           <div className="absolute inset-y-0 flex items-center animate-ticker whitespace-nowrap will-change-transform [animation-duration:60s]">
-             {NEWS_ITEMS.map((item, i) => (
+           {/* Fixed vertical alignment: Used flexbox for centering. Animation now starts from 0 to -50% for seamless loop */}
+           <div className="absolute inset-y-0 flex items-center animate-ticker whitespace-nowrap will-change-transform [animation-duration:90s]">
+             {/* Duplicate items for infinite scroll effect */}
+             {[...NEWS_ITEMS, ...NEWS_ITEMS].map((item, i) => (
                <span key={i} className="text-[10px] font-mono text-slate-300 mx-8 inline-flex items-center">
                  <span className="w-1.5 h-1.5 bg-slate-600 rounded-full mr-2"></span>
                  {item}

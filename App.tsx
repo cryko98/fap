@@ -300,19 +300,19 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-slate-900 bg-slate-950 py-12 relative overflow-hidden z-20">
+      <footer className="mt-auto border-t border-slate-900 bg-slate-950 py-8 relative overflow-hidden z-20">
         <div className="container mx-auto px-4 text-center">
-           <div className="flex flex-col items-center justify-center space-y-4">
+           <div className="flex flex-col items-center justify-center space-y-3">
              <div className="flex items-center gap-2 text-white font-black tracking-tight text-xl">
                 <span className="w-3 h-3 rounded-sm bg-fap-600 rotate-45"></span>
                 FINANCIAL ADVISOR PUSSY
              </div>
              
-             <p className="text-slate-500 text-xs max-w-lg mx-auto leading-relaxed font-medium">
-               <strong className="text-fap-500">DISCLAIMER:</strong> This AI agent is a cat. It can make mistakes. We are not responsible for any financial losses. Invest only what you can afford to lose. The "Financial Advice" provided is satire.
+             <p className="text-slate-500 text-[11px] max-w-4xl mx-auto leading-relaxed font-medium tracking-wide">
+               <strong className="text-fap-500">DISCLAIMER:</strong> I am a Financial Advisor Cat. Do not expect ultra high-tech analysis, but for a feline, I utilize real market data and legitimate strategy. I am the smartest financial advisor cat in existence, but this is still satire. Not financial advice.
              </p>
              
-             <p className="text-slate-600 text-[10px] font-mono uppercase tracking-widest mt-4">
+             <p className="text-slate-600 text-[10px] font-mono uppercase tracking-widest mt-2">
                © 2026 $FAP Protocol. All Rights Reserved.
              </p>
            </div>
