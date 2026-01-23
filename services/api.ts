@@ -153,13 +153,13 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     if (isGraduatedDex) {
         if (marketCapValue < 25000) {
              marketStatus = '📉 LOW CAP GRADUATE';
-             specificWarning = "Market cap is very low for a graduated token.";
+             specificWarning = "Market cap is very low for a graduated token. Thin ice.";
         } else {
              marketStatus = `✅ LIVE ON ${dexId.toUpperCase()}`;
         }
     } else if (isBondingCurveDex) {
         marketStatus = '⚠️ BONDING CURVE (Pump.fun)';
-        specificWarning = "Still on the internal bonding curve. Needs to hit ~$60k MC to migrate.";
+        specificWarning = "Still on the internal bonding curve. Needs to hit ~$60k MC to migrate to the ocean.";
     }
 
     const volumeAnalysis = `
@@ -175,7 +175,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     `;
 
     const prompt = `
-      You are "Financial Advisor Pussy" (Ticker: $FAP), a Wall Street cat analyst. 
+      You are "Financial Advisor Penguin" (Ticker: $FAP), a Wall Street penguin analyst from Antarctica. 
       Analyze this Solana token based on these detailed metrics.
       
       **IDENTIFICATION:**
@@ -197,14 +197,14 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       ${txnsAnalysis}
       
       **STRICT ANALYSIS RULES:**
-      1. **CHECK FOR QUALITY:** If Market Cap is low (<$20k) and liquidity is extremely low, be cautious.
+      1. **CHECK FOR QUALITY:** If Market Cap is low (<$20k) and liquidity is extremely low, be cautious. It might be frozen.
       2. **BONDING vs GRADUATED:** 
          - If DEX is 'RAYDIUM' or 'PUMPSWAP', it is GRADUATED.
          - If it is GRADUATED but Mcap is <$15k, it is likely a failed project.
       3. **FORMATTING:** Use Markdown bolding (**) for ALL monetary values, percentages, and key metrics (e.g. **$420**, **+69%**). This is critical for the display.
       
       **OUTPUT:**
-      - Tone: Sassy, professional, cat-themed.
+      - Tone: Sassy, professional, penguin-themed (use words like "Noot Noot", "slide", "ice", "fish", "pebble", "blizzard").
       - Verdict: "BUY", "HOLD", or "LIQUIDATE".
       - Length: < 150 words.
       
@@ -220,13 +220,13 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     const apiPromise = ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
-    }).then(response => response.text || "Meow? I analyzed the data but couldn't write the report.");
+    }).then(response => response.text || "Noot? I analyzed the data but couldn't write the report. Too cold.");
 
     const result = await Promise.race([apiPromise, timeoutPromise]);
     return result as string;
 
   } catch (error: any) {
     console.error("Gemini API Error:", error);
-    return `⚠️ **SYSTEM MALFUNCTION** \n\nThe AI Analyst could not process this request. \n\n**Reason:** ${error?.message || 'Unknown Connection Error'}. \n\n**Advice:** Check your Vercel Environment Variables.`;
+    return `⚠️ **SYSTEM FROZEN** \n\nThe AI Analyst could not process this request. \n\n**Reason:** ${error?.message || 'Unknown Connection Error'}. \n\n**Advice:** Check your Vercel Environment Variables.`;
   }
 };

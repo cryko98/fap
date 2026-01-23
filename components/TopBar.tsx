@@ -13,9 +13,9 @@ export const TopBar: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-slate-950 border-b border-slate-800 py-3 px-4 md:px-8 flex justify-between items-center shadow-lg z-50 relative">
+    <div className="w-full bg-white border-b border-slate-200 py-3 px-4 md:px-8 flex justify-between items-center shadow-sm z-50 relative">
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 text-fap-500 font-bold tracking-tighter">
+        <div className="flex items-center gap-2 text-fap-600 font-bold tracking-tighter">
            <Terminal size={18} />
            <span className="hidden md:inline">F.A.P. TERMINAL v2.4</span>
         </div>
@@ -26,24 +26,24 @@ export const TopBar: React.FC = () => {
           href="https://x.com" 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="text-slate-400 hover:text-white transition-colors flex items-center gap-2 text-xs font-mono uppercase group"
+          className="text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-2 text-xs font-mono uppercase group"
         >
-          {/* X Logo SVG */}
-          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current group-hover:fill-white transition-colors" aria-hidden="true">
+          {/* X Logo SVG - Dark for light mode */}
+          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current group-hover:fill-black transition-colors" aria-hidden="true">
             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
           </svg>
           <span className="hidden sm:inline font-bold">Community</span>
         </a>
 
-        <div className="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded border border-slate-800 hover:border-fap-500/50 transition-colors group">
-          <span className="text-fap-500 font-bold text-[10px] uppercase tracking-widest">CA:</span>
-          <span className="font-mono text-xs text-slate-300 truncate max-w-[100px] md:max-w-none group-hover:text-white transition-colors">{ca}</span>
+        <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded border border-slate-200 hover:border-fap-500/50 transition-colors group shadow-sm">
+          <span className="text-fap-600 font-bold text-[10px] uppercase tracking-widest">CA:</span>
+          <span className="font-mono text-xs text-slate-600 truncate max-w-[100px] md:max-w-none group-hover:text-slate-900 transition-colors">{ca}</span>
           <button 
             onClick={copyToClipboard}
-            className="ml-2 text-slate-500 hover:text-fap-400 transition-colors"
+            className="ml-2 text-slate-400 hover:text-fap-500 transition-colors"
             title="Copy CA"
           >
-            {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
+            {copied ? <Check size={12} className="text-green-600" /> : <Copy size={12} />}
           </button>
         </div>
       </div>
