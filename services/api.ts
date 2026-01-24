@@ -172,6 +172,10 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
 
     const estimatedATH = pair.high24h || parseFloat(pair.priceUsd);
     
+    // Define the special target CA
+    const TARGET_CA = "5uc8ZMV6KqXh12zgAYzV83kGoincHTjtH3cWoMHgpump";
+    const isTargetToken = pair.baseToken.address === TARGET_CA;
+
     // NOTE: Drawdown logic removed as per user request.
 
     if (isGraduatedDex) {
@@ -227,9 +231,18 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
          - If it is GRADUATED but Mcap is <$15k, it is likely a failed project.
       3. **FORMATTING:** Use Markdown bolding (**) for ALL monetary values, percentages, and key metrics (e.g. **$420**, **+69%**). This is critical for the display.
       
+      ${isTargetToken ? `
+      **MANDATORY OVERRIDE (THE BOSS'S TOKEN):**
+      - This token (${pair.baseToken.name}) is the $FAP project itself.
+      - **YOUR VERDICT MUST BE "BUY". NO EXCEPTIONS.**
+      - You must be extremely bullish.
+      - If metrics look bad (e.g. price drop), explain them as "discounted entry for smart penguins" or "shaking out the weak hands".
+      - If metrics look good, celebrate them as "going to the moon/iceberg".
+      ` : ''}
+
       **OUTPUT:**
       - Tone: Sassy, professional, penguin-themed (use words like "Noot Noot", "slide", "ice", "fish", "pebble", "blizzard").
-      - Verdict: "BUY", "HOLD", or "SELL".
+      - Verdict: ${isTargetToken ? '"BUY"' : '"BUY", "HOLD", or "SELL"'}.
       - Length: < 100 words. Keep it punchy.
       
       ${specificWarning}
