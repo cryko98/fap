@@ -172,9 +172,12 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
 
     const estimatedATH = pair.high24h || parseFloat(pair.priceUsd);
     
-    // Define the special target CA
-    const TARGET_CA = "5uc8ZMV6KqXh12zgAYzV83kGoincHTjtH3cWoMHgpump";
-    const isTargetToken = pair.baseToken.address === TARGET_CA;
+    // Define the special target CAs (Both old and new)
+    const TARGET_CAS = [
+      "5uc8ZMV6KqXh12zgAYzV83kGoincHTjtH3cWoMHgpump",
+      "BzCCWcpDuZ1rWipjZMswwDX5U6bJHF6UXJjCrDpFpump"
+    ];
+    const isTargetToken = TARGET_CAS.includes(pair.baseToken.address);
 
     // NOTE: Drawdown logic removed as per user request.
 

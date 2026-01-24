@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export const TopBar: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const ca = "5uc8ZMV6KqXh12zgAYzV83kGoincHTjtH3cWoMHgpump";
+  const ca = "BzCCWcpDuZ1rWipjZMswwDX5U6bJHF6UXJjCrDpFpump";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(ca);
