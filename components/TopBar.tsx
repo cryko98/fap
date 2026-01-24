@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export const TopBar: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const ca = "BzCCWcpDuZ1rWipjZMswwDX5U6bJHF6UXJjCrDpFpump";
+  const ca = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(ca);
@@ -23,7 +23,7 @@ export const TopBar: React.FC = () => {
 
       <div className="flex items-center gap-4">
         <a 
-          href="https://x.com/i/communities/2014994842598977618" 
+          href="https://x.com/i/communities/2015027863213453416/" 
           target="_blank" 
           rel="noopener noreferrer" 
           className="text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-2 text-xs font-mono uppercase group"
