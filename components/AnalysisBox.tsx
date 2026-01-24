@@ -195,10 +195,23 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
   }, [analysis, status]);
 
   const getVerdictType = (): 'buy' | 'sell' | 'hold' | null => {
+    // Robust Regex to find "Verdict:" followed by the decision, ignoring markdown and case
+    // This looks for patterns like "Verdict: BUY", "Verdict: **BUY**", "Verdict: 'BUY'", etc.
+    const match = analysis.match(/Verdict:\s*(?:\*\*)?\s*["']?(BUY|SELL|HOLD|LIQUIDATE)["']?\s*(?:\*\*)?/i);
+    
+    if (match) {
+        const decision = match[1].toUpperCase();
+        if (decision === 'BUY') return 'buy';
+        if (decision === 'SELL' || decision === 'LIQUIDATE') return 'sell';
+        if (decision === 'HOLD') return 'hold';
+    }
+    
+    // Fallback only if the strict pattern is missing, to avoid returning null unnecessarily
     const text = analysis.toUpperCase();
-    if (text.includes("SELL") || text.includes("LIQUIDATE")) return 'sell';
-    if (text.includes("BUY")) return 'buy';
-    if (text.includes("HOLD")) return 'hold';
+    if (text.includes("VERDICT: BUY")) return 'buy';
+    if (text.includes("VERDICT: SELL")) return 'sell';
+    if (text.includes("VERDICT: HOLD")) return 'hold';
+    
     return null;
   };
 
