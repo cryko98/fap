@@ -49,6 +49,30 @@ const getTimeSinceCreation = (timestamp: number): string => {
 };
 
 /**
+ * Converts an image URL to a Base64 string
+ */
+const urlToBase64 = async (url: string): Promise<string> => {
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        // Remove the data URL prefix (e.g., "data:image/png;base64,")
+        const base64Data = base64String.split(',')[1];
+        resolve(base64Data);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.error("Error converting image to base64:", error);
+    throw new Error("Failed to load reference image");
+  }
+};
+
+/**
  * Fetches token data from DexScreener
  */
 export const fetchTokenData = async (input: string): Promise<DexPair | null> => {
@@ -206,7 +230,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       **OUTPUT:**
       - Tone: Sassy, professional, penguin-themed (use words like "Noot Noot", "slide", "ice", "fish", "pebble", "blizzard").
       - Verdict: "BUY", "HOLD", or "SELL".
-      - Length: < 150 words.
+      - Length: < 100 words. Keep it punchy.
       
       ${specificWarning}
     `;
@@ -228,5 +252,77 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
   } catch (error: any) {
     console.error("Gemini API Error:", error);
     return `⚠️ **SYSTEM FROZEN** \n\nThe AI Analyst could not process this request. \n\n**Reason:** ${error?.message || 'Unknown Connection Error'}. \n\n**Advice:** Check your Vercel Environment Variables.`;
+  }
+};
+
+/**
+ * Generates a Meme Image using Gemini 2.5 Flash Image
+ */
+export const generateMemeImage = async (prompt: string, referenceImageUrl: string): Promise<string> => {
+  try {
+    const apiKey = getApiKey();
+    if (!apiKey) throw new Error("Missing API Key");
+
+    const ai = new GoogleGenAI({ apiKey: apiKey });
+    
+    // Convert reference image to Base64
+    const base64Image = await urlToBase64(referenceImageUrl);
+    
+    // Check if the user wants to use the FAP character
+    const useCharacter = prompt.toLowerCase().includes('fap') || prompt.toLowerCase().includes('penguin');
+    
+    let parts: any[] = [];
+    
+    if (useCharacter) {
+      // If prompt mentions FAP/Penguin, use the image as reference
+      parts = [
+        {
+          inlineData: {
+            mimeType: 'image/png',
+            data: base64Image
+          }
+        },
+        {
+          text: `Generate a photorealistic, cinematic image. 
+          Use the penguin character from the input image provided. 
+          Scene description: ${prompt}. 
+          Style: Realistic, high quality, 4k. 
+          IMPORTANT: Do not add any text, captions, or typography to the image.`
+        }
+      ];
+    } else {
+      // Otherwise just generate based on text, but still pass image for style consistency if possible
+       parts = [
+        {
+          inlineData: {
+            mimeType: 'image/png',
+            data: base64Image
+          }
+        },
+        {
+           text: `Generate a photorealistic image. Context: ${prompt}. Use the visual style of the provided image. IMPORTANT: Do not add any text, captions, or typography to the image.`
+        }
+      ];
+    }
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash-image',
+      contents: {
+        parts: parts
+      }
+    });
+
+    // Iterate to find image part
+    for (const part of response.candidates?.[0]?.content?.parts || []) {
+      if (part.inlineData) {
+        return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+      }
+    }
+    
+    throw new Error("No image generated.");
+
+  } catch (error) {
+    console.error("Meme Generation Error:", error);
+    throw error;
   }
 };

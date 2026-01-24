@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Search, ShieldAlert, Zap, Radio, CloudLightning, Moon, Snowflake, Fish } from 'lucide-react';
+import { Search, ShieldAlert, Zap, Radio, CloudLightning, Moon, Snowflake, Fish, Image as ImageIcon } from 'lucide-react';
 import { TopBar } from './components/TopBar';
 import { Header } from './components/Header';
 import { StatsGrid } from './components/StatsGrid';
 import { AnalysisBox } from './components/AnalysisBox';
+import { MemeGenerator } from './components/MemeGenerator';
 import { DexPair, AnalysisStatus } from './types';
 import { fetchTokenData, generateAnalysis } from './services/api';
 
@@ -89,12 +90,15 @@ const GlobalSentimentWidget = () => {
   );
 };
 
+const PENGUIN_LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping-removebg-preview%20(1).png";
+
 const App: React.FC = () => {
   const [address, setAddress] = useState('');
   const [data, setData] = useState<DexPair | null>(null);
   const [analysis, setAnalysis] = useState('');
   const [status, setStatus] = useState<AnalysisStatus>(AnalysisStatus.IDLE);
   const [error, setError] = useState<string | null>(null);
+  const [isMemeModalOpen, setIsMemeModalOpen] = useState(false);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -154,6 +158,12 @@ const App: React.FC = () => {
       <TopBar />
       <GlobalSentimentWidget />
       
+      <MemeGenerator 
+        isOpen={isMemeModalOpen} 
+        onClose={() => setIsMemeModalOpen(false)}
+        logoUrl={PENGUIN_LOGO_URL} 
+      />
+      
       <main className="flex-grow container mx-auto max-w-[1400px] px-4 relative z-10">
         
         <Header />
@@ -171,7 +181,7 @@ const App: React.FC = () => {
              <div className="relative group">
                 {/* The Penguin Image */}
                 <img 
-                  src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping-removebg-preview%20(1).png" 
+                  src={PENGUIN_LOGO_URL}
                   alt="$FAP Analyst"
                   className="w-64 md:w-[450px] object-cover transform translate-y-8 relative z-10 drop-shadow-[0_10px_30px_rgba(0,0,0,0.1)] transition-all duration-700 hover:scale-105"
                 />
@@ -179,8 +189,8 @@ const App: React.FC = () => {
           </div>
 
           {/* Search Box - HUD Style (Light) */}
-          <div className="relative z-30 pt-16">
-            <form onSubmit={handleSearch} className="relative group max-w-2xl mx-auto">
+          <div className="relative z-30 pt-16 flex flex-col gap-4 items-center">
+            <form onSubmit={handleSearch} className="relative group max-w-2xl w-full mx-auto">
               {/* HUD Brackets - Slate 300 */}
               <div className="absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2 border-slate-300 opacity-70"></div>
               <div className="absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-slate-300 opacity-70"></div>
@@ -214,6 +224,15 @@ const App: React.FC = () => {
                 </button>
               </div>
             </form>
+
+            {/* Meme Generator Button */}
+            <button 
+              onClick={() => setIsMemeModalOpen(true)}
+              className="bg-white border border-slate-200 hover:border-fap-400 text-slate-600 hover:text-fap-600 px-6 py-2 rounded-full shadow-sm hover:shadow-md transition-all flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-widest group"
+            >
+              <ImageIcon size={14} className="group-hover:rotate-12 transition-transform" />
+              Generate $FAP Meme
+            </button>
             
             {error && (
               <div className="mt-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm font-medium shadow-lg animate-fade-in flex items-center gap-2 max-w-2xl mx-auto backdrop-blur-sm">
