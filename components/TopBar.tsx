@@ -23,7 +23,7 @@ export const TopBar: React.FC = () => {
 
       <div className="flex items-center gap-4">
         <a 
-          href="https://x.com" 
+          href="https://x.com/i/communities/2014994842598977618" 
           target="_blank" 
           rel="noopener noreferrer" 
           className="text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-2 text-xs font-mono uppercase group"
