@@ -76,7 +76,7 @@ export const MemeGenerator: React.FC<MemeGeneratorProps> = ({ isOpen, onClose, l
         <div className="bg-slate-50 px-4 py-3 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles size={16} className="text-fap-500" />
-            <h3 className="font-black text-slate-800 tracking-tight uppercase">AI Meme Generator</h3>
+            <h3 className="font-black text-slate-800 tracking-tight uppercase">FAP Meme Generator</h3>
           </div>
           <button 
             onClick={onClose}
