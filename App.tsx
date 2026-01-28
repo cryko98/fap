@@ -5,7 +5,7 @@ import { Header } from './components/Header';
 import { StatsGrid } from './components/StatsGrid';
 import { AnalysisBox } from './components/AnalysisBox';
 import { MemeGenerator } from './components/MemeGenerator';
-import { DexPair, AnalysisStatus } from './types';
+import { DexPair, AnalysisStatus, AnalysisResult } from './types';
 import { fetchTokenData, generateAnalysis } from './services/api';
 
 // Background Chart Lines SVG (Light Mode - Darker lines)
@@ -61,13 +61,12 @@ const FloatingTicker = ({ type, text, delay, left, duration }: { type: 'up' | 'd
 
 // Static Pigeon Humor Widget (Light Mode)
 const GlobalSentimentWidget = () => {
-  // Randomly pick a state for visual flair (static for now, could be dynamic)
   const states = [
      { label: "FLYING", icon: <Wind size={16} />, color: "text-amber-500", border: "border-amber-200" },
      { label: "FLOCKING", icon: <Bird size={16} />, color: "text-blue-500", border: "border-blue-200" },
      { label: "SCAVENGING", icon: <MapPin size={16} />, color: "text-green-600", border: "border-green-200" },
   ];
-  const currentState = states[Math.floor(Date.now() / 10000) % states.length]; // Psuedo-random based on load time bucket
+  const currentState = states[Math.floor(Date.now() / 10000) % states.length]; 
 
   return (
     <div className="fixed bottom-4 right-4 hidden lg:flex flex-col gap-2 z-40 animate-fade-in">
@@ -95,7 +94,7 @@ const PIGEON_LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/obj
 const App: React.FC = () => {
   const [address, setAddress] = useState('');
   const [data, setData] = useState<DexPair | null>(null);
-  const [analysis, setAnalysis] = useState('');
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [status, setStatus] = useState<AnalysisStatus>(AnalysisStatus.IDLE);
   const [error, setError] = useState<string | null>(null);
   const [isMemeModalOpen, setIsMemeModalOpen] = useState(false);
@@ -108,7 +107,7 @@ const App: React.FC = () => {
     setStatus(AnalysisStatus.FETCHING_DATA);
     setError(null);
     setData(null);
-    setAnalysis('');
+    setAnalysisResult(null);
 
     try {
       // Fetch DexScreener Data
@@ -125,7 +124,7 @@ const App: React.FC = () => {
 
       // Fetch AI Analysis with safety wrapper
       const aiResponse = await generateAnalysis(tokenData);
-      setAnalysis(aiResponse);
+      setAnalysisResult(aiResponse);
       setStatus(AnalysisStatus.COMPLETE);
 
     } catch (err: any) {
@@ -171,7 +170,7 @@ const App: React.FC = () => {
         {/* Hero Section: Cat & Search */}
         <div className="max-w-4xl mx-auto mb-12 relative">
           
-          {/* Giant Peeking Pigeon - No Red Laser */}
+          {/* Giant Peeking Pigeon */}
           <div className="flex justify-center -mb-20 relative z-0 pointer-events-none">
              
              {/* Tech Rings Behind - Lighter Colors */}
@@ -179,7 +178,6 @@ const App: React.FC = () => {
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[600px] md:h-[600px] border border-green-200 rounded-full animate-[spin_40s_linear_infinite_reverse]"></div>
              
              <div className="relative group">
-                {/* The Pigeon Image */}
                 <img 
                   src={PIGEON_LOGO_URL}
                   alt="$FAP Analyst"
@@ -191,7 +189,6 @@ const App: React.FC = () => {
           {/* Search Box - HUD Style (Light) */}
           <div className="relative z-30 pt-16 flex flex-col gap-4 items-center">
             <form onSubmit={handleSearch} className="relative group max-w-2xl w-full mx-auto">
-              {/* HUD Brackets - Slate 300 */}
               <div className="absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2 border-slate-300 opacity-70"></div>
               <div className="absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-slate-300 opacity-70"></div>
               <div className="absolute -bottom-3 -left-3 w-6 h-6 border-b-2 border-l-2 border-slate-300 opacity-70"></div>
@@ -225,7 +222,6 @@ const App: React.FC = () => {
               </div>
             </form>
 
-            {/* Meme Generator Button */}
             <button 
               onClick={() => setIsMemeModalOpen(true)}
               className="bg-white border border-slate-200 hover:border-fap-400 text-slate-600 hover:text-fap-600 px-6 py-2 rounded-full shadow-sm hover:shadow-md transition-all flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-widest group"
@@ -308,7 +304,7 @@ const App: React.FC = () => {
 
                 {/* Right: Analysis (Smaller width, same height, scrollable) - DARK MODE */}
                 <div className="lg:col-span-4 h-full bg-slate-900 shadow-xl rounded-xl overflow-hidden border border-slate-700">
-                   <AnalysisBox analysis={analysis} status={status} />
+                   <AnalysisBox analysisResult={analysisResult} status={status} />
                 </div>
 
               </div>
