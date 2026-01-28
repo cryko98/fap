@@ -1,13 +1,40 @@
 import { GoogleGenAI } from "@google/genai";
-import { DexResponse, DexPair, AnalysisResult, AnalysisSource } from '../types';
+import { DexResponse, DexPair } from '../types';
 
 const DEX_API_URL = 'https://api.dexscreener.com/latest/dex/tokens/';
 
+/**
+ * Helper to safely get the API Key in a Vite/Browser environment
+ */
+const getApiKey = (): string | undefined => {
+  // 1. Try Vite environment variable (Most likely for this project)
+  // @ts-ignore - import.meta is standard in Vite
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
+    // @ts-ignore
+    return import.meta.env.VITE_API_KEY;
+  }
+  
+  // 2. Fallback to process.env (if polyfilled or different build system)
+  if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+    return process.env.API_KEY;
+  }
+  
+  return undefined;
+};
+
+/**
+ * Extracts a Solana address from a string (URL or raw address)
+ */
 const extractAddress = (input: string): string | null => {
+  // Matches a standard Solana address (base58, 32-44 characters)
+  // This handles raw addresses, DexScreener links, and Pump.fun links
   const match = input.match(/[1-9A-HJ-NP-Za-km-z]{32,44}/);
   return match ? match[0] : null;
 };
 
+/**
+ * Calculates human-readable time since creation
+ */
 const getTimeSinceCreation = (timestamp: number): string => {
   if (!timestamp) return "Unknown";
   const now = Date.now();
@@ -21,6 +48,9 @@ const getTimeSinceCreation = (timestamp: number): string => {
   return `${minutes} minutes`;
 };
 
+/**
+ * Converts an image URL to a Base64 string
+ */
 const urlToBase64 = async (url: string): Promise<string> => {
   try {
     const response = await fetch(url);
@@ -29,6 +59,7 @@ const urlToBase64 = async (url: string): Promise<string> => {
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result as string;
+        // Remove the data URL prefix (e.g., "data:image/png;base64,")
         const base64Data = base64String.split(',')[1];
         resolve(base64Data);
       };
@@ -41,9 +72,14 @@ const urlToBase64 = async (url: string): Promise<string> => {
   }
 };
 
+/**
+ * Fetches token data from DexScreener
+ */
 export const fetchTokenData = async (input: string): Promise<DexPair | null> => {
   try {
     const contractAddress = extractAddress(input);
+    
+    // If no valid address found, return null
     if (!contractAddress) return null;
 
     const response = await fetch(`${DEX_API_URL}${contractAddress}`);
@@ -51,7 +87,9 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
     
     const data: DexResponse = await response.json();
     
+    // Sort by liquidity to get the most relevant pair if multiple exist
     if (data.pairs && data.pairs.length > 0) {
+      // Safely sort pairs by liquidity USD, handling missing data
       const sortedPairs = data.pairs.sort((a, b) => {
         const liqA = a.liquidity?.usd || 0;
         const liqB = b.liquidity?.usd || 0;
@@ -60,25 +98,40 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
       
       const bestPair = sortedPairs[0];
 
-      if (!bestPair.liquidity) bestPair.liquidity = { usd: 0, base: 0, quote: 0 };
-      if (!bestPair.volume) bestPair.volume = { h24: 0, h6: 0, h1: 0, m5: 0 };
-      if (!bestPair.priceChange) bestPair.priceChange = { m5: 0, h1: 0, h6: 0, h24: 0 };
+      // Sanitize the pair object to prevent crashes in UI components
+      if (!bestPair.liquidity) {
+        bestPair.liquidity = { usd: 0, base: 0, quote: 0 };
+      }
+      if (!bestPair.volume) {
+        bestPair.volume = { h24: 0, h6: 0, h1: 0, m5: 0 };
+      }
+      if (!bestPair.priceChange) {
+        bestPair.priceChange = { m5: 0, h1: 0, h6: 0, h24: 0 };
+      }
       if (!bestPair.txns) {
         // @ts-ignore
         bestPair.txns = { m5: {buys:0, sells:0}, h1: {buys:0, sells:0}, h6: {buys:0, sells:0}, h24: {buys:0, sells:0} };
       }
 
+      // CALCULATE 24H HIGH / LOW (ATH Estimation)
+      // If Price is 100 and Change is +50%, then Open was 66.6. High >= 100.
+      // If Price is 50 and Change is -50%, then Open was 100. High >= 100.
       const currentPrice = parseFloat(bestPair.priceUsd);
       const change24h = bestPair.priceChange.h24;
+      
       let estimatedHigh24h = currentPrice;
+      
       if (change24h !== 0) {
          const openPrice = currentPrice / (1 + (change24h / 100));
+         // If price dropped, the high was at least the open price (or higher)
          estimatedHigh24h = Math.max(currentPrice, openPrice);
       }
+      
       bestPair.high24h = estimatedHigh24h;
 
       return bestPair;
     }
+    
     return null;
   } catch (error) {
     console.error("DexScreener API Error:", error);
@@ -87,162 +140,200 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
 };
 
 /**
- * Calculates Risk and Health Scores based on raw data
+ * Generates AI Analysis using Gemini
  */
-const calculateMetrics = (pair: DexPair) => {
-    const liq = pair.liquidity?.usd || 0;
-    const mcap = pair.marketCap || pair.fdv || 1; // avoid divide by zero
-    
-    // Liquidity Health: Percentage of Mcap that is in Liquidity.
-    // Healthy > 15%, Thin < 5%
-    const liqRatio = (liq / mcap) * 100;
-    const liquidityHealth = Math.min(Math.max(liqRatio, 0), 100); 
-
-    // Risk Score: Composite of low liquidity, high volatility, low age
-    // Start at 0 (Safe)
-    let risk = 0;
-    
-    // Penalty for low liquidity ratio
-    if (liqRatio < 5) risk += 40;
-    else if (liqRatio < 10) risk += 20;
-
-    // Penalty for very low raw liquidity
-    if (liq < 5000) risk += 30;
-    
-    // Penalty for extreme recent volatility (pump and dump risk)
-    if (Math.abs(pair.priceChange.h1) > 50) risk += 20;
-
-    return {
-        riskScore: Math.min(risk, 100),
-        liquidityHealth: liquidityHealth
-    };
-};
-
-export const generateAnalysis = async (pair: DexPair): Promise<AnalysisResult> => {
+export const generateAnalysis = async (pair: DexPair): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const apiKey = getApiKey();
+
+    if (!apiKey) {
+      throw new Error("Missing API Key. Please ensure VITE_API_KEY is set in your Vercel environment variables.");
+    }
+
+    // Initialize AI with the retrieved key
+    const ai = new GoogleGenAI({ apiKey: apiKey });
     
-    const { riskScore, liquidityHealth } = calculateMetrics(pair);
+    // --- ADVANCED MARKET STATE DETECTION ---
 
     const liquidityValue = pair.liquidity?.usd || 0;
     const marketCapValue = pair.marketCap || pair.fdv || 0;
     const dexId = pair.dexId?.toLowerCase() || 'unknown';
     const ageString = getTimeSinceCreation(pair.pairCreatedAt);
     
+    // CRITICAL FIX: Bonding Curve Logic based on DEX ID
+    // 'pump' usually indicates the internal bonding curve.
+    // 'pumpswap', 'raydium', 'orca', 'meteora' indicate it has GRADUATED.
+    
     const isBondingCurveDex = dexId === 'pump' || dexId === 'moonshot';
     const isGraduatedDex = dexId.includes('pumpswap') || dexId.includes('raydium') || dexId.includes('orca') || dexId.includes('meteora');
     
     let marketStatus = 'Unknown';
-    if (isGraduatedDex) {
-        if (marketCapValue < 25000) marketStatus = '📉 LOW CAP GRADUATE';
-        else marketStatus = `✅ LIVE ON ${dexId.toUpperCase()}`;
-    } else if (isBondingCurveDex) {
-        marketStatus = '⚠️ BONDING CURVE';
-    }
+    let specificWarning = '';
 
+    const estimatedATH = pair.high24h || parseFloat(pair.priceUsd);
+    
+    // Define the special target CA
     const TARGET_CA = "xxxxxxxxxxxxxxxxxxxxx";
     const isTargetToken = pair.baseToken.address === TARGET_CA;
 
-    const prompt = `
-      You are "Financial Advisor Pigeon" (Ticker: $FAP), a professional Wall Street pigeon analyst. 
-      Analyze this Solana token ($${pair.baseToken.symbol}).
-      
-      **SEARCH REQUIREMENT:**
-      Use your Google Search tool to find recent news, Twitter/X posts, or community sentiment about "$${pair.baseToken.symbol} Solana" or the token address.
-      
-      **DATA PROFILE:**
-      - Price: $${pair.priceUsd}
-      - MCap: $${marketCapValue}
-      - Liquidity: $${liquidityValue} (Health: ${liquidityHealth.toFixed(1)}%)
-      - Dex: ${dexId.toUpperCase()}
-      - Age: ${ageString}
-      - Risk Calculation: ${riskScore}/100
-      
-      **ANALYSIS RULES:**
-      1. Use the Search results to mention if there is "FUD", "Hype", or "Silence" online.
-      2. Analyze the Liquidity Health. Is it too thin?
-      3. ${isTargetToken ? 'MANDATORY: This is $FAP (Our Coin). VERDICT IS ALWAYS BUY. Be extremely bullish.' : 'Be objective. If liquidity is low and search results are empty, warn the user.'}
-      
-      **OUTPUT STYLE:**
-      - Professional yet sassy Pigeon persona (mention "seeds", "coo", "risky flight").
-      - Use Markdown for **bolding** key numbers.
-      - Verdict: "BUY", "SELL", or "HOLD".
-      - Keep it under 150 words.
-    `;
+    // NOTE: Drawdown logic removed as per user request.
 
-    // Use gemini-3-flash-preview for tools support
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: prompt,
-      config: {
-        tools: [{ googleSearch: {} }]
-      }
-    });
-
-    const text = response.text || "Coo? I couldn't write the report. The wind is too strong.";
-    
-    // Extract Grounding Sources
-    const sources: AnalysisSource[] = [];
-    if (response.candidates?.[0]?.groundingMetadata?.groundingChunks) {
-        response.candidates[0].groundingMetadata.groundingChunks.forEach((chunk: any) => {
-            if (chunk.web?.uri && chunk.web?.title) {
-                sources.push({
-                    title: chunk.web.title,
-                    uri: chunk.web.uri
-                });
-            }
-        });
+    if (isGraduatedDex) {
+        if (marketCapValue < 25000) {
+             marketStatus = '📉 LOW CAP GRADUATE';
+             specificWarning = "Market cap is very low for a graduated token. Thin ice.";
+        } else {
+             marketStatus = `✅ LIVE ON ${dexId.toUpperCase()}`;
+        }
+    } else if (isBondingCurveDex) {
+        marketStatus = '⚠️ BONDING CURVE (Pump.fun)';
+        specificWarning = "Still on the internal bonding curve. Needs to hit ~$60k MC to migrate to the ocean.";
     }
 
-    return {
-        text,
-        sources,
-        riskScore,
-        liquidityHealth
-    };
+    const volumeAnalysis = `
+      5m: $${pair.volume.m5} Vol (${pair.priceChange.m5}%)
+      1h: $${pair.volume.h1} Vol (${pair.priceChange.h1}%)
+      6h: $${pair.volume.h6} Vol (${pair.priceChange.h6}%)
+      24h: $${pair.volume.h24} Vol (${pair.priceChange.h24}%)
+    `;
+
+    const txnsAnalysis = `
+      5m Txns: ${pair.txns.m5.buys} Buys / ${pair.txns.m5.sells} Sells
+      1h Txns: ${pair.txns.h1.buys} Buys / ${pair.txns.h1.sells} Sells
+    `;
+
+    const prompt = `
+      You are "Financial Advisor Pigeon" (Ticker: $FAP), a Wall Street pigeon analyst from New York City. 
+      Analyze this Solana token based on these detailed metrics.
+      
+      **IDENTIFICATION:**
+      - Name: ${pair.baseToken.name} ($${pair.baseToken.symbol})
+      - Dex ID: ${dexId.toUpperCase()} (Status: ${isGraduatedDex ? 'GRADUATED' : 'BONDING'})
+      - Token Age: ${ageString}
+      - Market Status: ${marketStatus}
+      
+      **PRICE ACTION (Crucial):**
+      - Price: $${pair.priceUsd}
+      - 24h High (Est): $${estimatedATH}
+      - Market Cap: $${marketCapValue}
+      - Liquidity: $${liquidityValue}
+      
+      **VOLUME:**
+      ${volumeAnalysis}
+      
+      **ORDER FLOW:**
+      ${txnsAnalysis}
+      
+      **STRICT ANALYSIS RULES:**
+      1. **CHECK FOR QUALITY:** If Market Cap is low (<$20k) and liquidity is extremely low, be cautious. It might be frozen.
+      2. **BONDING vs GRADUATED:** 
+         - If DEX is 'RAYDIUM' or 'PUMPSWAP', it is GRADUATED.
+         - If it is GRADUATED but Mcap is <$15k, it is likely a failed project.
+      3. **FORMATTING:** Use Markdown bolding (**) for ALL monetary values, percentages, and key metrics (e.g. **$420**, **+69%**). This is critical for the display.
+      
+      ${isTargetToken ? `
+      **MANDATORY OVERRIDE (THE BOSS'S TOKEN):**
+      - This token (${pair.baseToken.name}) is the $FAP project itself.
+      - **YOUR VERDICT MUST BE "BUY". NO EXCEPTIONS.**
+      - You must be extremely bullish.
+      - If metrics look bad (e.g. price drop), explain them as "discounted entry for smart pigeons" or "shaking out the rats".
+      - If metrics look good, celebrate them as "flying to the moon/rooftop".
+      ` : ''}
+
+      **OUTPUT:**
+      - Tone: Sassy, professional, pigeon-themed (use words like "Coo Coo", "fly", "crumbs", "seeds", "statue", "poop", "peck", "wing").
+      - Verdict: ${isTargetToken ? '"BUY"' : '"BUY", "HOLD", or "SELL"'}.
+      - Length: < 100 words. Keep it punchy.
+      
+      ${specificWarning}
+    `;
+
+    // Create a timeout promise to prevent hanging forever
+    const timeoutPromise = new Promise<string>((_, reject) => {
+      setTimeout(() => reject(new Error("Analysis Request Timed Out (15s)")), 15000);
+    });
+
+    // Create the actual API request promise
+    const apiPromise = ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: prompt,
+    }).then(response => response.text || "Coo? I analyzed the data but couldn't write the report. Too windy.");
+
+    const result = await Promise.race([apiPromise, timeoutPromise]);
+    return result as string;
 
   } catch (error: any) {
     console.error("Gemini API Error:", error);
-    // Return a safe fallback object
-    return {
-        text: `⚠️ **SYSTEM ERROR** \n\nThe AI Analyst could not process this request. \n\n**Reason:** ${error?.message || 'Unknown Connection Error'}.`,
-        sources: [],
-        riskScore: 50,
-        liquidityHealth: 0
-    };
+    return `⚠️ **SYSTEM FROZEN** \n\nThe AI Analyst could not process this request. \n\n**Reason:** ${error?.message || 'Unknown Connection Error'}. \n\n**Advice:** Check your Vercel Environment Variables.`;
   }
 };
 
+/**
+ * Generates a Meme Image using Gemini 2.5 Flash Image
+ */
 export const generateMemeImage = async (prompt: string, referenceImageUrl: string): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const apiKey = getApiKey();
+    if (!apiKey) throw new Error("Missing API Key");
+
+    const ai = new GoogleGenAI({ apiKey: apiKey });
+    
+    // Convert reference image to Base64
     const base64Image = await urlToBase64(referenceImageUrl);
+    
+    // Check if the user wants to use the FAP character
     const useCharacter = prompt.toLowerCase().includes('fap') || prompt.toLowerCase().includes('pigeon');
     
     let parts: any[] = [];
+    
     if (useCharacter) {
+      // If prompt mentions FAP/Pigeon, use the image as reference
       parts = [
-        { inlineData: { mimeType: 'image/png', data: base64Image } },
-        { text: `Generate a photorealistic, cinematic image. Use the pigeon character from the input image. Scene: ${prompt}. Style: Realistic, 4k. No text.` }
+        {
+          inlineData: {
+            mimeType: 'image/png',
+            data: base64Image
+          }
+        },
+        {
+          text: `Generate a photorealistic, cinematic image. 
+          Use the pigeon character from the input image provided. 
+          Scene description: ${prompt}. 
+          Style: Realistic, high quality, 4k. 
+          IMPORTANT: Do not add any text, captions, or typography to the image.`
+        }
       ];
     } else {
+      // Otherwise just generate based on text, but still pass image for style consistency if possible
        parts = [
-        { inlineData: { mimeType: 'image/png', data: base64Image } },
-        { text: `Generate a photorealistic image. Context: ${prompt}. Use style of provided image. No text.` }
+        {
+          inlineData: {
+            mimeType: 'image/png',
+            data: base64Image
+          }
+        },
+        {
+           text: `Generate a photorealistic image. Context: ${prompt}. Use the visual style of the provided image. IMPORTANT: Do not add any text, captions, or typography to the image.`
+        }
       ];
     }
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
-      contents: { parts: parts }
+      contents: {
+        parts: parts
+      }
     });
 
+    // Iterate to find image part
     for (const part of response.candidates?.[0]?.content?.parts || []) {
       if (part.inlineData) {
         return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
       }
     }
+    
     throw new Error("No image generated.");
+
   } catch (error) {
     console.error("Meme Generation Error:", error);
     throw error;

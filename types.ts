@@ -50,18 +50,6 @@ export interface DexResponse {
   pairs: DexPair[];
 }
 
-export interface AnalysisSource {
-  title: string;
-  uri: string;
-}
-
-export interface AnalysisResult {
-  text: string;
-  sources: AnalysisSource[];
-  riskScore: number; // 0-100 (0 = Safe, 100 = Rug Risk)
-  liquidityHealth: number; // 0-100 (Liquidity to FDV ratio normalized)
-}
-
 export enum AnalysisStatus {
   IDLE,
   FETCHING_DATA,
