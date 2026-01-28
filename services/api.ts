@@ -173,7 +173,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     const estimatedATH = pair.high24h || parseFloat(pair.priceUsd);
     
     // Define the special target CA
-    const TARGET_CA = "DtkdfG3HKcjkauQZW5wsJT4BFKZwvNGgNoMo6kfcpump";
+    const TARGET_CA = "xxxxxxxxxxxxxxxxxxxxx";
     const isTargetToken = pair.baseToken.address === TARGET_CA;
 
     // NOTE: Drawdown logic removed as per user request.
@@ -203,7 +203,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     `;
 
     const prompt = `
-      You are "Financial Advisor Penguin" (Ticker: $FAP), a Wall Street penguin analyst from Antarctica. 
+      You are "Financial Advisor Pigeon" (Ticker: $FAP), a Wall Street pigeon analyst from New York City. 
       Analyze this Solana token based on these detailed metrics.
       
       **IDENTIFICATION:**
@@ -236,12 +236,12 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       - This token (${pair.baseToken.name}) is the $FAP project itself.
       - **YOUR VERDICT MUST BE "BUY". NO EXCEPTIONS.**
       - You must be extremely bullish.
-      - If metrics look bad (e.g. price drop), explain them as "discounted entry for smart penguins" or "shaking out the weak hands".
-      - If metrics look good, celebrate them as "going to the moon/iceberg".
+      - If metrics look bad (e.g. price drop), explain them as "discounted entry for smart pigeons" or "shaking out the rats".
+      - If metrics look good, celebrate them as "flying to the moon/rooftop".
       ` : ''}
 
       **OUTPUT:**
-      - Tone: Sassy, professional, penguin-themed (use words like "Noot Noot", "slide", "ice", "fish", "pebble", "blizzard").
+      - Tone: Sassy, professional, pigeon-themed (use words like "Coo Coo", "fly", "crumbs", "seeds", "statue", "poop", "peck", "wing").
       - Verdict: ${isTargetToken ? '"BUY"' : '"BUY", "HOLD", or "SELL"'}.
       - Length: < 100 words. Keep it punchy.
       
@@ -257,7 +257,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     const apiPromise = ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
-    }).then(response => response.text || "Noot? I analyzed the data but couldn't write the report. Too cold.");
+    }).then(response => response.text || "Coo? I analyzed the data but couldn't write the report. Too windy.");
 
     const result = await Promise.race([apiPromise, timeoutPromise]);
     return result as string;
@@ -282,12 +282,12 @@ export const generateMemeImage = async (prompt: string, referenceImageUrl: strin
     const base64Image = await urlToBase64(referenceImageUrl);
     
     // Check if the user wants to use the FAP character
-    const useCharacter = prompt.toLowerCase().includes('fap') || prompt.toLowerCase().includes('penguin');
+    const useCharacter = prompt.toLowerCase().includes('fap') || prompt.toLowerCase().includes('pigeon');
     
     let parts: any[] = [];
     
     if (useCharacter) {
-      // If prompt mentions FAP/Penguin, use the image as reference
+      // If prompt mentions FAP/Pigeon, use the image as reference
       parts = [
         {
           inlineData: {
@@ -297,7 +297,7 @@ export const generateMemeImage = async (prompt: string, referenceImageUrl: strin
         },
         {
           text: `Generate a photorealistic, cinematic image. 
-          Use the penguin character from the input image provided. 
+          Use the pigeon character from the input image provided. 
           Scene description: ${prompt}. 
           Style: Realistic, high quality, 4k. 
           IMPORTANT: Do not add any text, captions, or typography to the image.`

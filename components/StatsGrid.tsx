@@ -1,6 +1,6 @@
 import React from 'react';
 import { DexPair } from '../types';
-import { DollarSign, Users, Droplets, TrendingUp, TrendingDown, Clock, BarChart2, Snowflake, Fish, ThermometerSnowflake, MountainSnow } from 'lucide-react';
+import { DollarSign, Users, Droplets, TrendingUp, TrendingDown, Clock, BarChart2, Snowflake, Bird, MapPin, Wind } from 'lucide-react';
 
 interface StatsGridProps {
   pair: DexPair;
@@ -71,15 +71,15 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
                <DollarSign size={64} />
              </div>
              <div className="flex items-center gap-2 mb-2 text-slate-500">
-                <Fish size={14} className="text-fap-400" />
-                <p className="text-[10px] font-bold uppercase tracking-widest">Current Fish-Price</p>
+                <Bird size={14} className="text-fap-400" />
+                <p className="text-[10px] font-bold uppercase tracking-widest">Current Crumb-Price</p>
              </div>
              <p className="text-xl md:text-2xl font-mono font-black tracking-tight text-white drop-shadow-md">
                 {formatPrice(pair.priceUsd)}
              </p>
              <div className="flex items-center gap-1 mt-2">
                 <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${dropFromHigh < -20 ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-green-500/10 border-green-500/20 text-green-400'}`}>
-                    Slide from Top: {dropFromHigh.toFixed(1)}%
+                    Drop from Roof: {dropFromHigh.toFixed(1)}%
                 </span>
              </div>
           </div>
@@ -91,22 +91,22 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
              </div>
              <div className="flex items-center gap-2 mb-2 text-slate-500">
                <Users size={14} className="text-blue-400" />
-               <p className="text-[10px] font-bold uppercase tracking-widest">Market Penguin</p>
+               <p className="text-[10px] font-bold uppercase tracking-widest">Market Pigeon</p>
              </div>
              <p className="text-xl font-mono font-black text-white">{formatCurrency(mcap)}</p>
              <p className="text-[9px] text-slate-500 font-mono mt-1">
-                Fully Diluted Flippers: {formatCurrency(pair.fdv)}
+                Fully Diluted Wings: {formatCurrency(pair.fdv)}
              </p>
           </div>
 
           {/* Liquidity Card */}
           <div className="bg-slate-900 border border-slate-700/50 p-4 rounded-xl shadow-lg relative overflow-hidden group hover:border-cyan-500/30 transition-all">
              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-transform">
-               <MountainSnow size={64} />
+               <Droplets size={64} />
              </div>
              <div className="flex items-center gap-2 mb-2 text-slate-500">
                <Droplets size={14} className="text-cyan-400" />
-               <p className="text-[10px] font-bold uppercase tracking-widest">Iceberg Depth</p>
+               <p className="text-[10px] font-bold uppercase tracking-widest">Fountain Depth</p>
              </div>
              <p className="text-xl font-mono font-black text-white">{formatCurrency(pair.liquidity.usd)}</p>
              <div className="mt-2 w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
@@ -116,7 +116,7 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
                 ></div>
              </div>
              <p className="text-[9px] text-slate-500 mt-1 font-mono text-right">
-                Frozen: {liqRatio.toFixed(1)}%
+                Pooled: {liqRatio.toFixed(1)}%
              </p>
           </div>
 
@@ -126,14 +126,14 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
                <Clock size={64} />
              </div>
              <div className="flex items-center gap-2 mb-2 text-slate-500">
-               <ThermometerSnowflake size={14} className="text-amber-400" />
-               <p className="text-[10px] font-bold uppercase tracking-widest">Ice Age</p>
+               <MapPin size={14} className="text-amber-400" />
+               <p className="text-[10px] font-bold uppercase tracking-widest">City Time</p>
              </div>
              <p className="text-sm font-mono font-bold text-white mt-1">
                 {new Date(pair.pairCreatedAt).toLocaleDateString()}
              </p>
              <p className="text-[9px] text-amber-500/80 font-mono mt-1 uppercase tracking-wider">
-                Since First Snow
+                Since First Flight
              </p>
           </div>
        </div>
@@ -143,11 +143,11 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
          <div className="px-4 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-2">
                 <BarChart2 size={16} className="text-fap-400" />
-                <h3 className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Momentum & Flippers</h3>
+                <h3 className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Momentum & Wings</h3>
             </div>
             {pair.high24h && (
                <div className="text-[9px] text-slate-500 font-mono flex items-center gap-2">
-                  <span>24H PEAK: {formatCurrency(pair.high24h)}</span>
+                  <span>24H ROOF: {formatCurrency(pair.high24h)}</span>
                </div>
             )}
          </div>
@@ -156,8 +156,8 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
              <thead>
                <tr className="bg-slate-900/50 border-b border-slate-800">
                  <th className="py-2 px-4 text-[9px] uppercase text-slate-500 font-bold tracking-wider">Timeframe</th>
-                 <th className="py-2 px-4 text-[9px] uppercase text-slate-500 font-bold tracking-wider">Price Slide</th>
-                 <th className="py-2 px-4 text-[9px] uppercase text-slate-500 font-bold tracking-wider">Volume (Sardines)</th>
+                 <th className="py-2 px-4 text-[9px] uppercase text-slate-500 font-bold tracking-wider">Price Glide</th>
+                 <th className="py-2 px-4 text-[9px] uppercase text-slate-500 font-bold tracking-wider">Volume (Seeds)</th>
                  <th className="py-2 px-4 text-[9px] uppercase text-slate-500 font-bold tracking-wider w-1/3">Buys vs Sells</th>
                </tr>
              </thead>

@@ -13,7 +13,7 @@ import {
   Battery,
   Wifi,
   Search,
-  Snowflake
+  Bird
 } from 'lucide-react';
 
 interface AnalysisBoxProps {
@@ -21,19 +21,19 @@ interface AnalysisBoxProps {
   status: AnalysisStatus;
 }
 
-// Penguin-Themed Initialization Steps
+// Pigeon-Themed Initialization Steps
 const INIT_STEPS = [
   "Waking up the Analyst...",
-  "Waddling to the keyboard...",
-  "Sliding into liquidity pool...",
-  "Detecting seal odors...",
-  "Judging developer wallet history...",
-  "Sharpening flippers...",
-  "Calculating fish-fit margins...",
-  "Typing report with beak..."
+  "Preening feathers...",
+  "Flying to the keyboard...",
+  "Spotting crumbs on the chart...",
+  "Judging developer statues...",
+  "Sharpening beak...",
+  "Calculating seed-fit margins...",
+  "Pecking report with beak..."
 ];
 
-const PENGUIN_IMG_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping-removebg-preview%20(1).png";
+const PIGEON_IMG_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/Gemini_Generated_Image_4lewf24lewf24lew-removebg-preview.png";
 
 const VerdictBanner = ({ type }: { type: 'buy' | 'sell' | 'hold' }) => {
   if (type === 'buy') {
@@ -53,7 +53,7 @@ const VerdictBanner = ({ type }: { type: 'buy' | 'sell' | 'hold' }) => {
             
             <div className="relative z-10 flex items-center gap-2 mt-2 px-4 py-1 bg-green-900/60 border border-green-500/50 rounded-full backdrop-blur-sm">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
-                <p className="font-mono text-green-300 font-bold tracking-[0.2em] text-[10px] md:text-xs">FLIPPERS UP: ALPHA CONFIRMED</p>
+                <p className="font-mono text-green-300 font-bold tracking-[0.2em] text-[10px] md:text-xs">WINGS UP: ALPHA CONFIRMED</p>
             </div>
         </div>
       </div>
@@ -76,7 +76,7 @@ const VerdictBanner = ({ type }: { type: 'buy' | 'sell' | 'hold' }) => {
             
             <div className="relative z-10 flex items-center gap-2 mt-2 px-4 py-1 bg-red-900/60 border border-red-500/50 rounded-full backdrop-blur-sm">
                 <AlertTriangle size={12} className="text-red-400" />
-                <p className="font-mono text-red-300 font-bold tracking-[0.2em] text-[10px] md:text-xs">AVALANCHE WARNING</p>
+                <p className="font-mono text-red-300 font-bold tracking-[0.2em] text-[10px] md:text-xs">HAWK WARNING</p>
             </div>
         </div>
       </div>
@@ -98,15 +98,15 @@ const VerdictBanner = ({ type }: { type: 'buy' | 'sell' | 'hold' }) => {
             
             <div className="relative z-10 flex items-center gap-2 mt-2 px-4 py-1 bg-amber-900/60 border border-amber-500/50 rounded-full backdrop-blur-sm">
                 <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
-                <p className="font-mono text-amber-300 font-bold tracking-[0.2em] text-[10px] md:text-xs">WAITING AT ICE HOLE...</p>
+                <p className="font-mono text-amber-300 font-bold tracking-[0.2em] text-[10px] md:text-xs">WAITING ON STATUE...</p>
             </div>
         </div>
     </div>
   );
 };
 
-// Penguin Vitals Panel (Sidebar)
-const PenguinVitals = ({ active }: { active: boolean }) => (
+// Pigeon Vitals Panel (Sidebar)
+const PigeonVitals = ({ active }: { active: boolean }) => (
   <div className="hidden md:flex flex-col w-32 border-l border-slate-800 bg-slate-950/80 p-3 text-[10px] font-mono text-slate-500 select-none overflow-hidden relative backdrop-blur-sm z-20">
      <div className="mb-4 pb-2 border-b border-slate-800">
         <div className="text-slate-400 font-bold tracking-widest mb-2 flex items-center gap-1">
@@ -119,7 +119,7 @@ const PenguinVitals = ({ active }: { active: boolean }) => (
         <div>
             <div className="flex justify-between mb-1 text-xs">
                 <span>MOOD</span>
-                <span className={active ? "text-green-400" : "text-slate-600"}>CHILLING</span>
+                <span className={active ? "text-green-400" : "text-slate-600"}>COOING</span>
             </div>
             <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
                 <div className="h-full bg-green-500 w-[90%]"></div>
@@ -128,7 +128,7 @@ const PenguinVitals = ({ active }: { active: boolean }) => (
         
         <div>
             <div className="flex justify-between mb-1 text-xs">
-                <span>NOOT</span>
+                <span>COO</span>
                 <span className={active ? "text-pink-400" : "text-slate-600"}>LOUD</span>
             </div>
             <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
@@ -139,7 +139,7 @@ const PenguinVitals = ({ active }: { active: boolean }) => (
         <div>
             <div className="flex justify-between mb-1 text-xs">
                 <span>HUNGER</span>
-                <span className={active ? "text-orange-400" : "text-slate-600"}>NEED FISH</span>
+                <span className={active ? "text-orange-400" : "text-slate-600"}>NEED SEEDS</span>
             </div>
             <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
                 <div className="h-full bg-orange-500 w-[40%]"></div>
@@ -149,7 +149,7 @@ const PenguinVitals = ({ active }: { active: boolean }) => (
 
      {/* Active Scanning Visual */}
      <div className="mt-auto relative border border-slate-800 bg-slate-900/50 rounded p-2 text-center">
-        <Snowflake size={16} className={`mx-auto mb-1 ${active ? 'text-blue-400 animate-spin-slow' : 'text-slate-700'}`} />
+        <Bird size={16} className={`mx-auto mb-1 ${active ? 'text-blue-400 animate-bounce' : 'text-slate-700'}`} />
         <span className="text-[8px] tracking-wider block">NEURAL ENGINE</span>
         {active && <span className="text-[8px] text-green-500 animate-blink">● ONLINE</span>}
      </div>
@@ -227,14 +227,14 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
       {/* Decorative Grid Background */}
       <div className="absolute inset-0 opacity-10 bg-grid-pattern pointer-events-none"></div>
 
-      {/* Header - Penguin Professional Style */}
+      {/* Header - Pigeon Professional Style */}
       <div className="bg-slate-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between flex-shrink-0 z-30 shadow-md">
         <div className="flex items-center gap-3">
           {/* Analyst Avatar */}
           <div className="relative group cursor-help">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full opacity-75 animate-spin-slow blur-[2px]"></div>
             <img 
-                src={PENGUIN_IMG_URL} 
+                src={PIGEON_IMG_URL} 
                 alt="Analyst" 
                 className="w-8 h-8 rounded-full border border-slate-700 relative z-10 object-cover bg-slate-900"
             />
@@ -254,7 +254,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
 
         <div className="hidden md:flex items-center gap-2 px-2 py-1 bg-slate-900 rounded border border-slate-800">
              <Search size={10} className="text-slate-500" />
-             <span className="text-[9px] text-slate-400 font-mono">SCANNING_ICE</span>
+             <span className="text-[9px] text-slate-400 font-mono">SCANNING_CITY</span>
              <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse ml-1"></span>
         </div>
       </div>
@@ -262,9 +262,9 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden relative bg-slate-900/90">
         
-        {/* Penguin Watermark */}
+        {/* Pigeon Watermark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-[0.03]">
-             <img src={PENGUIN_IMG_URL} alt="" className="w-64 h-64 object-contain grayscale invert" />
+             <img src={PIGEON_IMG_URL} alt="" className="w-64 h-64 object-contain grayscale invert" />
         </div>
 
         {/* Central Display */}
@@ -275,7 +275,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
                 <div className="w-full h-1 bg-white absolute top-0 animate-scanline blur-[1px]"></div>
             </div>
 
-            {/* LOADING STATE - Penguin Boot Sequence */}
+            {/* LOADING STATE - Pigeon Boot Sequence */}
             {(status === AnalysisStatus.ANALYZING || status === AnalysisStatus.FETCHING_DATA) ? (
               <div className="h-full flex flex-col justify-center items-center relative z-20">
                  <div className="w-full max-w-sm font-mono text-xs">
@@ -293,7 +293,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
                        <div className="h-0.5 w-full bg-slate-800 rounded-full overflow-hidden">
                            <div className="h-full bg-gradient-to-r from-amber-500 to-pink-500 animate-[chart-flow_1.5s_ease-in-out_infinite]" style={{width: '30%'}}></div>
                        </div>
-                       <p className="text-center text-[8px] text-slate-600 mt-2 font-mono uppercase tracking-widest animate-pulse">Processing Sardines...</p>
+                       <p className="text-center text-[8px] text-slate-600 mt-2 font-mono uppercase tracking-widest animate-pulse">Processing Crumbs...</p>
                     </div>
                  </div>
               </div>
@@ -306,7 +306,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
                        SUBJECT: <span className="text-white font-bold bg-slate-800 px-1 rounded">$FAP</span>
                     </span>
                     <span className="text-[10px] text-fap-400 border border-fap-900/50 bg-fap-950/20 px-2 py-0.5 rounded shadow-[0_0_10px_rgba(251,113,133,0.1)]">
-                       GENERATED BY PENGUIN
+                       GENERATED BY PIGEON
                     </span>
                  </div>
                  
@@ -350,7 +350,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
         </div>
 
         {/* Right Sidebar - Vitals */}
-        <PenguinVitals active={isActive} />
+        <PigeonVitals active={isActive} />
 
       </div>
       
@@ -360,7 +360,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
              <span className="w-1.5 h-1.5 bg-slate-700 rounded-full"></span>
              SYSTEM_READY
          </span>
-         <span className="opacity-50">NOOT_OS v9.0.1 (ICE_AGE: 2)</span>
+         <span className="opacity-50">COO_OS v9.0.1 (CITY_TIME: 2)</span>
       </div>
     </div>
   );

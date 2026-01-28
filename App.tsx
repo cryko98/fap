@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, ShieldAlert, Zap, Radio, CloudLightning, Moon, Snowflake, Fish, Image as ImageIcon } from 'lucide-react';
+import { Search, ShieldAlert, Zap, Radio, CloudLightning, Moon, Snowflake, Fish, Image as ImageIcon, Bird, Wind, MapPin } from 'lucide-react';
 import { TopBar } from './components/TopBar';
 import { Header } from './components/Header';
 import { StatsGrid } from './components/StatsGrid';
@@ -59,13 +59,13 @@ const FloatingTicker = ({ type, text, delay, left, duration }: { type: 'up' | 'd
   );
 };
 
-// Static Penguin Humor Widget (Light Mode)
+// Static Pigeon Humor Widget (Light Mode)
 const GlobalSentimentWidget = () => {
   // Randomly pick a state for visual flair (static for now, could be dynamic)
   const states = [
-     { label: "SLIDING", icon: <CloudLightning size={16} />, color: "text-amber-500", border: "border-amber-200" },
-     { label: "HUDDLING", icon: <Moon size={16} />, color: "text-blue-500", border: "border-blue-200" },
-     { label: "FISHING", icon: <Radio size={16} />, color: "text-green-600", border: "border-green-200" },
+     { label: "FLYING", icon: <Wind size={16} />, color: "text-amber-500", border: "border-amber-200" },
+     { label: "FLOCKING", icon: <Bird size={16} />, color: "text-blue-500", border: "border-blue-200" },
+     { label: "SCAVENGING", icon: <MapPin size={16} />, color: "text-green-600", border: "border-green-200" },
   ];
   const currentState = states[Math.floor(Date.now() / 10000) % states.length]; // Psuedo-random based on load time bucket
 
@@ -73,8 +73,8 @@ const GlobalSentimentWidget = () => {
     <div className="fixed bottom-4 right-4 hidden lg:flex flex-col gap-2 z-40 animate-fade-in">
        <div className="bg-white/90 backdrop-blur border border-slate-200 p-3 rounded-lg shadow-xl w-48">
           <div className="flex items-center justify-between mb-2 pb-2 border-b border-slate-100">
-             <span className="text-[10px] font-mono text-slate-500 uppercase">Global Penguin Sentiment</span>
-             <Snowflake size={12} className="text-slate-400" />
+             <span className="text-[10px] font-mono text-slate-500 uppercase">Global Pigeon Sentiment</span>
+             <Bird size={12} className="text-slate-400" />
           </div>
           <div className="flex items-center gap-2">
              <div className={`p-1.5 rounded-md bg-slate-50 border ${currentState.border} ${currentState.color}`}>
@@ -82,7 +82,7 @@ const GlobalSentimentWidget = () => {
              </div>
              <div>
                 <div className={`text-xs font-black font-mono tracking-widest ${currentState.color}`}>{currentState.label}</div>
-                <div className="text-[9px] text-slate-400">Ice Sheet Stability</div>
+                <div className="text-[9px] text-slate-400">Plaza Stability</div>
              </div>
           </div>
        </div>
@@ -90,7 +90,7 @@ const GlobalSentimentWidget = () => {
   );
 };
 
-const PENGUIN_LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping-removebg-preview%20(1).png";
+const PIGEON_LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/Gemini_Generated_Image_4lewf24lewf24lew-removebg-preview.png";
 
 const App: React.FC = () => {
   const [address, setAddress] = useState('');
@@ -161,7 +161,7 @@ const App: React.FC = () => {
       <MemeGenerator 
         isOpen={isMemeModalOpen} 
         onClose={() => setIsMemeModalOpen(false)}
-        logoUrl={PENGUIN_LOGO_URL} 
+        logoUrl={PIGEON_LOGO_URL} 
       />
       
       <main className="flex-grow container mx-auto max-w-[1400px] px-4 relative z-10">
@@ -171,7 +171,7 @@ const App: React.FC = () => {
         {/* Hero Section: Cat & Search */}
         <div className="max-w-4xl mx-auto mb-12 relative">
           
-          {/* Giant Peeking Penguin - No Red Laser */}
+          {/* Giant Peeking Pigeon - No Red Laser */}
           <div className="flex justify-center -mb-20 relative z-0 pointer-events-none">
              
              {/* Tech Rings Behind - Lighter Colors */}
@@ -179,9 +179,9 @@ const App: React.FC = () => {
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[600px] md:h-[600px] border border-green-200 rounded-full animate-[spin_40s_linear_infinite_reverse]"></div>
              
              <div className="relative group">
-                {/* The Penguin Image */}
+                {/* The Pigeon Image */}
                 <img 
-                  src={PENGUIN_LOGO_URL}
+                  src={PIGEON_LOGO_URL}
                   alt="$FAP Analyst"
                   className="w-64 md:w-[450px] object-cover transform translate-y-8 relative z-10 drop-shadow-[0_10px_30px_rgba(0,0,0,0.1)] transition-all duration-700 hover:scale-105"
                 />
@@ -324,11 +324,11 @@ const App: React.FC = () => {
            <div className="flex flex-col items-center justify-center space-y-3">
              <div className="flex items-center gap-2 text-slate-900 font-black tracking-tight text-xl">
                 <span className="w-3 h-3 rounded-sm bg-fap-600 rotate-45"></span>
-                FINANCIAL ADVISOR PENGUIN
+                FINANCIAL ADVISOR PIGEON
              </div>
              
              <p className="text-slate-500 text-[11px] max-w-4xl mx-auto leading-relaxed font-medium tracking-wide">
-               <strong className="text-fap-600">DISCLAIMER:</strong> I am a Financial Advisor Penguin. Do not expect ultra high-tech analysis, but for a flightless bird, I utilize real market data and legitimate strategy. I am the smartest financial advisor penguin in existence, but this is still satire. Not financial advice. Noot noot.
+               <strong className="text-fap-600">DISCLAIMER:</strong> I am a Financial Advisor Pigeon. Do not expect ultra high-tech analysis, but for a city bird, I utilize real market data and legitimate strategy. I am the smartest financial advisor pigeon in existence, but this is still satire. Not financial advice. Coo coo.
              </p>
              
              <p className="text-slate-400 text-[10px] font-mono uppercase tracking-widest mt-2">

@@ -2,17 +2,17 @@ import React from 'react';
 import { Radio } from 'lucide-react';
 
 const NEWS_ITEMS = [
-  "BREAKING NOOT-S: Bitcoin CEO freezes assets (literally) in Antarctica.",
-  "MARKET ALERT: Seal coins smelling fishy today, advises caution.",
-  "INSIDER TRADING: Shiny pebble manipulation detected on Solana.",
-  "WHALE ALERT: Killer Whale just bought 500 lbs of krill with $SOL.",
-  "TECHNICAL ANALYSIS: Chart pattern confirms 'Sliding Penguin' formation.",
-  "SEC UPDATE: Gary Gensler slipped on black ice.",
-  "LIQUIDITY: Ice shelf depths reaching critical levels.",
-  "RUMOR: Ethereum devs distracted by happy feet dance, merge delayed.",
-  "STRATEGY: Buy low, slide high. It's the only way.",
-  "SECURITY: 2FA now requires pebble offering verification.",
-  "ECONOMY: Sardine inflation creates panic in the colony.",
+  "BREAKING COO: Bitcoin CEO spotted napping on a park bench.",
+  "MARKET ALERT: Hawk coins circling overhead, advises caution.",
+  "INSIDER TRADING: Premium breadcrumb manipulation detected on Solana.",
+  "WHALE ALERT: Fat Pigeon just bought 500 lbs of seeds with $SOL.",
+  "TECHNICAL ANALYSIS: Chart pattern confirms 'Head Bobbing' formation.",
+  "SEC UPDATE: Gary Gensler pooped on by anonymous flyer.",
+  "LIQUIDITY: Fountain depths reaching critical levels.",
+  "RUMOR: Ethereum devs distracted by shiny foil wrapper, merge delayed.",
+  "STRATEGY: Buy low, fly high. It's the only way.",
+  "SECURITY: 2FA now requires specific coo sequence.",
+  "ECONOMY: Seed inflation creates panic in the plaza.",
 ];
 
 export const Header: React.FC = () => {
@@ -23,7 +23,7 @@ export const Header: React.FC = () => {
       <div className="w-full max-w-3xl mb-6 bg-white border border-green-500/20 rounded-md overflow-hidden flex items-center shadow-[0_4px_15px_rgba(0,0,0,0.05)] relative group">
         <div className="bg-green-50 px-3 py-1.5 flex items-center gap-2 border-r border-green-100 z-20 shrink-0 relative">
           <Radio size={12} className="text-green-600 animate-pulse" />
-          <span className="text-[10px] font-mono font-bold text-green-700 uppercase tracking-widest whitespace-nowrap">Breaking Ice</span>
+          <span className="text-[10px] font-mono font-bold text-green-700 uppercase tracking-widest whitespace-nowrap">Breaking Coo</span>
         </div>
         
         {/* Scroller Area */}
@@ -51,7 +51,7 @@ export const Header: React.FC = () => {
       
       <div className="flex flex-col items-center">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 tracking-tighter drop-shadow-sm uppercase leading-tight">
-          FINANCIAL ADVISOR PENGUIN
+          FINANCIAL ADVISOR PIGEON
         </h1>
         <h2 className="text-4xl md:text-6xl font-black text-green-600 tracking-tighter mt-1 drop-shadow-sm">
           $FAP
@@ -59,7 +59,7 @@ export const Header: React.FC = () => {
       </div>
       
       <p className="mt-4 text-sm md:text-base text-slate-500 font-medium max-w-xl mx-auto font-mono leading-relaxed border-t border-slate-200 pt-3">
-        // The sassiest algorithmic trading terminal on Solana. Noot Noot.
+        // The sassiest algorithmic trading terminal on Wall Street. Coo Coo.
       </p>
     </header>
   );

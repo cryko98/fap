@@ -9,15 +9,16 @@ interface MemeGeneratorProps {
 }
 
 const FUNNY_PROMPTS = [
-  "Photorealistic Fap penguin in a bespoke suit analyzing a crashing red candle chart",
-  "Fap penguin as a Wall Street CEO, sitting at a mahogany desk with a golden fish",
-  "Cinematic shot of Fap penguin giving financial advice to a group of confused seals",
-  "Fap penguin in a luxury private jet looking at a crypto chart on a tablet",
-  "Realistic Fap penguin wearing a trading headset screaming 'BUY THE DIP' on the trading floor",
-  "Fap penguin crying over a frozen laptop screen showing -99% portfolio",
-  "Fap penguin buried in a pile of cash inside an igloo office",
-  "Close up of Fap penguin staring intensely at a Bloomberg terminal",
-  "Fap penguin shredding paper documents labeled 'SEC SUBPOENA'"
+  "Photorealistic Fap pigeon in a bespoke suit analyzing a crashing red candle chart",
+  "Fap pigeon as a Wall Street CEO, sitting at a mahogany desk with a golden crumb",
+  "Cinematic shot of Fap pigeon giving financial advice to a group of confused rats",
+  "Fap pigeon in a luxury private jet looking at a crypto chart on a tablet",
+  "Realistic Fap pigeon wearing a trading headset screaming 'BUY THE DIP' on the trading floor",
+  "Fap pigeon crying over a frozen laptop screen showing -99% portfolio",
+  "Fap pigeon buried in a pile of cash inside a cardboard box office",
+  "Close up of Fap pigeon staring intensely at a Bloomberg terminal",
+  "Fap pigeon shredding paper documents labeled 'SEC SUBPOENA'",
+  "Fap pigeon pooping on a bear market chart"
 ];
 
 export const MemeGenerator: React.FC<MemeGeneratorProps> = ({ isOpen, onClose, logoUrl }) => {
@@ -42,7 +43,7 @@ export const MemeGenerator: React.FC<MemeGeneratorProps> = ({ isOpen, onClose, l
       const imgData = await generateMemeImage(prompt, logoUrl);
       setGeneratedImage(imgData);
     } catch (err: any) {
-      setError("Failed to generate meme. The AI might be freezing up.");
+      setError("Failed to generate meme. The AI might be flying away.");
     } finally {
       setLoading(false);
     }
@@ -115,7 +116,7 @@ export const MemeGenerator: React.FC<MemeGeneratorProps> = ({ isOpen, onClose, l
                 <p className="text-sm font-medium">Enter a prompt below to generate a realistic image.</p>
                 <div className="mt-3 inline-flex items-center gap-2 bg-fap-50 text-fap-700 px-3 py-1.5 rounded-lg border border-fap-100 text-xs font-bold shadow-sm">
                    <Sparkles size={12} className="fill-current" />
-                   <span>TIP: Use "Fap" in your prompt to add the penguin!</span>
+                   <span>TIP: Use "Fap" in your prompt to add the pigeon!</span>
                 </div>
               </div>
             )}
@@ -127,7 +128,7 @@ export const MemeGenerator: React.FC<MemeGeneratorProps> = ({ isOpen, onClose, l
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Describe your scene... (e.g. 'Photorealistic Fap penguin in a bespoke suit')"
+                placeholder="Describe your scene... (e.g. 'Photorealistic Fap pigeon in a bespoke suit')"
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-fap-500/20 resize-none h-20"
               />
               <button 
