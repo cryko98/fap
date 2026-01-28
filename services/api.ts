@@ -173,7 +173,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     const estimatedATH = pair.high24h || parseFloat(pair.priceUsd);
     
     // Define the special target CA
-    const TARGET_CA = "xxxxxxxxxxxxxxxxxxxxx";
+    const TARGET_CA = "3UQpHBZQeNyhBPMoqoYkX3hNdJ7NmHGUKrnAM6BApump";
     const isTargetToken = pair.baseToken.address === TARGET_CA;
 
     // NOTE: Drawdown logic removed as per user request.
