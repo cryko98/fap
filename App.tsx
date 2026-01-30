@@ -255,9 +255,9 @@ const App: React.FC = () => {
                      <Wifi size={10} /> NETWORK
                    </h3>
                    <div className="space-y-1 font-mono text-[9px] text-stone-500">
-                      <p>> SOLANA: CONNECTED</p>
-                      <p>> LATENCY: 14ms</p>
-                      <p>> BLOCK: 245,992,101</p>
+                      <p>&gt; SOLANA: CONNECTED</p>
+                      <p>&gt; LATENCY: 14ms</p>
+                      <p>&gt; BLOCK: 245,992,101</p>
                    </div>
                 </div>
              </div>
