@@ -5,6 +5,26 @@ const DEX_API_URL = 'https://api.dexscreener.com/latest/dex/tokens/';
 const TARGET_CA = "xxxxxxxxxxxxxxxxxxxxxxxx";
 
 /**
+ * Robust API Key retrieval for Vite/Vercel environments.
+ * Checks import.meta.env.VITE_API_KEY first, then process.env.API_KEY.
+ */
+const getApiKey = (): string => {
+  // @ts-ignore: Vite specific environment variable access
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
+    // @ts-ignore
+    return import.meta.env.VITE_API_KEY;
+  }
+  // Fallback for Node/other environments
+  if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+    return process.env.API_KEY;
+  }
+  console.warn("API Key not found in environment variables (VITE_API_KEY or API_KEY).");
+  return '';
+};
+
+const API_KEY = getApiKey();
+
+/**
  * Extracts a Solana address from a string
  */
 const extractAddress = (input: string): string | null => {
@@ -115,7 +135,7 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
  */
 export const generateChatResponse = async (message: string, history: string[]): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
 
     // We use system instructions to define the persona and capabilities
     const systemInstruction = `
@@ -167,7 +187,7 @@ export interface VibeCoderResponse {
  */
 export const generateWebAppCode = async (prompt: string, previousCode?: string): Promise<VibeCoderResponse> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
     
     const systemInstruction = `
       You are "Vibe Coder", an expert autonomous Frontend Engineer.
@@ -233,7 +253,7 @@ export const generateWebAppCode = async (prompt: string, previousCode?: string):
  */
 export const generateAnalysis = async (pair: DexPair): Promise<string> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
     
     const liquidityValue = pair.liquidity?.usd || 0;
     const marketCapValue = pair.marketCap || pair.fdv || 0;
@@ -331,7 +351,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
  */
 export const generateMemeImage = async (prompt: string, referenceImageUrl: string): Promise<string> => {
   try {
-     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+     const ai = new GoogleGenAI({ apiKey: API_KEY });
      
      // Convert reference image to Base64
      const base64Image = await urlToBase64(referenceImageUrl);
