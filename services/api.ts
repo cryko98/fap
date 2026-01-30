@@ -53,6 +53,13 @@ const urlToBase64 = async (url: string): Promise<string> => {
 };
 
 /**
+ * Helper to clean JSON string from potential Markdown formatting
+ */
+const cleanJsonString = (str: string): string => {
+  return str.replace(/```json\n?|```/g, '').trim();
+};
+
+/**
  * Fetches token data from DexScreener
  */
 export const fetchTokenData = async (input: string): Promise<DexPair | null> => {
@@ -202,7 +209,7 @@ export const generateWebAppCode = async (prompt: string, previousCode?: string):
       }
     });
 
-    const textResponse = result.text || "{}";
+    const textResponse = cleanJsonString(result.text || "{}");
     const parsed: VibeCoderResponse = JSON.parse(textResponse);
     
     // Fallback if parsing fails or structure is wrong
