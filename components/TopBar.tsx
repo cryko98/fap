@@ -1,10 +1,16 @@
 import React from 'react';
-import { Copy, Check, Terminal } from 'lucide-react';
+import { Copy, Check, Terminal, Home, Cpu, Image as ImageIcon, Crosshair, Code } from 'lucide-react';
 import { useState } from 'react';
+import { View } from '../types';
 
-export const TopBar: React.FC = () => {
+interface TopBarProps {
+  currentView: View;
+  setView: (view: View) => void;
+}
+
+export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
   const [copied, setCopied] = useState(false);
-  const ca = "3UQpHBZQeNyhBPMoqoYkX3hNdJ7NmHGUKrnAM6BApump";
+  const ca = "xxxxxxxxxxxxxxxxxxxxxxxx";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(ca);
@@ -12,53 +18,94 @@ export const TopBar: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const NavButton = ({ view, icon: Icon, label }: { view: View; icon: any; label: string }) => (
+    <button
+      onClick={() => setView(view)}
+      className={`relative group px-4 py-2 flex items-center gap-2 transition-all duration-300 overflow-hidden ${
+        currentView === view ? 'text-claw-500' : 'text-stone-500 hover:text-stone-300'
+      }`}
+    >
+      <div className={`absolute inset-0 border border-claw-800/50 skew-x-12 transform transition-all ${
+        currentView === view ? 'bg-claw-900/20 translate-y-0 opacity-100' : 'translate-y-full opacity-0 group-hover:opacity-50 group-hover:translate-y-0'
+      }`}></div>
+      
+      <Icon size={16} className={`relative z-10 transition-transform ${currentView === view ? 'scale-110 drop-shadow-[0_0_5px_rgba(220,38,38,0.8)]' : ''}`} />
+      <span className="relative z-10 font-mono text-xs font-bold tracking-widest uppercase hidden sm:block">
+        {label}
+      </span>
+      
+      {currentView === view && (
+        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-claw-500 shadow-[0_0_10px_#dc2626]"></span>
+      )}
+    </button>
+  );
+
   return (
-    <div className="w-full bg-white border-b border-slate-200 py-3 px-4 md:px-8 flex justify-between items-center shadow-sm z-50 relative">
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 text-fap-600 font-bold tracking-tighter">
-           <Terminal size={18} />
-           <span className="hidden md:inline">F.A.P. TERMINAL v2.4</span>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-4">
-        <a 
-          href="https://twitter.com/i/communities/2016586395054190936" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="text-slate-500 hover:text-slate-900 transition-colors flex items-center justify-center p-2 rounded-full hover:bg-slate-100 group"
-          aria-label="X (Twitter)"
-        >
-          {/* X Logo SVG */}
-          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current group-hover:fill-black transition-colors" aria-hidden="true">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-          </svg>
-        </a>
-
-        <a 
-          href="https://t.me/faponsol1" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="text-slate-500 hover:text-[#229ED9] transition-colors flex items-center justify-center p-2 rounded-full hover:bg-slate-100 group"
-          aria-label="Telegram"
-        >
-          {/* Telegram Logo SVG */}
-          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current group-hover:fill-[#229ED9] transition-colors" aria-hidden="true">
-            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-          </svg>
-        </a>
-
-        <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded border border-slate-200 hover:border-fap-500/50 transition-colors group shadow-sm">
-          <span className="text-fap-600 font-bold text-[10px] uppercase tracking-widest">CA:</span>
-          <span className="font-mono text-xs text-slate-600 truncate max-w-[100px] md:max-w-none group-hover:text-slate-900 transition-colors">{ca}</span>
-          <button 
-            onClick={copyToClipboard}
-            className="ml-2 text-slate-400 hover:text-fap-500 transition-colors"
-            title="Copy CA"
+    <div className="fixed top-0 left-0 right-0 z-50 p-4 pointer-events-none">
+      <div className="max-w-7xl mx-auto bg-black/90 backdrop-blur-xl border border-stone-800 pointer-events-auto clip-hex shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+        <div className="flex justify-between items-center h-16 px-6 relative overflow-hidden">
+          
+          {/* Moving Scanline Decoration inside Header */}
+          <div className="absolute top-0 left-0 w-full h-full bg-grid-pattern opacity-10 pointer-events-none"></div>
+          
+          {/* Branding */}
+          <div 
+            className="flex items-center gap-4 cursor-pointer group"
+            onClick={() => setView(View.LANDING)}
           >
-            {copied ? <Check size={12} className="text-green-600" /> : <Copy size={12} />}
-          </button>
+            <div className="w-10 h-10 relative">
+               <div className="absolute inset-0 bg-claw-600 blur opacity-20 animate-pulse"></div>
+               <img 
+                 src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ChatGPT%20Image%202026.%20jan.%2030.%2023_05_42.png" 
+                 alt="Claw Logo" 
+                 className="w-full h-full object-cover clip-corner-1 border border-claw-500/50 relative z-10"
+               />
+            </div>
+            <div className="flex flex-col">
+               <h1 className="text-xl font-black italic tracking-tighter leading-none text-white">
+                 CLAW<span className="text-claw-500 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)]">GPT</span>
+               </h1>
+               <div className="flex items-center gap-2">
+                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-blink"></span>
+                 <span className="text-[9px] font-mono text-stone-500 tracking-[0.2em] uppercase">
+                   Sys.Online
+                 </span>
+               </div>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex items-center gap-1 md:gap-2">
+            <NavButton view={View.LANDING} icon={Home} label="Core" />
+            <NavButton view={View.VIBE_CODER} icon={Code} label="Vibe Coder" />
+            <NavButton view={View.TERMINAL} icon={Terminal} label="Scanner" />
+            <NavButton view={View.IMAGEN} icon={ImageIcon} label="Visuals" />
+          </div>
+
+          {/* CA & Details */}
+          <div className="hidden lg:flex items-center gap-6">
+            <div className="h-8 w-px bg-stone-800 rotate-12"></div>
+            
+            <div 
+              onClick={copyToClipboard}
+              className="group cursor-pointer flex flex-col items-end"
+            >
+              <div className="flex items-center gap-2 text-[10px] text-stone-500 font-mono uppercase tracking-widest mb-0.5">
+                Contract Address <Crosshair size={10} className="text-claw-500" />
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-xs text-stone-300 group-hover:text-claw-400 transition-colors">
+                  {ca.slice(0, 4)}...{ca.slice(-4)}
+                </span>
+                {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} className="text-stone-600 group-hover:text-white" />}
+              </div>
+            </div>
+          </div>
+
         </div>
+        
+        {/* Bottom decoration line */}
+        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-claw-900 to-transparent opacity-50"></div>
       </div>
     </div>
   );

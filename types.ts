@@ -57,3 +57,10 @@ export enum AnalysisStatus {
   COMPLETE,
   ERROR
 }
+
+export enum View {
+  LANDING,
+  VIBE_CODER,
+  TERMINAL,
+  IMAGEN
+}
