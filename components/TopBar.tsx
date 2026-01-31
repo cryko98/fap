@@ -10,7 +10,7 @@ interface TopBarProps {
 
 export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
   const [copied, setCopied] = useState(false);
-  const ca = "xxxxxxxxxxxxxxxxxxxxxxxx";
+  const ca = "358if2oQEsqJLQictFnzYwp4PkscNVZCdEpVMLF8pump";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(ca);
@@ -63,7 +63,7 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
             </div>
             <div className="flex flex-col">
                <h1 className="text-xl font-black italic tracking-tighter leading-none text-white">
-                 CLAW<span className="text-claw-500 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)]">GPT</span>
+                 <span className="text-claw-500 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)]">Claw</span>Gpt
                </h1>
                <div className="flex items-center gap-2">
                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-blink"></span>
@@ -84,6 +84,20 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
 
           {/* CA & Details */}
           <div className="hidden lg:flex items-center gap-6">
+            <div className="h-8 w-px bg-stone-800 rotate-12"></div>
+            
+            {/* X (Twitter) Link */}
+            <a 
+               href="https://x.com/ClawGpt" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="group flex items-center justify-center w-8 h-8 border border-stone-800 bg-black hover:bg-stone-900 hover:border-claw-500 transition-all clip-hex"
+            >
+               <svg viewBox="0 0 24 24" className="w-4 h-4 text-stone-400 group-hover:text-white fill-current">
+                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+               </svg>
+            </a>
+
             <div className="h-8 w-px bg-stone-800 rotate-12"></div>
             
             <div 

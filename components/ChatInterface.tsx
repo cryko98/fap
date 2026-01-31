@@ -18,7 +18,7 @@ export const ChatInterface: React.FC = () => {
     { 
       role: 'agent', 
       type: 'system',
-      content: "IDENTITY CONFIRMED: CLAWGPT V2.6 // SENTINEL\n\nMISSION PARAMETERS LOADED:\n> Solana Chain Analysis & Pattern Recognition\n> Real-Time Market Data Retrieval (Google Search Uplink)\n> Temporal Market Data Retrieval (Year 2026)\n\nI am the pincer that separates signal from noise. How may I assist your portfolio today?" 
+      content: "IDENTITY CONFIRMED: ClawGpt V2.6 // SENTINEL\n\nMISSION PARAMETERS LOADED:\n> Solana Chain Analysis & Pattern Recognition\n> Real-Time Market Data Retrieval (Google Search Uplink)\n> Temporal Market Data Retrieval (Year 2026)\n\nI am the pincer that separates signal from noise. How may I assist your portfolio today?" 
     }
   ]);
   const [loading, setLoading] = useState(false);

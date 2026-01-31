@@ -73,7 +73,9 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
       <div className="bg-obsidian-900 px-4 py-2 border-b border-claw-900/30 flex items-center justify-between flex-shrink-0 z-30">
         <div className="flex items-center gap-2">
             <Cpu size={14} className="text-claw-500 animate-pulse" />
-            <span className="font-mono text-xs text-claw-100 tracking-widest">CLAWGPT_CORE</span>
+            <span className="font-mono text-xs text-white tracking-widest">
+               <span className="text-claw-500">CLAW</span>GPT_CORE
+            </span>
         </div>
         <div className="flex items-center gap-2 px-2 py-0.5 bg-claw-900/20 border border-claw-900/50 rounded">
              <span className="w-1.5 h-1.5 bg-claw-500 rounded-full animate-blink"></span>

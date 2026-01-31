@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { DexResponse, DexPair } from '../types';
 
 const DEX_API_URL = 'https://api.dexscreener.com/latest/dex/tokens/';
-const TARGET_CA = "xxxxxxxxxxxxxxxxxxxxxxxx";
+const TARGET_CA = "358if2oQEsqJLQictFnzYwp4PkscNVZCdEpVMLF8pump";
 
 /**
  * Robust API Key retrieval for Vite/Vercel environments.
@@ -139,7 +139,7 @@ export const generateChatResponse = async (message: string, history: string[]): 
 
     // We use system instructions to define the persona and capabilities
     const systemInstruction = `
-      You are ClawGPT, a high-tech AI market sentinel for the Solana ecosystem.
+      You are ClawGpt, a high-tech AI market sentinel for the Solana ecosystem.
       
       **CORE BEHAVIORS:**
       1. **Conversational Fluidity:** Respond briefly and naturally.
@@ -266,6 +266,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     let marketStatus = 'Unknown';
     const estimatedATH = pair.high24h || parseFloat(pair.priceUsd);
     
+    // Ensure case-insensitive comparison or precise match
     const isTargetToken = pair.baseToken.address === TARGET_CA;
 
     if (isGraduatedDex) {
@@ -292,7 +293,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
 
     // Added Google Search to analysis as well for latest news on the token
     const prompt = `
-      You are ClawGPT, a highly advanced autonomous trading sentinel.
+      You are ClawGpt, a highly advanced autonomous trading sentinel.
       Analyze this asset: ${pair.baseToken.name} ($${pair.baseToken.symbol}).
       
       **DATA STREAM:**
