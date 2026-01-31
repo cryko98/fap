@@ -63,21 +63,21 @@ export const VibeCoder: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full max-w-[1800px] mx-auto p-4 md:p-6 animate-fade-in pt-32 min-h-screen flex flex-col">
+    <div className="w-full h-full max-w-[1800px] mx-auto p-2 md:p-6 animate-fade-in pt-24 md:pt-32 min-h-screen flex flex-col">
       
       {/* Header */}
-      <div className="mb-6 flex justify-between items-end border-b border-stone-800 pb-4">
+      <div className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-end border-b border-stone-800 pb-4 gap-4">
          <div>
-            <h2 className="text-3xl text-white font-black italic flex items-center gap-3 tracking-tighter">
-                <Code className="text-claw-500" size={32} /> VIBE_CODER
+            <h2 className="text-2xl md:text-3xl text-white font-black italic flex items-center gap-3 tracking-tighter">
+                <Code className="text-claw-500" size={24} /> VIBE_CODER
             </h2>
-            <p className="text-xs text-stone-500 font-mono mt-2 tracking-widest uppercase">
+            <p className="text-[10px] md:text-xs text-stone-500 font-mono mt-2 tracking-widest uppercase">
                 Autonomous HTML5 Engine // Iterative Development
             </p>
          </div>
          {code && (
-           <div className="flex gap-3">
-              <button onClick={copyCode} className="px-4 py-2 bg-stone-900 border border-stone-700 hover:border-white text-xs font-mono text-stone-300 flex items-center gap-2 transition-colors">
+           <div className="flex gap-3 w-full md:w-auto">
+              <button onClick={copyCode} className="flex-1 md:flex-none justify-center px-4 py-2 bg-stone-900 border border-stone-700 hover:border-white text-xs font-mono text-stone-300 flex items-center gap-2 transition-colors">
                  <Copy size={12} /> COPY CODE
               </button>
            </div>
@@ -87,7 +87,7 @@ export const VibeCoder: React.FC = () => {
       <div className="flex-1 flex flex-col lg:flex-row gap-6 min-h-[700px]">
         
         {/* Left Panel: Chat Interface */}
-        <div className="w-full lg:w-1/3 flex flex-col gap-4 min-h-[500px]">
+        <div className="w-full lg:w-1/3 flex flex-col gap-4 h-[500px] lg:h-auto">
             <div className="flex-1 bg-obsidian-900/80 border border-stone-800 clip-corner-1 flex flex-col overflow-hidden relative shadow-lg backdrop-blur-md">
                 
                 {/* Chat History */}

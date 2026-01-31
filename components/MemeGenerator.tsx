@@ -67,23 +67,23 @@ export const VisualSynthesis: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full max-w-7xl mx-auto p-4 md:p-6 animate-fade-in pt-32">
+    <div className="w-full h-full max-w-7xl mx-auto p-4 md:p-6 animate-fade-in pt-24 md:pt-32">
       
       {/* Header */}
-      <div className="w-full mb-8 animate-slide-up flex flex-col md:flex-row justify-between items-end gap-4 border-b border-stone-800 pb-4">
+      <div className="w-full mb-8 animate-slide-up flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-stone-800 pb-4">
          <div>
-            <h2 className="text-3xl text-white font-black italic flex items-center gap-3 tracking-tighter">
-                <Film className="text-claw-500" size={32} /> VISUAL_SYNTHESIS
+            <h2 className="text-2xl md:text-3xl text-white font-black italic flex items-center gap-3 tracking-tighter">
+                <Film className="text-claw-500" size={24} /> VISUAL_SYNTHESIS
             </h2>
-            <p className="text-xs text-stone-500 font-mono mt-2 tracking-widest uppercase">
+            <p className="text-[10px] md:text-xs text-stone-500 font-mono mt-2 tracking-widest uppercase">
                 Render Engine V2.0 // 8K Resolution Output
             </p>
          </div>
          <div className="flex gap-2">
-            <div className="px-3 py-1 bg-stone-900 border border-stone-700 text-[10px] text-stone-400 font-mono">
+            <div className="px-2 md:px-3 py-1 bg-stone-900 border border-stone-700 text-[10px] text-stone-400 font-mono">
                GPU_TEMP: 45°C
             </div>
-            <div className="px-3 py-1 bg-stone-900 border border-stone-700 text-[10px] text-green-500 font-mono">
+            <div className="px-2 md:px-3 py-1 bg-stone-900 border border-stone-700 text-[10px] text-green-500 font-mono">
                VRAM: OK
             </div>
          </div>
@@ -92,11 +92,11 @@ export const VisualSynthesis: React.FC = () => {
       <div className="flex flex-col lg:flex-row gap-8">
         
         {/* Control Panel (Left) */}
-        <div className="w-full lg:w-1/3 flex flex-col gap-6">
+        <div className="w-full lg:w-1/3 flex flex-col gap-6 order-2 lg:order-1">
             
             {/* Input Module */}
             <div className="bg-obsidian-900/80 border border-stone-800 p-1 clip-corner-1 backdrop-blur-md">
-                <div className="bg-black/50 p-6 border border-stone-800/50 h-full">
+                <div className="bg-black/50 p-4 md:p-6 border border-stone-800/50 h-full">
                     <div className="flex items-center gap-2 mb-4 text-claw-500 border-b border-claw-900/30 pb-2">
                        <Aperture size={16} className="animate-spin-slow" />
                        <h2 className="font-mono font-bold tracking-widest text-xs uppercase">Vector Input</h2>
@@ -109,7 +109,7 @@ export const VisualSynthesis: React.FC = () => {
                                 value={prompt}
                                 onChange={(e) => setPrompt(e.target.value)}
                                 placeholder="ENTER VISUAL PARAMETERS..."
-                                className="w-full h-40 bg-black border border-stone-700 text-stone-300 p-4 text-xs font-mono rounded-none focus:border-claw-600 focus:outline-none resize-none leading-relaxed tracking-wide"
+                                className="w-full h-32 md:h-40 bg-black border border-stone-700 text-stone-300 p-4 text-xs font-mono rounded-none focus:border-claw-600 focus:outline-none resize-none leading-relaxed tracking-wide"
                             />
                             {/* Decorative corners on textarea */}
                             <div className="absolute top-6 left-0 w-2 h-2 border-t border-l border-stone-500 pointer-events-none opacity-50"></div>
@@ -181,8 +181,8 @@ export const VisualSynthesis: React.FC = () => {
         </div>
 
         {/* Viewport (Right) */}
-        <div className="w-full lg:w-2/3">
-             <div className="w-full h-full bg-black border border-stone-800 p-1 relative min-h-[500px] shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col">
+        <div className="w-full lg:w-2/3 order-1 lg:order-2">
+             <div className="w-full h-full bg-black border border-stone-800 p-1 relative min-h-[350px] md:min-h-[500px] shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col">
                 
                 {/* Viewport UI Overlay */}
                 <div className="absolute top-4 left-4 z-20 flex gap-2">
@@ -209,7 +209,7 @@ export const VisualSynthesis: React.FC = () => {
 
                     {loading ? (
                     <div className="flex flex-col items-center gap-6 w-full px-12 z-10">
-                        <div className="relative w-32 h-32">
+                        <div className="relative w-24 h-24 md:w-32 md:h-32">
                             <div className="absolute inset-0 border-2 border-stone-800 rounded-full"></div>
                             <div className="absolute inset-0 border-t-2 border-claw-500 rounded-full animate-spin"></div>
                             <div className="absolute inset-4 border-2 border-stone-800 rounded-full"></div>
@@ -237,7 +237,7 @@ export const VisualSynthesis: React.FC = () => {
                     </>
                     ) : (
                     <div className="text-center opacity-30">
-                        <ImageIcon size={80} className="mx-auto text-stone-600 mb-6" strokeWidth={1} />
+                        <ImageIcon size={64} md:size={80} className="mx-auto text-stone-600 mb-6" strokeWidth={1} />
                         <p className="font-mono text-xs text-stone-500 uppercase tracking-widest">System Idle</p>
                     </div>
                     )}
