@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { DexResponse, DexPair } from '../types';
 
 const DEX_API_URL = 'https://api.dexscreener.com/latest/dex/tokens/';
-const TARGET_CA = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+const TARGET_CA = "3A7vNEzBjKRPGkBYZw8pErHLE3G9dVAoJEncKF7Gpump";
 
 /**
  * Robust API Key retrieval for Vite/Vercel environments.

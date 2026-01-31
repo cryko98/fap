@@ -10,7 +10,7 @@ interface TopBarProps {
 
 export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
   const [copied, setCopied] = useState(false);
-  const ca = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+  const ca = "3A7vNEzBjKRPGkBYZw8pErHLE3G9dVAoJEncKF7Gpump";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(ca);
