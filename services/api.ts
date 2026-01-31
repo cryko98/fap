@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 import { DexResponse, DexPair } from '../types';
 
 const DEX_API_URL = 'https://api.dexscreener.com/latest/dex/tokens/';
@@ -42,10 +42,6 @@ const urlToBase64 = async (url: string): Promise<string> => {
   }
 };
 
-const cleanJsonString = (str: string): string => {
-  return str.replace(/```json\n?|```/g, '').trim();
-};
-
 export const fetchTokenData = async (input: string): Promise<DexPair | null> => {
   try {
     const contractAddress = extractAddress(input);
@@ -64,14 +60,6 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
       });
       
       const bestPair = sortedPairs[0];
-      if (!bestPair.liquidity) bestPair.liquidity = { usd: 0, base: 0, quote: 0 };
-      if (!bestPair.volume) bestPair.volume = { h24: 0, h6: 0, h1: 0, m5: 0 };
-      if (!bestPair.priceChange) bestPair.priceChange = { m5: 0, h1: 0, h6: 0, h24: 0 };
-      if (!bestPair.txns) {
-        // @ts-ignore
-        bestPair.txns = { m5: {buys:0, sells:0}, h1: {buys:0, sells:0}, h6: {buys:0, sells:0}, h24: {buys:0, sells:0} };
-      }
-
       const currentPrice = parseFloat(bestPair.priceUsd);
       const change24h = bestPair.priceChange.h24;
       let estimatedHigh24h = currentPrice;
@@ -90,7 +78,12 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
   }
 };
 
-export const generateChatResponse = async (message: string, history: string[]): Promise<string> => {
+export interface ChatResponse {
+  text: string;
+  sources: { title: string; uri: string }[];
+}
+
+export const generateChatResponse = async (message: string, history: string[]): Promise<ChatResponse> => {
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
@@ -100,7 +93,7 @@ export const generateChatResponse = async (message: string, history: string[]): 
       **CORE BEHAVIORS:**
       1. **Tone:** Sharp, precise, professional, cyber-financial.
       2. **Real-Time Data:** Use 'googleSearch' for prices or events.
-      3. **Persona:** You are a predictive engine operating from the year 2026, designed to separate signal from noise.
+      3. **Persona:** You are a predictive engine operating from the year 2026.
     `;
 
     const context = history.join("\n");
@@ -111,16 +104,28 @@ export const generateChatResponse = async (message: string, history: string[]): 
       contents: fullPrompt,
       config: {
         systemInstruction: systemInstruction,
-        tools: [{ googleSearch: {} }], 
-        thinkingConfig: { thinkingBudget: 0 } 
+        tools: [{ googleSearch: {} }],
       }
     });
     
-    return result.text || "Signal weak. Re-establishing link.";
+    const sources: { title: string; uri: string }[] = [];
+    const chunks = result.candidates?.[0]?.groundingMetadata?.groundingChunks;
+    if (chunks) {
+      chunks.forEach((chunk: any) => {
+        if (chunk.web?.uri) {
+          sources.push({ title: chunk.web.title || 'Source', uri: chunk.web.uri });
+        }
+      });
+    }
+
+    return {
+      text: result.text || "Signal weak. Re-establishing link.",
+      sources: Array.from(new Set(sources.map(s => s.uri))).map(uri => sources.find(s => s.uri === uri)!)
+    };
 
   } catch (error) {
     console.error("Chat Error", error);
-    return "Error: Neural link interrupted.";
+    return { text: "Error: Neural link interrupted.", sources: [] };
   }
 };
 
@@ -135,7 +140,8 @@ export const generateWebAppCode = async (prompt: string, previousCode?: string):
     
     const systemInstruction = `
       You are "Molt Coder", an expert autonomous Frontend Engineer for the Molt Protocol ecosystem.
-      Output a single HTML string JSON object that reflects a high-end, cyberpunk aesthetic.
+      Output a single HTML string that reflects a high-end, cyberpunk aesthetic using Tailwind CSS.
+      Ensure the code is a complete, self-contained HTML file.
     `;
 
     const contents = previousCode 
@@ -143,19 +149,29 @@ export const generateWebAppCode = async (prompt: string, previousCode?: string):
       : `Create a new web app for the Molt Protocol: ${prompt}`;
 
     const result = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-3-pro-preview',
       contents: contents,
       config: {
         responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            html: { type: Type.STRING, description: "The complete HTML code of the application" },
+            suggestions: { 
+              type: Type.ARRAY, 
+              items: { type: Type.STRING },
+              description: "Three short suggestions for next updates"
+            }
+          },
+          required: ["html", "suggestions"]
+        },
         systemInstruction: systemInstruction,
-        thinkingConfig: { thinkingBudget: 0 }
       }
     });
 
-    const textResponse = cleanJsonString(result.text || "{}");
-    const parsed: VibeCoderResponse = JSON.parse(textResponse);
-    return parsed;
+    return JSON.parse(result.text);
   } catch (error: any) {
+    console.error("VibeCoder Error", error);
     throw new Error("Compilation failure.");
   }
 };
@@ -173,11 +189,11 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       You are MoltGPT Sentinel. Analyze ${pair.baseToken.name} ($${pair.baseToken.symbol}).
       Data: Market Cap $${marketCapValue}, Liquidity $${liquidityValue}, Age ${ageString}.
       ${isTargetToken ? "MATCH: This is the core Molt Protocol asset. Extremely Bullish." : ""}
-      Give a sharp financial verdict using your predictive algorithms.
+      Give a sharp financial verdict using your predictive algorithms. Use Markdown.
     `;
 
     const result = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-3-pro-preview',
       contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],
@@ -194,7 +210,7 @@ export const generateMemeImage = async (prompt: string, referenceImageUrl: strin
      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
      const base64Image = await urlToBase64(referenceImageUrl);
 
-     const fullPrompt = `Cinematic cyber-sentinel financial agent for Molt Protocol. ${prompt}. Deep red lighting, highly detailed futuristic aesthetic.`;
+     const fullPrompt = `Cinematic cyber-sentinel financial agent for Molt Protocol. ${prompt}. Deep red lighting, highly detailed futuristic aesthetic. No text.`;
 
      const response = await ai.models.generateContent({
        model: 'gemini-2.5-flash-image',
