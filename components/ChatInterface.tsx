@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Terminal, ShieldAlert, Wifi, Battery, ExternalLink, Globe } from 'lucide-react';
-import { generateChatResponse, ChatResponse } from '../services/api';
+import { Send, Bot, User, Terminal, ShieldAlert, Wifi, Battery, MessageSquare, Search } from 'lucide-react';
+import { generateChatResponse } from '../services/api';
 
 const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping%20(4).png";
 
@@ -12,20 +12,13 @@ const SUGGESTIONS = [
   "Check Rug status"
 ];
 
-interface Message {
-  role: string;
-  content: string;
-  type?: 'system' | 'msg';
-  sources?: { title: string; uri: string }[];
-}
-
 export const ChatInterface: React.FC = () => {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<{role: string, content: string, type?: 'system' | 'msg'}[]>([
     { 
       role: 'agent', 
       type: 'system',
-      content: "IDENTITY CONFIRMED: MoltGPT V2.6 // SENTINEL\n\nMISSION PARAMETERS LOADED:\n> Solana Chain Analysis & Pattern Recognition\n> Real-Time Market Data Retrieval (Google Search Uplink)\n\nI am the pincer that separates signal from noise. How may I assist your portfolio today?" 
+      content: "IDENTITY CONFIRMED: MoltGPT V2.6 // SENTINEL\n\nMISSION PARAMETERS LOADED:\n> Solana Chain Analysis & Pattern Recognition\n> Real-Time Market Data Retrieval (Google Search Uplink)\n> Temporal Market Data Retrieval (Year 2026)\n\nI am the pincer that separates signal from noise. How may I assist your portfolio today?" 
     }
   ]);
   const [loading, setLoading] = useState(false);
@@ -52,14 +45,10 @@ export const ChatInterface: React.FC = () => {
       .map(m => `${m.role.toUpperCase()}: ${m.content}`);
 
     try {
-      const response: ChatResponse = await generateChatResponse(msgToSend, history);
-      setMessages(prev => [...prev, { 
-        role: 'agent', 
-        content: response.text,
-        sources: response.sources
-      }]);
+      const response = await generateChatResponse(msgToSend, history);
+      setMessages(prev => [...prev, { role: 'agent', content: response }]);
     } catch (err) {
-      setMessages(prev => [...prev, { role: 'agent', content: "Error: Neural connection interrupted." }]);
+      setMessages(prev => [...prev, { role: 'agent', content: "Error: Neural connection interrupted by network entropy." }]);
     } finally {
       setLoading(false);
     }
@@ -76,8 +65,8 @@ export const ChatInterface: React.FC = () => {
               </div>
               NEURAL LINK_V2
             </h2>
-            <p className="text-xs text-stone-500 font-mono mt-1 tracking-wider pl-1 uppercase">
-              Predictive Pincer Online
+            <p className="text-xs text-stone-500 font-mono mt-1 tracking-wider pl-1">
+            DIRECT UPLINK TO 2026 PREDICTION ENGINE
             </p>
         </div>
         <div className="hidden md:flex gap-4 text-stone-600 font-mono text-[10px]">
@@ -86,10 +75,23 @@ export const ChatInterface: React.FC = () => {
         </div>
       </div>
 
+      {/* Container Frame */}
       <div className="flex-1 bg-obsidian-900/80 border border-stone-800 flex flex-col overflow-hidden relative clip-corner-2 shadow-[0_0_30px_rgba(0,0,0,0.5)] backdrop-blur-md min-h-[600px] mb-8">
         
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none"></div>
+        {/* Decorative Borders */}
+        <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-claw-900 rounded-tl-lg pointer-events-none z-20"></div>
+        <div className="absolute bottom-0 right-0 w-20 h-20 border-r-2 border-b-2 border-claw-900 rounded-br-lg pointer-events-none z-20"></div>
 
+        {/* Background FX - Watermark */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none"></div>
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+            <img 
+               src={LOGO_URL} 
+               className="w-[500px] h-[500px] object-contain opacity-5 grayscale mix-blend-screen"
+            />
+        </div>
+
+        {/* Header */}
         <div className="bg-black/40 backdrop-blur border-b border-stone-800 p-4 flex justify-between items-center z-10">
            <div className="flex items-center gap-4">
               <div className="relative">
@@ -99,12 +101,25 @@ export const ChatInterface: React.FC = () => {
                  </div>
               </div>
               <div className="flex flex-col">
-                 <span className="text-claw-100 font-mono text-xs font-bold tracking-widest uppercase">MoltGPT Sentinel</span>
-                 <span className="text-[9px] text-stone-500 font-mono uppercase tracking-tighter">Verified Connection</span>
+                 <span className="text-claw-100 font-mono text-xs font-bold tracking-widest uppercase">Encrypted Channel</span>
+                 <div className="flex items-center gap-2">
+                    <span className="w-1 h-1 bg-claw-500 rounded-full"></span>
+                    <span className="text-[9px] text-stone-500 font-mono uppercase">Hash: #88291AA</span>
+                 </div>
+              </div>
+           </div>
+           
+           <div className="hidden md:block">
+              <div className="h-8 w-32 bg-stone-900/50 border border-stone-800 relative overflow-hidden">
+                 <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-claw-500/20 to-transparent animate-scanline"></div>
+                 <div className="flex items-center justify-center h-full text-[9px] font-mono text-stone-500">
+                    SIGNAL_STABLE
+                 </div>
               </div>
            </div>
         </div>
 
+        {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 relative z-10 scroll-smooth" ref={scrollRef}>
            {messages.map((msg, idx) => (
              <div key={idx} className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -121,34 +136,15 @@ export const ChatInterface: React.FC = () => {
                     ? 'bg-stone-900 text-stone-200 border-stone-700' 
                     : msg.type === 'system' 
                        ? 'bg-yellow-900/10 text-yellow-500 border-yellow-900/30'
-                       : 'bg-black/80 text-claw-50 border-claw-900/30'
+                       : 'bg-black/80 text-claw-50 border-claw-900/30 shadow-[0_0_15px_rgba(220,38,38,0.05)]'
                 }`}>
-                   <p className="whitespace-pre-wrap">{msg.content}</p>
-                   
-                   {msg.sources && msg.sources.length > 0 && (
-                     <div className="mt-4 pt-4 border-t border-stone-800">
-                        <div className="flex items-center gap-2 text-[10px] text-stone-500 mb-2 uppercase tracking-widest font-bold">
-                           <Globe size={10} /> Grounding Sources
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                           {msg.sources.map((source, sIdx) => (
-                             <a 
-                               key={sIdx} 
-                               href={source.uri} 
-                               target="_blank" 
-                               rel="noopener noreferrer"
-                               className="flex items-center gap-1.5 px-2 py-1 bg-stone-900 border border-stone-700 text-[9px] text-stone-400 hover:text-white hover:border-claw-500 transition-all"
-                             >
-                                <ExternalLink size={8} /> {source.title.slice(0, 20)}...
-                             </a>
-                           ))}
-                        </div>
-                     </div>
-                   )}
+                   {/* Tiny decoration on message box */}
+                   <div className={`absolute top-0 right-0 p-1 ${msg.role === 'user' ? 'bg-stone-700' : 'bg-claw-900'}`}></div>
 
+                   <p className="whitespace-pre-wrap">{msg.content}</p>
                    {msg.role === 'agent' && msg.type !== 'system' && (
                      <div className="mt-3 pt-2 border-t border-claw-900/20 text-[9px] text-claw-600 font-bold uppercase tracking-widest flex items-center gap-1">
-                        <Terminal size={10} /> Signal Confirmed
+                        <Terminal size={10} /> Verified Prediction // 2026
                      </div>
                    )}
                 </div>
@@ -175,7 +171,10 @@ export const ChatInterface: React.FC = () => {
            )}
         </div>
 
+        {/* Input & Suggestions */}
         <div className="p-4 bg-black/60 border-t border-stone-800 z-10 backdrop-blur">
+           
+           {/* Suggestions */}
            {!loading && (
              <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
                 {SUGGESTIONS.map((suggestion, idx) => (
@@ -199,7 +198,7 @@ export const ChatInterface: React.FC = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="INPUT COMMAND OR QUERY..."
-                className="flex-1 bg-black border border-stone-700 text-white h-12 px-4 focus:outline-none focus:border-claw-600 font-mono text-sm placeholder-stone-700 transition-all tracking-wider uppercase"
+                className="flex-1 bg-black border border-stone-700 text-white h-12 px-4 focus:outline-none focus:border-claw-600 font-mono text-sm placeholder-stone-700 transition-all tracking-wider"
                 autoFocus
               />
               <button 
@@ -210,7 +209,16 @@ export const ChatInterface: React.FC = () => {
                 Send_CMD
               </button>
            </form>
+           <div className="flex justify-between items-center mt-2 px-1">
+              <div className="text-[9px] text-stone-600 font-mono flex items-center gap-2">
+                 <span className="w-1 h-1 bg-green-500 rounded-full"></span> SYSTEM READY
+              </div>
+              <div className="text-[9px] text-stone-700 font-mono uppercase">
+                  Caution: High Volatility
+              </div>
+           </div>
         </div>
+
       </div>
     </div>
   );
