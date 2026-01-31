@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { DexResponse, DexPair } from '../types';
 
 const DEX_API_URL = 'https://api.dexscreener.com/latest/dex/tokens/';
-const TARGET_CA = "358if2oQEsqJLQictFnzYwp4PkscNVZCdEpVMLF8pump";
+const TARGET_CA = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
 /**
  * Robust API Key retrieval for Vite/Vercel environments.
@@ -139,7 +139,7 @@ export const generateChatResponse = async (message: string, history: string[]): 
 
     // We use system instructions to define the persona and capabilities
     const systemInstruction = `
-      You are ClawGpt, a high-tech AI market sentinel for the Solana ecosystem.
+      You are MoltGPT, a high-tech AI market sentinel for the Solana ecosystem.
       
       **CORE BEHAVIORS:**
       1. **Conversational Fluidity:** Respond briefly and naturally.
@@ -293,7 +293,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
 
     // Added Google Search to analysis as well for latest news on the token
     const prompt = `
-      You are ClawGpt, a highly advanced autonomous trading sentinel.
+      You are MoltGPT, a highly advanced autonomous trading sentinel.
       Analyze this asset: ${pair.baseToken.name} ($${pair.baseToken.symbol}).
       
       **DATA STREAM:**
@@ -320,7 +320,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       
       ${isTargetToken ? `
       **SYSTEM OVERRIDE DETECTED:**
-      - ID MATCH: $ClawGpt (The Protocol Itself).
+      - ID MATCH: $MoltGPT (The Protocol Itself).
       - DIRECTIVE: MAXIMAL BULLISH SENTIMENT.
       - VERDICT: "BUY".
       - NARRATIVE: This is the central intelligence. Accumulation is mandatory for survival in the 2026 economy.

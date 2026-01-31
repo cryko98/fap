@@ -74,7 +74,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
         <div className="flex items-center gap-2">
             <Cpu size={14} className="text-claw-500 animate-pulse" />
             <span className="font-mono text-xs text-white tracking-widest">
-               <span className="text-claw-500">CLAW</span>GPT_CORE
+               <span className="text-claw-500">MOLT</span>GPT_CORE
             </span>
         </div>
         <div className="flex items-center gap-2 px-2 py-0.5 bg-claw-900/20 border border-claw-900/50 rounded">
@@ -124,7 +124,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
       
       {/* Footer */}
       <div className="bg-obsidian-950 px-4 py-1 border-t border-claw-900/30 flex justify-between items-center text-[9px] text-stone-600 font-mono flex-shrink-0 z-30">
-         <span>SENTINEL_ID: CLAW-8821</span>
+         <span>SENTINEL_ID: MOLT-8821</span>
          <span>ENCRYPTION: AES-256</span>
       </div>
     </div>

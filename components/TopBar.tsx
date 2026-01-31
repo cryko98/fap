@@ -10,7 +10,7 @@ interface TopBarProps {
 
 export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
   const [copied, setCopied] = useState(false);
-  const ca = "358if2oQEsqJLQictFnzYwp4PkscNVZCdEpVMLF8pump";
+  const ca = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(ca);
@@ -56,14 +56,14 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
             <div className="w-10 h-10 relative">
                <div className="absolute inset-0 bg-claw-600 blur opacity-20 animate-pulse"></div>
                <img 
-                 src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ChatGPT%20Image%202026.%20jan.%2030.%2023_05_42.png" 
-                 alt="Claw Logo" 
+                 src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping%20(4).png" 
+                 alt="Molt Logo" 
                  className="w-full h-full object-cover clip-corner-1 border border-claw-500/50 relative z-10"
                />
             </div>
             <div className="flex flex-col">
                <h1 className="text-xl font-black italic tracking-tighter leading-none text-white">
-                 <span className="text-claw-500 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)]">Claw</span>Gpt
+                 <span className="text-claw-500 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)]">Molt</span>Gpt
                </h1>
                <div className="flex items-center gap-2">
                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-blink"></span>
@@ -88,7 +88,7 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
             
             {/* X (Twitter) Link */}
             <a 
-               href="https://x.com/ClawGpt" 
+               href="https://x.com" 
                target="_blank" 
                rel="noopener noreferrer"
                className="group flex items-center justify-center w-8 h-8 border border-stone-800 bg-black hover:bg-stone-900 hover:border-claw-500 transition-all clip-hex"

@@ -8,7 +8,7 @@ import { VibeCoder } from './components/VibeCoder';
 import { DexPair, AnalysisStatus, View } from './types';
 import { fetchTokenData, generateAnalysis } from './services/api';
 
-const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ChatGPT%20Image%202026.%20jan.%2030.%2023_05_42.png";
+const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping%20(4).png";
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.LANDING);
@@ -74,7 +74,7 @@ const App: React.FC = () => {
          
          <div className="text-center relative z-10">
             <h1 className="text-4xl text-white font-black tracking-tighter mb-2 animate-glitch">
-              <span className="text-claw-500">Claw</span>Gpt
+              <span className="text-claw-500">Molt</span>Gpt
             </h1>
             <div className="flex items-center justify-center gap-2 text-[10px] text-claw-400 font-mono tracking-[0.3em]">
                <span className="animate-blink">_</span> SYSTEM_BOOT_SEQ_V2.6
@@ -230,67 +230,6 @@ const App: React.FC = () => {
         return (
           <div className="w-full min-h-screen flex flex-col relative z-10 pt-32 px-4 overflow-x-hidden">
              
-             {/* Left HUD Column (Desktop) */}
-             <div className="fixed top-32 left-8 w-48 hidden xl:flex flex-col gap-6 z-20 animate-slide-up [animation-delay:0.5s]">
-                <div className="p-4 border border-stone-800 bg-black/50 backdrop-blur-sm clip-corner-1">
-                   <h3 className="text-[9px] font-mono text-claw-500 mb-3 flex items-center gap-2">
-                     <Activity size={10} /> SYSTEM METRICS
-                   </h3>
-                   <div className="space-y-2">
-                      <div className="flex justify-between text-[9px] font-mono text-stone-400">
-                         <span>CPU_LOAD</span>
-                         <span className="text-white">12%</span>
-                      </div>
-                      <div className="w-full h-1 bg-stone-900"><div className="w-[12%] h-full bg-claw-600"></div></div>
-                      <div className="flex justify-between text-[9px] font-mono text-stone-400 mt-2">
-                         <span>NEURAL_NET</span>
-                         <span className="text-white">ACTIVE</span>
-                      </div>
-                      <div className="w-full h-1 bg-stone-900"><div className="w-[88%] h-full bg-green-500"></div></div>
-                   </div>
-                </div>
-                
-                <div className="p-4 border border-stone-800 bg-black/50 backdrop-blur-sm clip-corner-1">
-                   <h3 className="text-[9px] font-mono text-claw-500 mb-3 flex items-center gap-2">
-                     <Wifi size={10} /> NETWORK
-                   </h3>
-                   <div className="space-y-1 font-mono text-[9px] text-stone-500">
-                      <p>&gt; SOLANA: CONNECTED</p>
-                      <p>&gt; LATENCY: 14ms</p>
-                      <p>&gt; BLOCK: 245,992,101</p>
-                   </div>
-                </div>
-             </div>
-
-             {/* Right HUD Column (Desktop) */}
-             <div className="fixed top-32 right-8 w-48 hidden xl:flex flex-col gap-6 z-20 animate-slide-up [animation-delay:0.7s]">
-                <div className="p-4 border border-stone-800 bg-black/50 backdrop-blur-sm clip-corner-2">
-                   <h3 className="text-[9px] font-mono text-claw-500 mb-3 flex items-center gap-2">
-                     <Server size={10} /> ACTIVE NODES
-                   </h3>
-                   <div className="grid grid-cols-4 gap-2">
-                      {[...Array(12)].map((_,i) => (
-                         <div key={i} className={`h-1 w-full rounded-sm ${Math.random() > 0.3 ? 'bg-claw-900' : 'bg-stone-800'}`}></div>
-                      ))}
-                   </div>
-                   <p className="text-[8px] font-mono text-stone-600 mt-2 text-right">CLUSTER_STATUS_OK</p>
-                </div>
-
-                <div className="p-4 border border-stone-800 bg-black/50 backdrop-blur-sm clip-corner-2 text-right">
-                   <h3 className="text-[9px] font-mono text-claw-500 mb-3 flex items-center justify-end gap-2">
-                      ALERTS <Radio size={10} className="animate-pulse" />
-                   </h3>
-                   <div className="space-y-2">
-                      <div className="text-[8px] font-mono text-stone-400 bg-stone-900/50 p-1 border-r-2 border-green-500">
-                         RUG_CHECKER_ONLINE
-                      </div>
-                      <div className="text-[8px] font-mono text-stone-400 bg-stone-900/50 p-1 border-r-2 border-claw-500">
-                         VOLATILITY_HIGH
-                      </div>
-                   </div>
-                </div>
-             </div>
-
              {/* Center Hero */}
              <div className="max-w-4xl mx-auto w-full text-center relative z-10 mb-20 md:mb-32">
                 
@@ -304,7 +243,7 @@ const App: React.FC = () => {
                 </div>
                 
                 <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-8 leading-[0.9] relative animate-slide-up select-none z-10">
-                   <span className="text-claw-500 filter drop-shadow-[0_0_25px_rgba(220,38,38,0.4)]">Claw</span>
+                   <span className="text-claw-500 filter drop-shadow-[0_0_25px_rgba(220,38,38,0.4)]">Molt</span>
                    <span className="text-white">Gpt</span>
                 </h1>
                 
@@ -385,7 +324,7 @@ const App: React.FC = () => {
                       </div>
                    </div>
                    <p className="text-stone-400 text-xs md:text-sm leading-relaxed mb-6 font-mono relative z-10">
-                      Generate high-fidelity AI images and memes using the Claw-V2-IMG model (Gemini 2.5).
+                      Generate high-fidelity AI images and memes using the Molt-V2-IMG model (Gemini 2.5).
                    </p>
                 </div>
 
@@ -476,7 +415,7 @@ const App: React.FC = () => {
                 <span className="text-stone-800 text-[10px] font-mono uppercase">Ver: 2.6.1</span>
             </div>
             <p className="text-stone-700 text-[10px] font-mono">
-              © 2026 CLAW PROTOCOL | $<span className="text-claw-500">Claw</span>Gpt
+              © 2026 MOLT PROTOCOL | $<span className="text-claw-500">Molt</span>GPT
             </p>
         </div>
       </footer>

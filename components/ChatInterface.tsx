@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Terminal, ShieldAlert, Wifi, Battery, MessageSquare, Search } from 'lucide-react';
 import { generateChatResponse } from '../services/api';
 
-const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ChatGPT%20Image%202026.%20jan.%2030.%2023_05_42.png";
+const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping%20(4).png";
 
 const SUGGESTIONS = [
   "Price of Solana?",
   "Latest crypto news",
   "Analyze Bitcoin trend",
-  "What is the Claw Protocol?",
+  "What is the Molt Protocol?",
   "Check Rug status"
 ];
 
@@ -18,7 +18,7 @@ export const ChatInterface: React.FC = () => {
     { 
       role: 'agent', 
       type: 'system',
-      content: "IDENTITY CONFIRMED: ClawGpt V2.6 // SENTINEL\n\nMISSION PARAMETERS LOADED:\n> Solana Chain Analysis & Pattern Recognition\n> Real-Time Market Data Retrieval (Google Search Uplink)\n> Temporal Market Data Retrieval (Year 2026)\n\nI am the pincer that separates signal from noise. How may I assist your portfolio today?" 
+      content: "IDENTITY CONFIRMED: MoltGPT V2.6 // SENTINEL\n\nMISSION PARAMETERS LOADED:\n> Solana Chain Analysis & Pattern Recognition\n> Real-Time Market Data Retrieval (Google Search Uplink)\n> Temporal Market Data Retrieval (Year 2026)\n\nI am the pincer that separates signal from noise. How may I assist your portfolio today?" 
     }
   ]);
   const [loading, setLoading] = useState(false);

@@ -4,12 +4,12 @@ import { generateMemeImage } from '../services/api';
 
 const PROMPTS = [
   "A futuristic red cyber-crab manipulating a holographic stock market interface",
-  "Cyberpunk New York City 2026, rain slicked streets, red neon Claw Protocol advertisements",
+  "Cyberpunk New York City 2026, rain slicked streets, red neon Molt Protocol advertisements",
   "Abstract data visualization of a blockchain transaction exploding into red crystal shards",
   "A high-tech server room with red ambient lighting and a mechanical claw sentinel guarding it",
   "Cinematic macro shot of a robotic eye reflecting a green candlestick chart",
   "A dark hooded figure holding a glowing red orb in a futuristic trading floor",
-  "The ClawGPT Agent sitting on a throne made of computer servers and cables",
+  "The MoltGPT Agent sitting on a throne made of computer servers and cables",
   "A hyper-realistic golden coin with a crab insignia floating in zero gravity"
 ];
 
@@ -46,7 +46,7 @@ export const VisualSynthesis: React.FC = () => {
     setGeneratedImage(null);
 
     try {
-      const imgData = await generateMemeImage(prompt, "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ChatGPT%20Image%202026.%20jan.%2030.%2023_05_42.png");
+      const imgData = await generateMemeImage(prompt, "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping%20(4).png");
       setGeneratedImage(imgData);
     } catch (err: any) {
       setError(`Synthesis Failed: ${err.message || 'GPU Cluster Unresponsive'}`);
@@ -59,7 +59,7 @@ export const VisualSynthesis: React.FC = () => {
     if (generatedImage) {
       const link = document.createElement('a');
       link.href = generatedImage;
-      link.download = `claw-synthesis-${Date.now()}.png`;
+      link.download = `molt-synthesis-${Date.now()}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -164,7 +164,7 @@ export const VisualSynthesis: React.FC = () => {
                <div className="space-y-3">
                   <div className="flex justify-between text-[10px] font-mono text-stone-400 border-b border-stone-800/50 pb-1">
                      <span>MODEL_VERSION</span>
-                     <span className="text-claw-400">CLAW-V2-IMG</span>
+                     <span className="text-claw-400">MOLT-V2-IMG</span>
                   </div>
                   <div className="flex justify-between text-[10px] font-mono text-stone-400 border-b border-stone-800/50 pb-1">
                      <span>RENDER_QUEUE</span>
@@ -251,7 +251,7 @@ export const VisualSynthesis: React.FC = () => {
                         <div className={`w-2 h-2 rounded-full ${loading ? 'bg-yellow-500 animate-pulse [animation-delay:0.4s]' : 'bg-stone-800'}`}></div>
                     </div>
                     <div className="text-[8px] font-mono text-stone-600">
-                        CLAW_RENDER_ENGINE
+                        MOLT_RENDER_ENGINE
                     </div>
                 </div>
              </div>
