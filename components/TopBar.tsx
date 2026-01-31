@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy, Check, Terminal, Home, Cpu, Image as ImageIcon, Crosshair, Code } from 'lucide-react';
+import { Terminal, Home, Code, Image as ImageIcon, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import { View } from '../types';
 
@@ -10,7 +10,8 @@ interface TopBarProps {
 
 export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
   const [copied, setCopied] = useState(false);
-  const ca = "3A7vNEzBjKRPGkBYZw8pErHLE3G9dVAoJEncKF7Gpump";
+  const ca = "HLrpvnCNUhLdpAKG97QnMJaC2NkQH3pZM1xDCKGGpump";
+  const xLink = "https://twitter.com/i/communities/2017643567527956513";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(ca);
@@ -21,105 +22,81 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
   const NavButton = ({ view, icon: Icon, label }: { view: View; icon: any; label: string }) => (
     <button
       onClick={() => setView(view)}
-      className={`relative group px-4 py-2 flex items-center gap-2 transition-all duration-300 overflow-hidden ${
-        currentView === view ? 'text-claw-500' : 'text-stone-500 hover:text-stone-300'
+      className={`relative px-2 md:px-4 py-2 flex items-center gap-1 md:gap-2 transition-all duration-300 ${
+        currentView === view ? 'text-white' : 'text-stone-500 hover:text-stone-300'
       }`}
     >
-      <div className={`absolute inset-0 border border-claw-800/50 skew-x-12 transform transition-all ${
-        currentView === view ? 'bg-claw-900/20 translate-y-0 opacity-100' : 'translate-y-full opacity-0 group-hover:opacity-50 group-hover:translate-y-0'
-      }`}></div>
-      
-      <Icon size={16} className={`relative z-10 transition-transform ${currentView === view ? 'scale-110 drop-shadow-[0_0_5px_rgba(220,38,38,0.8)]' : ''}`} />
-      <span className="relative z-10 font-mono text-xs font-bold tracking-widest uppercase hidden sm:block">
+      <Icon size={14} className={currentView === view ? 'text-claw-500' : ''} />
+      <span className="font-mono text-[9px] md:text-[10px] font-bold tracking-widest uppercase hidden sm:block">
         {label}
       </span>
-      
       {currentView === view && (
-        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-claw-500 shadow-[0_0_10px_#dc2626]"></span>
+        <div className="absolute -top-1 left-0 w-full h-px bg-claw-600 shadow-[0_0_10px_#dc2626]"></div>
       )}
     </button>
   );
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 p-4 pointer-events-none">
-      <div className="max-w-7xl mx-auto bg-black/90 backdrop-blur-xl border border-stone-800 pointer-events-auto clip-hex shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-        <div className="flex justify-between items-center h-16 px-6 relative overflow-hidden">
-          
-          {/* Moving Scanline Decoration inside Header */}
-          <div className="absolute top-0 left-0 w-full h-full bg-grid-pattern opacity-10 pointer-events-none"></div>
-          
-          {/* Branding */}
-          <div 
-            className="flex items-center gap-4 cursor-pointer group"
-            onClick={() => setView(View.LANDING)}
-          >
-            <div className="w-10 h-10 relative">
-               <div className="absolute inset-0 bg-claw-600 blur opacity-20 animate-pulse"></div>
-               <img 
-                 src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping%20(4).png" 
-                 alt="Molt Logo" 
-                 className="w-full h-full object-cover clip-corner-1 border border-claw-500/50 relative z-10"
-               />
-            </div>
-            <div className="flex flex-col">
-               <h1 className="text-xl font-black italic tracking-tighter leading-none text-white">
-                 <span className="text-claw-500 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)]">Molt</span>GPT
-               </h1>
-               <div className="flex items-center gap-2">
-                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-blink"></span>
-                 <span className="text-[9px] font-mono text-stone-500 tracking-[0.2em] uppercase">
-                   Sys.Online
-                 </span>
-               </div>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center gap-1 md:gap-2">
-            <NavButton view={View.LANDING} icon={Home} label="Core" />
-            <NavButton view={View.VIBE_CODER} icon={Code} label="Vibe Coder" />
-            <NavButton view={View.TERMINAL} icon={Terminal} label="Scanner" />
-            <NavButton view={View.IMAGEN} icon={ImageIcon} label="Visuals" />
-          </div>
-
-          {/* CA & Details */}
-          <div className="hidden lg:flex items-center gap-6">
-            <div className="h-8 w-px bg-stone-800 rotate-12"></div>
-            
-            {/* X (Twitter) Link */}
-            <a 
-               href="https://x.com/i/communities/2017596168448987472" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               className="group flex items-center justify-center w-8 h-8 border border-stone-800 bg-black hover:bg-stone-900 hover:border-claw-500 transition-all clip-hex"
-            >
-               <svg viewBox="0 0 24 24" className="w-4 h-4 text-stone-400 group-hover:text-white fill-current">
-                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-               </svg>
-            </a>
-
-            <div className="h-8 w-px bg-stone-800 rotate-12"></div>
-            
-            <div 
-              onClick={copyToClipboard}
-              className="group cursor-pointer flex flex-col items-end"
-            >
-              <div className="flex items-center gap-2 text-[10px] text-stone-500 font-mono uppercase tracking-widest mb-0.5">
-                Contract Address <Crosshair size={10} className="text-claw-500" />
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-xs text-stone-300 group-hover:text-claw-400 transition-colors">
-                  {ca.slice(0, 4)}...{ca.slice(-4)}
-                </span>
-                {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} className="text-stone-600 group-hover:text-white" />}
-              </div>
-            </div>
-          </div>
-
-        </div>
+    <div className="fixed top-0 left-0 right-0 z-50 p-2 md:p-4">
+      <div className="max-w-7xl mx-auto border-b border-stone-800/50 bg-black/80 backdrop-blur-md flex justify-between items-center h-14 px-2 md:px-4">
         
-        {/* Bottom decoration line */}
-        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-claw-900 to-transparent opacity-50"></div>
+        {/* Brand Side */}
+        <div 
+          className="flex items-center gap-2 md:gap-3 cursor-pointer group shrink-0"
+          onClick={() => setView(View.LANDING)}
+        >
+          <div className="w-6 h-6 md:w-8 md:h-8 relative shrink-0">
+             <img 
+               src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping%20(4).png" 
+               alt="MoltGPT Logo" 
+               className="w-full h-full object-cover grayscale brightness-125"
+             />
+          </div>
+          <div className="flex flex-col hidden xs:flex">
+             <h1 className="text-xs md:text-base font-black italic tracking-tighter leading-none text-white uppercase">
+               <span className="text-claw-500">Molt</span>GPT
+             </h1>
+             <span className="text-[7px] md:text-[8px] font-mono text-stone-600 tracking-widest uppercase">
+               Sys.Online
+             </span>
+          </div>
+        </div>
+
+        {/* Navigation Items */}
+        <div className="flex items-center gap-0.5 md:gap-1 overflow-x-auto scrollbar-hide">
+          <NavButton view={View.LANDING} icon={Home} label="Core" />
+          <NavButton view={View.VIBE_CODER} icon={Code} label="Vibe" />
+          <NavButton view={View.TERMINAL} icon={Terminal} label="Scanner" />
+          <NavButton view={View.IMAGEN} icon={ImageIcon} label="Visuals" />
+        </div>
+
+        {/* Social / CA Side */}
+        <div className="flex items-center gap-2 md:gap-4 lg:gap-6 shrink-0">
+          <a 
+             href={xLink} 
+             target="_blank" 
+             rel="noopener noreferrer"
+             className="text-stone-500 hover:text-white transition-colors p-1 md:p-0"
+             aria-label="X Community"
+          >
+             <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+             </svg>
+          </a>
+
+          <div 
+            onClick={copyToClipboard}
+            className="flex items-center gap-1.5 md:gap-3 cursor-pointer group px-2 py-1 border border-stone-800 hover:border-claw-900 transition-colors bg-stone-900/20"
+          >
+            <div className="flex flex-col items-end">
+              <span className="text-[7px] text-stone-600 font-mono uppercase tracking-widest hidden md:block">Contract</span>
+              <span className="font-mono text-[9px] md:text-[10px] text-stone-400 group-hover:text-claw-400 transition-colors">
+                {ca.slice(0, 4)}...{ca.slice(-4)}
+              </span>
+            </div>
+            {copied ? <Check size={10} className="text-green-500" /> : <Copy size={10} className="text-stone-700" />}
+          </div>
+        </div>
       </div>
     </div>
   );
