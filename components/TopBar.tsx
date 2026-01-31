@@ -88,7 +88,7 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
             
             {/* X (Twitter) Link */}
             <a 
-               href="https://x.com" 
+               href="https://x.com/i/communities/2017596168448987472" 
                target="_blank" 
                rel="noopener noreferrer"
                className="group flex items-center justify-center w-8 h-8 border border-stone-800 bg-black hover:bg-stone-900 hover:border-claw-500 transition-all clip-hex"
