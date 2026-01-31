@@ -74,7 +74,7 @@ const App: React.FC = () => {
          
          <div className="text-center relative z-10">
             <h1 className="text-4xl text-white font-black tracking-tighter mb-2 animate-glitch">
-              <span className="text-claw-500">Molt</span>Gpt
+              <span className="text-claw-500">Molt</span>GPT
             </h1>
             <div className="flex items-center justify-center gap-2 text-[10px] text-claw-400 font-mono tracking-[0.3em]">
                <span className="animate-blink">_</span> SYSTEM_BOOT_SEQ_V2.6
@@ -244,7 +244,7 @@ const App: React.FC = () => {
                 
                 <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-8 leading-[0.9] relative animate-slide-up select-none z-10">
                    <span className="text-claw-500 filter drop-shadow-[0_0_25px_rgba(220,38,38,0.4)]">Molt</span>
-                   <span className="text-white">Gpt</span>
+                   <span className="text-white">GPT</span>
                 </h1>
                 
                 <p className="max-w-2xl mx-auto text-stone-300 font-mono text-sm md:text-base leading-relaxed mb-12 animate-slide-up [animation-delay:0.1s] bg-black/40 backdrop-blur-sm p-4 border-l-2 border-claw-500 relative z-10">

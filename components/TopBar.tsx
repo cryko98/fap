@@ -63,7 +63,7 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
             </div>
             <div className="flex flex-col">
                <h1 className="text-xl font-black italic tracking-tighter leading-none text-white">
-                 <span className="text-claw-500 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)]">Molt</span>Gpt
+                 <span className="text-claw-500 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)]">Molt</span>GPT
                </h1>
                <div className="flex items-center gap-2">
                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-blink"></span>
