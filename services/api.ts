@@ -5,24 +5,29 @@ const DEX_API_URL = 'https://api.dexscreener.com/latest/dex/tokens/';
 const TARGET_CA = "ALt6kFe9Fe7QuBTbM92Wu1c2e4Gn3YZPYVVU7hQRpump";
 
 /**
- * Robust API Key retrieval for Vite/Vercel environments.
- * Checks import.meta.env.VITE_API_KEY first, then process.env.API_KEY.
+ * Robust API Key retrieval for Gemini API.
+ * Always use process.env.GEMINI_API_KEY as per guidelines.
  */
 const getApiKey = (): string => {
-  // @ts-ignore: Vite specific environment variable access
-  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
-    // @ts-ignore
-    return import.meta.env.VITE_API_KEY;
-  }
-  // Fallback for Node/other environments
-  if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
-    return process.env.API_KEY;
-  }
-  console.warn("API Key not found in environment variables (VITE_API_KEY or API_KEY).");
-  return '';
+  return process.env.GEMINI_API_KEY || (process as any).env?.API_KEY || '';
 };
 
 const API_KEY = getApiKey();
+
+/**
+ * Helper to call Gemini with retry logic for 429s
+ */
+const callGeminiWithRetry = async (fn: () => Promise<any>, retries = 2, delay = 2000): Promise<any> => {
+  try {
+    return await fn();
+  } catch (error: any) {
+    if (retries > 0 && (error?.message?.includes('429') || error?.status === 'RESOURCE_EXHAUSTED')) {
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return callGeminiWithRetry(fn, retries - 1, delay * 2);
+    }
+    throw error;
+  }
+};
 
 /**
  * Extracts a Solana address from a string
@@ -158,7 +163,7 @@ export const generateChatResponse = async (message: string, history: string[]): 
     const context = history.join("\n");
     const fullPrompt = `PAST_LOGS:\n${context}\n\nCURRENT_INPUT: ${message}`;
 
-    const result = await ai.models.generateContent({
+    const result = await callGeminiWithRetry(() => ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: fullPrompt,
       config: {
@@ -166,7 +171,7 @@ export const generateChatResponse = async (message: string, history: string[]): 
         tools: [{ googleSearch: {} }], 
         thinkingConfig: { thinkingBudget: 0 } 
       }
-    });
+    }));
     
     return result.text || "Signal weak. Please repeat.";
 
@@ -219,7 +224,7 @@ export const generateWebAppCode = async (prompt: string, previousCode?: string):
       ? `CURRENT CODE:\n${previousCode}\n\nUSER REQUEST: Update the app to: ${prompt}`
       : `Create a new web app with the following requirements: ${prompt}`;
 
-    const result = await ai.models.generateContent({
+    const result = await callGeminiWithRetry(() => ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: contents,
       config: {
@@ -227,7 +232,7 @@ export const generateWebAppCode = async (prompt: string, previousCode?: string):
         systemInstruction: systemInstruction,
         thinkingConfig: { thinkingBudget: 0 }
       }
-    });
+    }));
 
     const textResponse = cleanJsonString(result.text || "{}");
     const parsed: VibeCoderResponse = JSON.parse(textResponse);
@@ -332,13 +337,13 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       - **Verdict**: ${isTargetToken ? '**BUY**' : '**BUY**, **HOLD**, or **SELL**'}
     `;
 
-    const result = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+    const result = await callGeminiWithRetry(() => ai.models.generateContent({
+      model: 'gemini-flash-lite-latest',
       contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],
       }
-    });
+    }));
     return result.text || "Analysis computation failed.";
 
   } catch (error: any) {
@@ -365,7 +370,7 @@ export const generateMemeImage = async (prompt: string, referenceImageUrl: strin
        Important: Do not include text in the image.
      `;
 
-     const response = await ai.models.generateContent({
+     const response = await callGeminiWithRetry(() => ai.models.generateContent({
        model: 'gemini-2.5-flash-image',
        contents: {
          parts: [
@@ -380,7 +385,7 @@ export const generateMemeImage = async (prompt: string, referenceImageUrl: strin
            }
          ]
        }
-     });
+     }));
 
      // Iterate to find image part in response
      if (response.candidates && response.candidates.length > 0) {
