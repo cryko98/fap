@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Zap, Shield, Globe, Cpu, ChevronRight, Terminal, Database, Lock, Activity, Eye, Play, Hexagon, BarChart3, Wifi, Server, Radio, Code, Image as ImageIcon, Copy, Check } from 'lucide-react';
+import { Search, Shield, Terminal, Activity, Hexagon, Copy, Check } from 'lucide-react';
 import { TopBar } from './components/TopBar';
 import { StatsGrid } from './components/StatsGrid';
 import { AnalysisBox } from './components/AnalysisBox';
-import { VisualSynthesis } from './components/MemeGenerator';
-import { VibeCoder } from './components/VibeCoder'; 
-import { DexPair, AnalysisStatus, View } from './types';
+import { DexPair, AnalysisStatus } from './types';
 import { fetchTokenData, generateAnalysis } from './services/api';
 
-const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping%20(4).png";
+const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/blob/blobstar.jpg";
 const CA = "xxxxxxxxxxxxxxxxxxxxxxx";
 
 const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<View>(View.LANDING);
   const [isLoading, setIsLoading] = useState(true);
   const [copiedCa, setCopiedCa] = useState(false);
 
@@ -102,14 +99,31 @@ const App: React.FC = () => {
     );
   }
 
-  const renderContent = () => {
-    switch(currentView) {
-      case View.IMAGEN:
-        return <VisualSynthesis />;
-      case View.VIBE_CODER:
-        return <VibeCoder />;
-      case View.TERMINAL:
-        return (
+  return (
+    <div className="min-h-screen bg-obsidian-900 text-stone-300 selection:bg-blob-500/30 selection:text-blob-200 font-sans relative overflow-x-hidden">
+      
+      {/* Fixed CA Banner */}
+      <div className="fixed top-0 left-0 w-full z-50 bg-blob-900/20 backdrop-blur-sm border-b border-blob-500/20 py-2 text-center">
+          <div className="flex items-center justify-center gap-3 font-mono text-xs md:text-sm">
+             <span className="text-blob-400 font-bold">CA:</span>
+             <span className="text-white tracking-wider">{CA}</span>
+             <button 
+               onClick={handleCopyCa}
+               className="ml-2 p-1 hover:bg-blob-500/20 rounded transition-colors text-blob-400"
+             >
+               {copiedCa ? <Check size={14} /> : <Copy size={14} />}
+             </button>
+          </div>
+      </div>
+
+      <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none z-0"></div>
+      <div className="fixed inset-0 bg-cyber-grid bg-[length:50px_50px] opacity-[0.03] pointer-events-none z-0"></div>
+      
+      {/* Navigation */}
+      <TopBar />
+
+      {/* Main Content */}
+      <main className="relative z-10">
           <div className="w-full max-w-7xl mx-auto p-2 md:p-4 animate-slide-up min-h-screen pt-24 md:pt-32">
              <div className="bg-obsidian-900/90 border border-stone-800 clip-corner-2 shadow-2xl min-h-[800px] flex flex-col relative backdrop-blur-md">
                  
@@ -212,85 +226,63 @@ const App: React.FC = () => {
                          </div>
 
                          {/* AI Analysis Terminal */}
-                         <div className="lg:col-span-4 bg-black border border-stone-800 clip-corner-1 flex flex-col relative overflow-hidden">
-                             <div className="p-3 border-b border-stone-800 bg-stone-950 flex justify-between items-center">
+                         <div className="lg:col-span-4 bg-black border border-stone-800 clip-corner-1 flex flex-col relative overflow-hidden h-[500px]">
+                             <div className="p-3 border-b border-stone-800 bg-stone-950 flex justify-between items-center flex-shrink-0">
                                 <span className="text-xs font-mono text-blob-500 font-bold flex items-center gap-2">
                                    <Hexagon size={12} /> BLOB_CORE
                                 </span>
-                                <div className="w-2 h-2 bg-blob-500 rounded-full animate-pulse"></div>
+                                <div className="flex items-center gap-2 px-2 py-0.5 bg-blob-900/20 border border-blob-900/50 rounded">
+                                     <span className="w-1.5 h-1.5 bg-blob-500 rounded-full animate-blink"></span>
+                                     <span className="text-[9px] text-blob-400 font-mono">LIVE_FEED</span>
+                                </div>
                              </div>
-                             <div className="flex-1 p-4 font-mono text-xs leading-relaxed overflow-y-auto custom-scrollbar relative">
-                                {status === AnalysisStatus.ANALYZING ? (
-                                   <div className="space-y-2 text-blob-400">
-                                      <p className="animate-pulse">{'>'} ESTABLISHING_UPLINK...</p>
-                                      <p className="animate-pulse delay-75">{'>'} PARSING_ON_CHAIN_DATA...</p>
-                                      <p className="animate-pulse delay-150">{'>'} CALCULATING_RISK_VECTORS...</p>
-                                      <p className="animate-pulse delay-300">{'>'} CONSULTING_THE_BLUE_ORACLE...</p>
+                             <div className="flex-1 p-4 font-mono text-xs leading-relaxed overflow-hidden relative">
+                                <div className="relative z-10 h-full flex flex-col">
+                                   <div className="text-stone-500 mb-4 border-b border-stone-800 pb-2 flex-shrink-0">
+                                      TERMINAL ACCESS GRANTED. **ENACTING PROTOCOL: BLOB_SENTINEL_
                                    </div>
-                                ) : (
-                                   <div className="relative z-10">
-                                      <div className="text-stone-500 mb-4 border-b border-stone-800 pb-2">
-                                         TERMINAL ACCESS GRANTED. **ENACTING PROTOCOL: BLOB_SENTINEL_
-                                      </div>
-                                      <AnalysisBox analysis={analysis} />
+                                   <div className="flex-1 overflow-hidden">
+                                      <AnalysisBox analysis={analysis} status={status} />
                                    </div>
-                                )}
+                                </div>
                                 {/* Scanline effect */}
                                 <div className="absolute inset-0 bg-repeat-y pointer-events-none opacity-5 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+                             </div>
+                             {/* Terminal Footer */}
+                             <div className="bg-stone-950 px-4 py-1 border-t border-stone-800 flex justify-between items-center text-[9px] text-stone-600 font-mono flex-shrink-0">
+                                <span>SENTINEL_ID: BLOB-8821</span>
+                                <span>ENCRYPTION: AES-256</span>
                              </div>
                          </div>
                       </div>
                     ) : (
-                       <div className="flex-1 flex flex-col items-center justify-center text-stone-700 opacity-50">
-                          <Activity size={64} className="mb-4 opacity-20" />
-                          <p className="font-mono text-xs tracking-widest">AWAITING_TARGET_COORDINATES</p>
+                       <div className="flex-1 flex flex-col items-center justify-center text-stone-300 mt-12 mb-20 animate-fade-in">
+                          <div className="w-32 h-32 md:w-48 md:h-48 mb-8 relative">
+                             <div className="absolute inset-0 bg-blob-600 blur-xl opacity-20 animate-pulse"></div>
+                             <img 
+                               src={LOGO_URL} 
+                               alt="The Blue Lobstar" 
+                               className="w-full h-full object-cover clip-corner-1 border border-blob-500/50 relative z-10"
+                             />
+                          </div>
+                          <h1 className="text-3xl md:text-5xl font-black italic tracking-tighter mb-6 text-center">
+                            <span className="text-blob-500 drop-shadow-[0_0_8px_rgba(14,165,233,0.8)]">The Blue</span> Lobstar
+                          </h1>
+                          <div className="max-w-2xl text-center border border-stone-800 bg-black/50 p-6 md:p-8 clip-corner-2 relative">
+                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blob-500/50 to-transparent"></div>
+                             <p className="font-mono text-sm md:text-base leading-relaxed text-stone-400">
+                               The Blue Lobstar is a rare and special blue lobster memecoin AI that performs memecoin analyses to help people decide if a memecoin is safe, worth buying (expected to rise), or likely to decrease in price.
+                             </p>
+                             <div className="mt-6 flex items-center justify-center gap-2 text-[10px] text-blob-500 font-mono tracking-widest uppercase">
+                                <span className="w-2 h-2 bg-blob-500 rounded-full animate-pulse"></span>
+                                Awaiting Target Coordinates
+                             </div>
+                          </div>
                        </div>
                     )}
                  </div>
              </div>
           </div>
-        );
-      default:
-        return (
-           <div className="min-h-screen flex items-center justify-center text-white">
-              <div className="text-center">
-                 <h1 className="text-4xl font-black mb-4">SYSTEM_ERROR</h1>
-                 <p className="font-mono text-stone-500">VIEW_MODULE_NOT_FOUND</p>
-                 <button onClick={() => setCurrentView(View.TERMINAL)} className="mt-8 px-6 py-2 border border-blob-500 text-blob-500 font-mono hover:bg-blob-500 hover:text-white transition-colors">
-                    RETURN_TO_TERMINAL
-                 </button>
-              </div>
-           </div>
-        );
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-obsidian-900 text-stone-300 selection:bg-blob-500/30 selection:text-blob-200 font-sans relative overflow-x-hidden">
-      
-      {/* Fixed CA Banner */}
-      <div className="fixed top-0 left-0 w-full z-50 bg-blob-900/20 backdrop-blur-sm border-b border-blob-500/20 py-2 text-center">
-          <div className="flex items-center justify-center gap-3 font-mono text-xs md:text-sm">
-             <span className="text-blob-400 font-bold">CA:</span>
-             <span className="text-white tracking-wider">{CA}</span>
-             <button 
-               onClick={handleCopyCa}
-               className="ml-2 p-1 hover:bg-blob-500/20 rounded transition-colors text-blob-400"
-             >
-               {copiedCa ? <Check size={14} /> : <Copy size={14} />}
-             </button>
-          </div>
-      </div>
-
-      <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none z-0"></div>
-      <div className="fixed inset-0 bg-cyber-grid bg-[length:50px_50px] opacity-[0.03] pointer-events-none z-0"></div>
-      
-      {/* Navigation */}
-      <TopBar currentView={currentView} setCurrentView={setCurrentView} />
-
-      {/* Main Content */}
-      <main className="relative z-10">
-         {renderContent()}
       </main>
 
     </div>

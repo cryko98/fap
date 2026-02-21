@@ -44,7 +44,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
     if (status === AnalysisStatus.COMPLETE && analysis) {
       setDisplayedText('');
       let i = 0;
-      const speed = 5; 
+      const speed = 10; 
       
       const intervalId = setInterval(() => {
         setDisplayedText(analysis.slice(0, i));
@@ -61,40 +61,23 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
     }
   }, [analysis, status]);
 
-  if (status === AnalysisStatus.IDLE || status === AnalysisStatus.ERROR) return null;
+  if (status === AnalysisStatus.IDLE) {
+    return (
+      <div className="font-mono text-stone-500 text-xs animate-pulse">
+        {'>'} STANDBY_MODE: AWAITING_INPUT...
+      </div>
+    );
+  }
+
+  if (status === AnalysisStatus.ERROR) return null;
 
   return (
-    <div className="w-full h-full bg-black border border-blob-900/50 flex flex-col shadow-[0_0_30px_rgba(14,165,233,0.1)]">
-      
-      {/* Decorative Grid Background */}
-      <div className="absolute inset-0 opacity-10 bg-grid-pattern pointer-events-none"></div>
-
-      {/* Header */}
-      <div className="bg-obsidian-900 px-4 py-2 border-b border-blob-900/30 flex items-center justify-between flex-shrink-0 z-30">
-        <div className="flex items-center gap-2">
-            <Cpu size={14} className="text-blob-500 animate-pulse" />
-            <span className="font-mono text-xs text-white tracking-widest">
-               <span className="text-blob-500">BLOB</span>_CORE
-            </span>
-        </div>
-        <div className="flex items-center gap-2 px-2 py-0.5 bg-blob-900/20 border border-blob-900/50 rounded">
-             <span className="w-1.5 h-1.5 bg-blob-500 rounded-full animate-blink"></span>
-             <span className="text-[9px] text-blob-400 font-mono">LIVE_FEED</span>
-        </div>
-      </div>
-      
-      <div className="flex flex-1 overflow-hidden relative bg-black/90">
-        <div ref={scrollRef} className="flex-1 p-6 overflow-y-auto relative scroll-smooth z-10">
-            
-            {/* Scanline */}
-            <div className="pointer-events-none absolute inset-0 w-full h-full overflow-hidden z-0 opacity-10">
-                <div className="w-full h-0.5 bg-blob-500 absolute top-0 animate-scanline blur-[1px]"></div>
-            </div>
-
+    <div className="w-full h-full flex flex-col relative">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto relative scroll-smooth z-10 custom-scrollbar">
             {/* Loading State */}
             {(status === AnalysisStatus.ANALYZING || status === AnalysisStatus.FETCHING_DATA) ? (
-              <div className="h-full flex flex-col justify-center items-center relative z-20">
-                 <div className="w-full max-w-sm font-mono text-xs">
+              <div className="h-full flex flex-col justify-start relative z-20">
+                 <div className="w-full font-mono text-[10px] md:text-xs">
                     {INIT_STEPS.map((step, index) => (
                       <div key={index} className={`flex items-center gap-3 mb-2 transition-all duration-100 ${index > initStep ? 'opacity-20' : 'opacity-100'}`}>
                          <span className={`text-[10px] ${index === initStep ? 'text-blob-500' : 'text-stone-600'}`}>
@@ -105,27 +88,17 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
                          </span>
                       </div>
                     ))}
-                    <div className="mt-6 h-0.5 w-full bg-obsidian-800">
-                        <div className="h-full bg-blob-600 animate-[chart-flow_1s_ease-in-out_infinite]" style={{width: '50%'}}></div>
-                    </div>
                  </div>
               </div>
             ) : (
               /* Analysis Text */
-              <div className="font-mono text-stone-300 text-xs md:text-sm leading-relaxed relative z-20">
+              <div className="font-mono text-stone-300 text-xs md:text-sm leading-relaxed relative z-20 pb-4">
                  <div className="prose prose-invert prose-p:my-2 prose-headings:text-blob-500 prose-headings:font-bold prose-headings:text-sm prose-strong:text-blob-400 prose-strong:font-normal max-w-none">
                      <ReactMarkdown>{displayedText}</ReactMarkdown>
                  </div>
                  <span className="inline-block w-2 h-4 bg-blob-500 ml-1 animate-blink align-middle"></span>
               </div>
             )}
-        </div>
-      </div>
-      
-      {/* Footer */}
-      <div className="bg-obsidian-950 px-4 py-1 border-t border-blob-900/30 flex justify-between items-center text-[9px] text-stone-600 font-mono flex-shrink-0 z-30">
-         <span>SENTINEL_ID: BLOB-8821</span>
-         <span>ENCRYPTION: AES-256</span>
       </div>
     </div>
   );

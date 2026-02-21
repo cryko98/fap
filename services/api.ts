@@ -327,9 +327,9 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       ` : ''}
 
       **OUTPUT STRUCTURE:**
-      - Analysis: [A concise paragraph analyzing the data and any news found]
-      - Risk Level: [Low/Medium/High/Extreme]
-      - Verdict: ${isTargetToken ? '"BUY"' : '"BUY", "HOLD", or "SELL"'}
+      - **Analysis**: [A concise paragraph analyzing the data and any news found]
+      - **Risk Level**: [Low/Medium/High/Extreme]
+      - **Verdict**: ${isTargetToken ? '**BUY**' : '**BUY**, **HOLD**, or **SELL**'}
     `;
 
     const result = await ai.models.generateContent({
