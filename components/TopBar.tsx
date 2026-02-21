@@ -1,14 +1,8 @@
 import React from 'react';
-import { Copy, Check, Terminal, Home, Cpu, Image as ImageIcon, Crosshair, Code } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import { useState } from 'react';
-import { View } from '../types';
 
-interface TopBarProps {
-  currentView: View;
-  setView: (view: View) => void;
-}
-
-export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
+export const TopBar: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const ca = "xxxxxxxxxxxxxxxxxxxxxxx";
 
@@ -17,28 +11,6 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-
-  const NavButton = ({ view, icon: Icon, label }: { view: View; icon: any; label: string }) => (
-    <button
-      onClick={() => setView(view)}
-      className={`relative group px-3 md:px-4 py-2 flex items-center gap-2 transition-all duration-300 overflow-hidden ${
-        currentView === view ? 'text-blob-500' : 'text-stone-500 hover:text-stone-300'
-      }`}
-    >
-      <div className={`absolute inset-0 border border-blob-800/50 skew-x-12 transform transition-all ${
-        currentView === view ? 'bg-blob-900/20 translate-y-0 opacity-100' : 'translate-y-full opacity-0 group-hover:opacity-50 group-hover:translate-y-0'
-      }`}></div>
-      
-      <Icon size={18} className={`relative z-10 transition-transform ${currentView === view ? 'scale-110 drop-shadow-[0_0_5px_rgba(14,165,233,0.8)]' : ''}`} />
-      <span className="relative z-10 font-mono text-xs font-bold tracking-widest uppercase hidden md:block">
-        {label}
-      </span>
-      
-      {currentView === view && (
-        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blob-500 shadow-[0_0_10px_#0ea5e9]"></span>
-      )}
-    </button>
-  );
 
   return (
     <div className="fixed top-8 left-0 right-0 z-40 p-2 md:p-4 pointer-events-none">
@@ -50,13 +22,12 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
           
           {/* Branding */}
           <div 
-            className="flex items-center gap-2 md:gap-4 cursor-pointer group shrink-0"
-            onClick={() => setView(View.LANDING)}
+            className="flex items-center gap-2 md:gap-4 group shrink-0"
           >
             <div className="w-8 h-8 md:w-10 md:h-10 relative">
                <div className="absolute inset-0 bg-blob-600 blur opacity-20 animate-pulse"></div>
                <img 
-                 src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping%20(4).png" 
+                 src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/blob/blobstar.jpg" 
                  alt="Blue Lobstar Logo" 
                  className="w-full h-full object-cover clip-corner-1 border border-blob-500/50 relative z-10"
                />
@@ -74,21 +45,13 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
             </div>
           </div>
 
-          {/* Navigation */}
-          <div className="flex items-center gap-0 md:gap-2 overflow-x-auto scrollbar-hide px-2">
-            <NavButton view={View.LANDING} icon={Home} label="Core" />
-            <NavButton view={View.VIBE_CODER} icon={Code} label="Vibe Coder" />
-            <NavButton view={View.TERMINAL} icon={Terminal} label="Scanner" />
-            <NavButton view={View.IMAGEN} icon={ImageIcon} label="Visuals" />
-          </div>
-
           {/* Socials */}
           <div className="flex items-center gap-3 md:gap-6 shrink-0">
             <div className="hidden lg:block h-8 w-px bg-stone-800 rotate-12"></div>
             
             {/* Telegram Link */}
              <a 
-               href="https://t.me/bluelobstar" 
+               href="https://tg.com" 
                target="_blank" 
                rel="noopener noreferrer"
                className="group flex items-center justify-center w-7 h-7 md:w-8 md:h-8 border border-stone-800 bg-black hover:bg-stone-900 hover:border-blob-500 transition-all clip-hex"
@@ -100,7 +63,7 @@ export const TopBar: React.FC<TopBarProps> = ({ currentView, setView }) => {
 
             {/* X (Twitter) Link */}
             <a 
-               href="https://twitter.com/bluelobstar" 
+               href="https://x.com" 
                target="_blank" 
                rel="noopener noreferrer"
                className="group flex items-center justify-center w-7 h-7 md:w-8 md:h-8 border border-stone-800 bg-black hover:bg-stone-900 hover:border-blob-500 transition-all clip-hex"
