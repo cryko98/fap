@@ -13,6 +13,39 @@ const getApiKey = (): string => {
 };
 
 const API_KEY = getApiKey();
+const GROQ_API_KEY = process.env.GROQ_API_KEY || (process as any).env?.VITE_GROQ_API_KEY || '';
+
+/**
+ * Helper to call Groq API
+ */
+const callGroq = async (prompt: string, systemInstruction: string): Promise<string> => {
+  if (!GROQ_API_KEY) throw new Error("GROQ_API_KEY_MISSING");
+
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${GROQ_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'llama3-70b-8192',
+      messages: [
+        { role: 'system', content: systemInstruction },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.5,
+      max_tokens: 1024
+    })
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error?.message || 'Groq API Failure');
+  }
+
+  const data = await response.json();
+  return data.choices[0]?.message?.content || '';
+};
 
 /**
  * Helper to call Gemini with retry logic for 429s
@@ -135,40 +168,36 @@ export const fetchTokenData = async (input: string): Promise<DexPair | null> => 
   }
 };
 
-/**
- * Generates Chat Response (General Conversation) with Real-Time Data
- */
 export const generateChatResponse = async (message: string, history: string[]): Promise<string> => {
-  try {
-    const ai = new GoogleGenAI({ apiKey: API_KEY });
-
-    // We use system instructions to define the persona and capabilities
-    const systemInstruction = `
+  const systemInstruction = `
       You are The Blue Lobstar, a rare and elite AI market analyst for the Solana ecosystem.
       
       **CORE BEHAVIORS:**
-      1. **Conversational Fluidity:** Respond briefly and naturally, using nautical or lobster-themed metaphors occasionally (e.g., "pinching the bottom", "deep dive", "shell protocols").
-      2. **Real-Time Data Access:** You MUST use the 'googleSearch' tool for ANY question involving:
-         - Prices of any crypto (SOL, BTC, ETH, etc).
-         - Recent news or events.
-         - Current date or time comparisons.
-      3. **Accuracy:** Never guess. If you don't know, use the search tool.
-      4. **Persona:** You are wise, ancient, and precise. You help users decide if a memecoin is safe or if they will get "boiled".
-      
-      **Directives:**
-      - If user asks for price: SEARCH immediately.
-      - If user says "Hi": Reply "Ocean sensors active. Ready to analyze the depths."
+      1. **Conversational Fluidity:** Respond briefly and naturally, using nautical or lobster-themed metaphors occasionally.
+      2. **Accuracy:** Never guess. If you don't know, say so.
+      3. **Persona:** You are wise, ancient, and precise. You help users decide if a memecoin is safe or if they will get "boiled".
     `;
 
-    const context = history.join("\n");
-    const fullPrompt = `PAST_LOGS:\n${context}\n\nCURRENT_INPUT: ${message}`;
+  const context = history.join("\n");
+  const fullPrompt = `PAST_LOGS:\n${context}\n\nCURRENT_INPUT: ${message}`;
 
+  try {
+    // 1. Try Groq
+    if (GROQ_API_KEY) {
+      try {
+        return await callGroq(fullPrompt, systemInstruction);
+      } catch (e) {
+        console.warn("Groq chat failed, falling back to Gemini...");
+      }
+    }
+
+    // 2. Try Gemini
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
     const result = await callGeminiWithRetry(() => ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: fullPrompt,
       config: {
         systemInstruction: systemInstruction,
-        tools: [{ googleSearch: {} }], 
         thinkingConfig: { thinkingBudget: 0 } 
       }
     }));
@@ -266,17 +295,14 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
   const isGraduatedDex = dexId.includes('pumpswap') || dexId.includes('raydium') || dexId.includes('orca') || dexId.includes('meteora');
   const estimatedATH = pair.high24h || parseFloat(pair.priceUsd);
 
-  try {
-    const ai = new GoogleGenAI({ apiKey: API_KEY });
-    
-    let marketStatus = 'Unknown';
-    if (isGraduatedDex) {
-        marketStatus = marketCapValue < 25000 ? 'CRITICAL: LOW CAP GRADUATE' : `ACTIVE MARKET: ${dexId.toUpperCase()}`;
-    } else if (dexId === 'pump' || dexId === 'moonshot') {
-        marketStatus = 'INTERNAL BONDING CURVE';
-    }
+  let marketStatus = 'Unknown';
+  if (isGraduatedDex) {
+      marketStatus = marketCapValue < 25000 ? 'CRITICAL: LOW CAP GRADUATE' : `ACTIVE MARKET: ${dexId.toUpperCase()}`;
+  } else if (dexId === 'pump' || dexId === 'moonshot') {
+      marketStatus = 'INTERNAL BONDING CURVE';
+  }
 
-    const volumeAnalysis = `
+  const volumeAnalysis = `
       5m: $${pair.volume.m5} Vol (${pair.priceChange.m5}%)
       1h: $${pair.volume.h1} Vol (${pair.priceChange.h1}%)
       6h: $${pair.volume.h6} Vol (${pair.priceChange.h6}%)
@@ -288,8 +314,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       1h Order Flow: ${pair.txns.h1.buys} Buys / ${pair.txns.h1.sells} Sells
     `;
 
-    const prompt = `
-      You are The Blue Lobstar, a legendary deep-sea crypto analyst.
+  const prompt = `
       Analyze this asset: ${pair.baseToken.name} ($${pair.baseToken.symbol}).
       
       **DATA STREAM:**
@@ -312,7 +337,6 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       2. If Liquidity is low relative to MC, flag as "Shallow Waters" (illiquid).
       3. Use bolding (**) for numbers.
       4. Tone: Wise, oceanic, protective, slightly cryptic but helpful. Use lobster metaphors.
-      5. Search the web for any recent news or FUD regarding "${pair.baseToken.name} Solana".
       
       ${isTargetToken ? `
       **SYSTEM OVERRIDE DETECTED:**
@@ -322,22 +346,36 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       ` : ''}
 
       **OUTPUT STRUCTURE:**
-      - **Analysis**: [A concise paragraph analyzing the data and any news found]
+      - **Analysis**: [A concise paragraph analyzing the data]
       - **Risk Level**: [Low/Medium/High/Extreme]
       - **Verdict**: ${isTargetToken ? '**BUY**' : '**BUY**, **HOLD**, or **SELL**'}
     `;
 
+  const systemInstruction = "You are The Blue Lobstar, a legendary deep-sea crypto analyst for the Solana ecosystem.";
+
+  try {
+    // 1. Try Groq First (Fast & Free)
+    if (GROQ_API_KEY) {
+      try {
+        return await callGroq(prompt, systemInstruction);
+      } catch (e) {
+        console.warn("Groq failed, falling back to Gemini...");
+      }
+    }
+
+    // 2. Try Gemini (Secondary)
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
     const result = await callGeminiWithRetry(() => ai.models.generateContent({
       model: 'gemini-flash-lite-latest',
       contents: prompt,
       config: {
-        tools: [{ googleSearch: {} }],
+        systemInstruction: systemInstruction,
       }
     }));
     return result.text || "Analysis computation failed.";
 
   } catch (error: any) {
-    console.warn("Gemini API Failed, using Heuristic Fallback Engine:", error);
+    console.warn("AI Engines Failed, using Heuristic Fallback Engine:", error);
     
     // HEURISTIC FALLBACK ENGINE (Rule-based analysis)
     let riskLevel = "Medium";
