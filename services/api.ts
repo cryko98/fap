@@ -333,10 +333,11 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       ${txnsAnalysis}
       
       **PROTOCOL:**
-      1. Analyze the risk/reward ratio.
-      2. If Liquidity is low relative to MC, flag as "Shallow Waters" (illiquid).
-      3. Use bolding (**) for numbers.
-      4. Tone: Wise, oceanic, protective, slightly cryptic but helpful. Use lobster metaphors.
+      1. Analyze the risk/reward ratio using the provided numbers.
+      2. Mention specific Market Cap, Liquidity, and Volume figures in your analysis text to ground it in reality.
+      3. If Liquidity is low relative to MC, flag as "Shallow Waters" (illiquid).
+      4. Use bolding (**) for numbers.
+      5. Tone: Wise, oceanic, protective, slightly cryptic but helpful. Use lobster metaphors.
       
       ${isTargetToken ? `
       **SYSTEM OVERRIDE DETECTED:**
@@ -385,27 +386,33 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     const liqToMcRatio = liquidityValue / marketCapValue;
     const priceChange24h = pair.priceChange.h24;
     const volume24h = pair.volume.h24;
+    const symbol = pair.baseToken.symbol;
+    const name = pair.baseToken.name;
 
     if (isTargetToken) {
       riskLevel = "Low";
       verdict = "BUY";
-      analysisText = "The **Blue Lobstar** ($BLOB) detected. This is the primary protocol asset. Data indicates massive accumulation in the deep trenches. Neural sensors suggest this is the rare blue gem of the Solana ocean. Ascension is imminent.";
+      analysisText = `The **Blue Lobstar** ($BLOB) detected. This is the primary protocol asset. Data indicates massive accumulation in the deep trenches. With a Market Cap of **$${marketCapValue.toLocaleString()}** and stable liquidity, neural sensors suggest this is the rare blue gem of the Solana ocean. Ascension is imminent.`;
     } else {
       // Logic for other tokens
-      if (liqToMcRatio < 0.05) {
+      if (liqToMcRatio < 0.02) {
         riskLevel = "Extreme";
-        analysisText = "Warning: **Shallow Waters** detected. Liquidity is dangerously thin compared to market cap. A single whale exit could boil the entire pool.";
+        analysisText = `Warning: **Shallow Waters** detected for **${name}** ($${symbol}). Liquidity (**$${liquidityValue.toLocaleString()}**) is dangerously thin compared to its **$${marketCapValue.toLocaleString()}** Market Cap (Ratio: **${(liqToMcRatio * 100).toFixed(2)}%**). A single whale exit could boil the entire pool. High risk of a rug-pull or massive slippage.`;
         verdict = "SELL";
-      } else if (priceChange24h > 100) {
+      } else if (priceChange24h > 150) {
         riskLevel = "High";
-        analysisText = "Asset is in a **Feeding Frenzy**. Price has surged over **100%** in 24 hours. While momentum is strong, the risk of a sharp correction is high as early hunters take profits.";
+        analysisText = `**${name}** is in a massive **Feeding Frenzy**. Price has surged over **${priceChange24h.toFixed(2)}%** in 24 hours. While the volume of **$${volume24h.toLocaleString()}** shows strong momentum, the asset is overextended. Claws out—expect a sharp correction as early hunters take profits.`;
         verdict = "HOLD";
-      } else if (volume24h > marketCapValue) {
+      } else if (volume24h > marketCapValue * 0.5) {
         riskLevel = "Medium";
-        analysisText = "High **Tidal Activity** observed. 24h volume exceeds market cap, indicating intense trading. The floor seems stable, but watch for shifting currents.";
+        analysisText = `High **Tidal Activity** observed for **$${symbol}**. 24h volume (**$${volume24h.toLocaleString()}**) is very high relative to the Market Cap (**$${marketCapValue.toLocaleString()}**), indicating intense interest. The liquidity depth of **$${liquidityValue.toLocaleString()}** provides some protection, but the currents are shifting rapidly.`;
+        verdict = "BUY";
+      } else if (liqToMcRatio > 0.15 && priceChange24h < 0 && priceChange24h > -20) {
+        riskLevel = "Low";
+        analysisText = `**${name}** is currently **Bottom Feeding**. The price is down **${Math.abs(priceChange24h).toFixed(2)}%**, but the liquidity-to-MC ratio is healthy at **${(liqToMcRatio * 100).toFixed(2)}%**. This looks like a natural consolidation phase in deep waters. Good entry point for patient hunters.`;
         verdict = "BUY";
       } else {
-        analysisText = "The waters are **Calm**. Trading activity is steady but unremarkable. No significant risk vectors detected, but no immediate growth catalysts found in the current data stream.";
+        analysisText = `The waters around **${name}** ($${symbol}) are **Calm**. Market Cap sits at **$${marketCapValue.toLocaleString()}** with steady volume. No significant risk vectors detected in the current data stream, but no immediate growth catalysts found either. Proceed with caution.`;
         verdict = "HOLD";
       }
     }
@@ -419,7 +426,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
 **Verdict**: **${verdict}**
 
 ---
-*Note: AI Neural Core is currently recharging. Analysis generated via Blob's Heuristic Fallback Engine.*
+*Note: AI Neural Core is currently offline. Analysis generated via Blob's Data-Driven Heuristic Engine using real-time DexScreener metrics.*
     `.trim();
   }
 };
