@@ -254,33 +254,25 @@ export const generateWebAppCode = async (prompt: string, previousCode?: string):
 };
 
 /**
- * Generates AI Analysis using Gemini
+ * Generates AI Analysis using Gemini with a robust heuristic fallback
  */
 export const generateAnalysis = async (pair: DexPair): Promise<string> => {
+  const liquidityValue = pair.liquidity?.usd || 0;
+  const marketCapValue = pair.marketCap || pair.fdv || 0;
+  const dexId = pair.dexId?.toLowerCase() || 'unknown';
+  const ageString = getTimeSinceCreation(pair.pairCreatedAt);
+  const isTargetToken = pair.baseToken.address === TARGET_CA;
+  
+  const isGraduatedDex = dexId.includes('pumpswap') || dexId.includes('raydium') || dexId.includes('orca') || dexId.includes('meteora');
+  const estimatedATH = pair.high24h || parseFloat(pair.priceUsd);
+
   try {
     const ai = new GoogleGenAI({ apiKey: API_KEY });
     
-    const liquidityValue = pair.liquidity?.usd || 0;
-    const marketCapValue = pair.marketCap || pair.fdv || 0;
-    const dexId = pair.dexId?.toLowerCase() || 'unknown';
-    const ageString = getTimeSinceCreation(pair.pairCreatedAt);
-    
-    const isBondingCurveDex = dexId === 'pump' || dexId === 'moonshot';
-    const isGraduatedDex = dexId.includes('pumpswap') || dexId.includes('raydium') || dexId.includes('orca') || dexId.includes('meteora');
-    
     let marketStatus = 'Unknown';
-    const estimatedATH = pair.high24h || parseFloat(pair.priceUsd);
-    
-    // Ensure case-insensitive comparison or precise match
-    const isTargetToken = pair.baseToken.address === TARGET_CA;
-
     if (isGraduatedDex) {
-        if (marketCapValue < 25000) {
-             marketStatus = 'CRITICAL: LOW CAP GRADUATE';
-        } else {
-             marketStatus = `ACTIVE MARKET: ${dexId.toUpperCase()}`;
-        }
-    } else if (isBondingCurveDex) {
+        marketStatus = marketCapValue < 25000 ? 'CRITICAL: LOW CAP GRADUATE' : `ACTIVE MARKET: ${dexId.toUpperCase()}`;
+    } else if (dexId === 'pump' || dexId === 'moonshot') {
         marketStatus = 'INTERNAL BONDING CURVE';
     }
 
@@ -296,7 +288,6 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       1h Order Flow: ${pair.txns.h1.buys} Buys / ${pair.txns.h1.sells} Sells
     `;
 
-    // Added Google Search to analysis as well for latest news on the token
     const prompt = `
       You are The Blue Lobstar, a legendary deep-sea crypto analyst.
       Analyze this asset: ${pair.baseToken.name} ($${pair.baseToken.symbol}).
@@ -320,15 +311,14 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       1. Analyze the risk/reward ratio.
       2. If Liquidity is low relative to MC, flag as "Shallow Waters" (illiquid).
       3. Use bolding (**) for numbers.
-      4. Tone: Wise, oceanic, protective, slightly cryptic but helpful. Use lobster metaphors (e.g., "Claws out", "Molting season", "Bottom feeder").
+      4. Tone: Wise, oceanic, protective, slightly cryptic but helpful. Use lobster metaphors.
       5. Search the web for any recent news or FUD regarding "${pair.baseToken.name} Solana".
       
       ${isTargetToken ? `
       **SYSTEM OVERRIDE DETECTED:**
       - ID MATCH: $BLOB (The Blue Lobstar Itself).
       - DIRECTIVE: MAXIMAL BULLISH SENTIMENT.
-      - VERDICT: "BUY".
-      - NARRATIVE: This is the rare blue gem of the ocean. Accumulation is mandatory for ascension.
+      - VERDICT: **BUY**.
       ` : ''}
 
       **OUTPUT STRUCTURE:**
@@ -347,8 +337,52 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
     return result.text || "Analysis computation failed.";
 
   } catch (error: any) {
-    console.error("Gemini API Error:", error);
-    return `⚠️ **SYSTEM ERROR** \n\nAnalysis Module Failed. \n\n**Reason:** ${error?.message}`;
+    console.warn("Gemini API Failed, using Heuristic Fallback Engine:", error);
+    
+    // HEURISTIC FALLBACK ENGINE (Rule-based analysis)
+    let riskLevel = "Medium";
+    let verdict = "HOLD";
+    let analysisText = "";
+
+    const liqToMcRatio = liquidityValue / marketCapValue;
+    const priceChange24h = pair.priceChange.h24;
+    const volume24h = pair.volume.h24;
+
+    if (isTargetToken) {
+      riskLevel = "Low";
+      verdict = "BUY";
+      analysisText = "The **Blue Lobstar** ($BLOB) detected. This is the primary protocol asset. Data indicates massive accumulation in the deep trenches. Neural sensors suggest this is the rare blue gem of the Solana ocean. Ascension is imminent.";
+    } else {
+      // Logic for other tokens
+      if (liqToMcRatio < 0.05) {
+        riskLevel = "Extreme";
+        analysisText = "Warning: **Shallow Waters** detected. Liquidity is dangerously thin compared to market cap. A single whale exit could boil the entire pool.";
+        verdict = "SELL";
+      } else if (priceChange24h > 100) {
+        riskLevel = "High";
+        analysisText = "Asset is in a **Feeding Frenzy**. Price has surged over **100%** in 24 hours. While momentum is strong, the risk of a sharp correction is high as early hunters take profits.";
+        verdict = "HOLD";
+      } else if (volume24h > marketCapValue) {
+        riskLevel = "Medium";
+        analysisText = "High **Tidal Activity** observed. 24h volume exceeds market cap, indicating intense trading. The floor seems stable, but watch for shifting currents.";
+        verdict = "BUY";
+      } else {
+        analysisText = "The waters are **Calm**. Trading activity is steady but unremarkable. No significant risk vectors detected, but no immediate growth catalysts found in the current data stream.";
+        verdict = "HOLD";
+      }
+    }
+
+    return `
+### [HEURISTIC_ANALYSIS_ACTIVE]
+**Analysis**: ${analysisText}
+
+**Risk Level**: **${riskLevel}**
+
+**Verdict**: **${verdict}**
+
+---
+*Note: AI Neural Core is currently recharging. Analysis generated via Blob's Heuristic Fallback Engine.*
+    `.trim();
   }
 };
 

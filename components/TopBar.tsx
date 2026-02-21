@@ -27,7 +27,7 @@ export const TopBar: React.FC = () => {
             <div className="w-8 h-8 md:w-10 md:h-10 relative">
                <div className="absolute inset-0 bg-blob-600 blur opacity-20 animate-pulse"></div>
                <img 
-                 src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/blob/blobstar.jpg" 
+                 src="https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/blob/blobstar.jpg?v=2" 
                  alt="Blue Lobstar Logo" 
                  className="w-full h-full object-cover clip-corner-1 border border-blob-500/50 relative z-10"
                />

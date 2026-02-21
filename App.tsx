@@ -6,7 +6,7 @@ import { AnalysisBox } from './components/AnalysisBox';
 import { DexPair, AnalysisStatus } from './types';
 import { fetchTokenData, generateAnalysis } from './services/api';
 
-const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/blob/blobstar.jpg";
+const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/blob/blobstar.jpg?v=2";
 const CA = "xxxxxxxxxxxxxxxxxxxxxxx";
 
 const App: React.FC = () => {
