@@ -51,7 +51,7 @@ export const TopBar: React.FC = () => {
             
             {/* Telegram Link */}
              <a 
-               href="https://tg.com" 
+               href="https://t.me/thebluelobstar" 
                target="_blank" 
                rel="noopener noreferrer"
                className="group flex items-center justify-center w-7 h-7 md:w-8 md:h-8 border border-stone-800 bg-black hover:bg-stone-900 hover:border-blob-500 transition-all clip-hex"

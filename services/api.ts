@@ -9,12 +9,25 @@ const TARGET_CA = "ALt6kFe9Fe7QuBTbM92Wu1c2e4Gn3YZPYVVU7hQRpump";
  * Always use process.env.GEMINI_API_KEY as per guidelines.
  */
 const getApiKey = (): string => {
-  return process.env.GEMINI_API_KEY || (process as any).env?.API_KEY || '';
+  return (process as any).env?.GEMINI_API_KEY || (process as any).env?.API_KEY || '';
 };
 
 const API_KEY = getApiKey();
-// Vite environment variables must be accessed via import.meta.env and prefixed with VITE_
-const GROQ_API_KEY = (import.meta as any).env?.VITE_GROQ_API_KEY || '';
+
+/**
+ * Robust retrieval for Groq API Key
+ */
+const getGroqKey = (): string => {
+  // @ts-ignore
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GROQ_API_KEY) {
+    // @ts-ignore
+    return import.meta.env.VITE_GROQ_API_KEY;
+  }
+  // @ts-ignore
+  return (process as any).env?.VITE_GROQ_API_KEY || (process as any).env?.GROQ_API_KEY || '';
+};
+
+const GROQ_API_KEY = getGroqKey();
 
 /**
  * Helper to call Groq API
@@ -350,7 +363,8 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       **OUTPUT STRUCTURE:**
       - **Analysis**: [A concise paragraph analyzing the data]
       - **Risk Level**: [Low/Medium/High/Extreme]
-      - **Verdict**: ${isTargetToken ? '**BUY**' : '**BUY**, **HOLD**, or **SELL**'}
+      
+      # VERDICT: [BUY, HOLD, or SELL]
     `;
 
   const systemInstruction = "You are The Blue Lobstar, a legendary deep-sea crypto analyst for the Solana ecosystem.";
@@ -424,7 +438,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
 
 **Risk Level**: **${riskLevel}**
 
-**Verdict**: **${verdict}**
+# VERDICT: ${verdict}
 
 ---
 *Note: AI Neural Core is currently offline. Analysis generated via Blob's Data-Driven Heuristic Engine using real-time DexScreener metrics.*

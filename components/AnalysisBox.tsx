@@ -93,7 +93,8 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
             ) : (
               /* Analysis Text */
               <div className="font-mono text-stone-300 text-xs md:text-sm leading-relaxed relative z-20 pb-4">
-                 <div className="prose prose-invert prose-p:my-2 prose-headings:text-blob-500 prose-headings:font-bold prose-headings:text-sm prose-strong:text-blob-400 prose-strong:font-normal max-w-none">
+                 <div className="prose prose-invert prose-p:my-2 prose-headings:text-blob-500 prose-headings:font-bold prose-headings:text-sm prose-strong:text-blob-400 prose-strong:font-normal max-w-none
+                   [&_h1]:text-2xl [&_h1]:text-white [&_h1]:bg-blob-600/20 [&_h1]:p-4 [&_h1]:border-l-4 [&_h1]:border-blob-500 [&_h1]:mt-6 [&_h1]:mb-2 [&_h1]:clip-corner-1 [&_h1]:animate-pulse">
                      <ReactMarkdown>{displayedText}</ReactMarkdown>
                  </div>
                  <span className="inline-block w-2 h-4 bg-blob-500 ml-1 animate-blink align-middle"></span>
