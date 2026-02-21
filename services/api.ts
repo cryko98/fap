@@ -13,7 +13,8 @@ const getApiKey = (): string => {
 };
 
 const API_KEY = getApiKey();
-const GROQ_API_KEY = process.env.GROQ_API_KEY || (process as any).env?.VITE_GROQ_API_KEY || '';
+// Vite environment variables must be accessed via import.meta.env and prefixed with VITE_
+const GROQ_API_KEY = (import.meta as any).env?.VITE_GROQ_API_KEY || '';
 
 /**
  * Helper to call Groq API
