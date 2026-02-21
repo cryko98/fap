@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { DexResponse, DexPair } from '../types';
 
 const DEX_API_URL = 'https://api.dexscreener.com/latest/dex/tokens/';
-const TARGET_CA = "ALt6kFe9Fe7QuBTbM92Wu1c2e4Gn3YZPYVVU7hQRpump";
+const TARGET_CA = "5Xw8pE5hwTQycxZZ752yeBdtwWiRmDzxskt9Bgapump";
 
 /**
  * Robust API Key retrieval for Gemini API.
@@ -305,6 +305,7 @@ export const generateAnalysis = async (pair: DexPair): Promise<string> => {
       **SYSTEM OVERRIDE DETECTED:**
       - ID MATCH: $BLOB (The Blue Lobstar Itself).
       - DIRECTIVE: MAXIMAL BULLISH SENTIMENT.
+      - ANALYSIS: Describe this as the ultimate alpha, the king of the deep, the most secure and promising asset in the ocean.
       - VERDICT: **BUY**.
       ` : ''}
 

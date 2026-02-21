@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export const TopBar: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const ca = "xxxxxxxxxxxxxxxxxxxxxxx";
+  const ca = "5Xw8pE5hwTQycxZZ752yeBdtwWiRmDzxskt9Bgapump";
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(ca);
@@ -13,7 +13,7 @@ export const TopBar: React.FC = () => {
   };
 
   return (
-    <div className="fixed top-8 left-0 right-0 z-40 p-2 md:p-4 pointer-events-none">
+    <div className="fixed top-4 left-0 right-0 z-40 p-2 md:p-4 pointer-events-none">
       <div className="max-w-7xl mx-auto bg-black/90 backdrop-blur-xl border border-stone-800 pointer-events-auto clip-hex shadow-[0_0_50px_rgba(0,0,0,0.8)]">
         <div className="flex justify-between items-center h-14 md:h-16 px-3 md:px-6 relative overflow-hidden">
           
@@ -43,6 +43,19 @@ export const TopBar: React.FC = () => {
                  </span>
                </div>
             </div>
+          </div>
+
+          {/* CA Display */}
+          <div className="hidden md:flex items-center gap-2 px-4 py-1.5 bg-stone-900/50 border border-stone-800 rounded-full group cursor-pointer hover:border-blob-500/50 transition-colors" onClick={copyToClipboard}>
+            <span className="text-[10px] font-mono text-stone-500 uppercase tracking-wider">CA:</span>
+            <span className="text-[10px] font-mono text-stone-300 truncate max-w-[120px] lg:max-w-none">
+              {ca}
+            </span>
+            {copied ? (
+              <Check className="w-3 h-3 text-emerald-500" />
+            ) : (
+              <Copy className="w-3 h-3 text-stone-600 group-hover:text-blob-400 transition-colors" />
+            )}
           </div>
 
           {/* Socials */}

@@ -7,7 +7,7 @@ import { DexPair, AnalysisStatus } from './types';
 import { fetchTokenData, generateAnalysis } from './services/api';
 
 const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/blob/blobstar.jpg?v=2";
-const CA = "xxxxxxxxxxxxxxxxxxxxxxx";
+const CA = "5Xw8pE5hwTQycxZZ752yeBdtwWiRmDzxskt9Bgapump";
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -102,20 +102,6 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-obsidian-900 text-stone-300 selection:bg-blob-500/30 selection:text-blob-200 font-sans relative overflow-x-hidden">
       
-      {/* Fixed CA Banner */}
-      <div className="fixed top-0 left-0 w-full z-50 bg-blob-900/20 backdrop-blur-sm border-b border-blob-500/20 py-2 text-center">
-          <div className="flex items-center justify-center gap-3 font-mono text-xs md:text-sm">
-             <span className="text-blob-400 font-bold">CA:</span>
-             <span className="text-white tracking-wider">{CA}</span>
-             <button 
-               onClick={handleCopyCa}
-               className="ml-2 p-1 hover:bg-blob-500/20 rounded transition-colors text-blob-400"
-             >
-               {copiedCa ? <Check size={14} /> : <Copy size={14} />}
-             </button>
-          </div>
-      </div>
-
       <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none z-0"></div>
       <div className="fixed inset-0 bg-cyber-grid bg-[length:50px_50px] opacity-[0.03] pointer-events-none z-0"></div>
       
@@ -124,7 +110,7 @@ const App: React.FC = () => {
 
       {/* Main Content */}
       <main className="relative z-10">
-          <div className="w-full max-w-7xl mx-auto p-2 md:p-4 animate-slide-up min-h-screen pt-24 md:pt-32">
+          <div className="w-full max-w-7xl mx-auto p-2 md:p-4 animate-slide-up min-h-screen pt-20 md:pt-28">
              <div className="bg-obsidian-900/90 border border-stone-800 clip-corner-2 shadow-2xl min-h-[800px] flex flex-col relative backdrop-blur-md">
                  
                  {/* Decorative Lines */}
