@@ -9,7 +9,7 @@ import { DexPair, AnalysisStatus, View } from './types';
 import { fetchTokenData, generateAnalysis } from './services/api';
 
 const LOGO_URL = "https://wkkeyyrknmnynlcefugq.supabase.co/storage/v1/object/public/neww/ping%20(4).png";
-const CA = "ALt6kFe9Fe7QuBTbM92Wu1c2e4Gn3YZPYVVU7hQRpump";
+const CA = "xxxxxxxxxxxxxxxxxxxxxxx";
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.LANDING);
@@ -74,7 +74,7 @@ const App: React.FC = () => {
          
          <div className="w-32 h-32 md:w-40 md:h-40 mb-8 relative">
              <div className="absolute inset-0 border-2 border-stone-800 clip-corner-1"></div>
-             <div className="absolute inset-0 border-t-2 border-claw-500 rounded-sm animate-spin"></div>
+             <div className="absolute inset-0 border-t-2 border-blob-500 rounded-sm animate-spin"></div>
              <div className="absolute inset-2 bg-black clip-corner-1 flex items-center justify-center overflow-hidden">
                  <img src={LOGO_URL} className="w-full h-full object-cover opacity-80" />
              </div>
@@ -82,19 +82,19 @@ const App: React.FC = () => {
          
          <div className="text-center relative z-10">
             <h1 className="text-3xl md:text-4xl text-white font-black tracking-tighter mb-2 animate-glitch">
-              <span className="text-claw-500">Molt</span>GPT
+              <span className="text-blob-500">The Blue</span> Lobstar
             </h1>
-            <div className="flex items-center justify-center gap-2 text-[10px] text-claw-400 font-mono tracking-[0.3em]">
-               <span className="animate-blink">_</span> SYSTEM_BOOT_SEQ_V2.6
+            <div className="flex items-center justify-center gap-2 text-[10px] text-blob-400 font-mono tracking-[0.3em]">
+               <span className="animate-blink">_</span> INITIALIZING_OCEAN_PROTOCOLS
             </div>
          </div>
          
          <div className="absolute bottom-10 left-0 w-full px-8 md:px-12">
             <div className="h-0.5 bg-stone-900 w-full overflow-hidden">
-               <div className="h-full bg-claw-600 w-full animate-boot-bar"></div>
+               <div className="h-full bg-blob-600 w-full animate-boot-bar"></div>
             </div>
             <div className="flex justify-between mt-2 text-[8px] text-stone-600 font-mono uppercase">
-               <span>Loading Pincer Algorithms...</span>
+               <span>Calibrating Pinchers...</span>
                <span>100%</span>
             </div>
          </div>
@@ -114,23 +114,23 @@ const App: React.FC = () => {
              <div className="bg-obsidian-900/90 border border-stone-800 clip-corner-2 shadow-2xl min-h-[800px] flex flex-col relative backdrop-blur-md">
                  
                  {/* Decorative Lines */}
-                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-claw-600 to-transparent opacity-50"></div>
-                 <div className="absolute -left-2 top-20 w-1 h-20 bg-claw-600/30"></div>
+                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blob-600 to-transparent opacity-50"></div>
+                 <div className="absolute -left-2 top-20 w-1 h-20 bg-blob-600/30"></div>
 
                  {/* Terminal Header */}
                  <div className="p-4 md:p-8 border-b border-stone-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-black/40">
                     <div>
                         <h2 className="text-xl md:text-2xl text-white font-black italic tracking-tighter flex items-center gap-3">
-                           <Terminal className="text-claw-500" /> 
-                           MARKET_SCANNER <span className="text-xs align-top text-stone-500 font-normal mt-1">V.2.6</span>
+                           <Terminal className="text-blob-500" /> 
+                           DEEP_SEA_SCANNER <span className="text-xs align-top text-stone-500 font-normal mt-1">V.3.0</span>
                         </h2>
                         <p className="text-xs text-stone-500 font-mono mt-2 flex items-center gap-2">
-                           <span className="w-2 h-2 bg-claw-500 rounded-full animate-pulse"></span>
-                           TARGET ACQUISITION MODE ACTIVE
+                           <span className="w-2 h-2 bg-blob-500 rounded-full animate-pulse"></span>
+                           HYDRO-SENSORS ACTIVE
                         </p>
                     </div>
                     <div className="flex gap-2 md:gap-4">
-                        <div className="px-2 md:px-3 py-1 bg-claw-900/20 border border-claw-900/50 text-[10px] text-claw-400 font-mono">
+                        <div className="px-2 md:px-3 py-1 bg-blob-900/20 border border-blob-900/50 text-[10px] text-blob-400 font-mono">
                            SECURE
                         </div>
                         <div className="px-2 md:px-3 py-1 bg-stone-900 border border-stone-800 text-[10px] text-stone-500 font-mono">
@@ -142,7 +142,7 @@ const App: React.FC = () => {
                  <div className="p-3 md:p-6 lg:p-8 flex-1 flex flex-col">
                     {/* Search Bar */}
                     <form onSubmit={handleSearch} className="max-w-3xl mx-auto w-full mb-8 relative group z-10">
-                       <div className="absolute -inset-1 bg-gradient-to-r from-claw-600 to-stone-800 rounded opacity-20 group-hover:opacity-40 transition duration-500 blur-sm"></div>
+                       <div className="absolute -inset-1 bg-gradient-to-r from-blob-600 to-stone-800 rounded opacity-20 group-hover:opacity-40 transition duration-500 blur-sm"></div>
                        <div className="relative flex flex-col sm:flex-row bg-black clip-corner-1 border border-stone-700">
                          <div className="pl-4 flex items-center justify-center text-stone-500 py-2 sm:py-0">
                             <Search size={18} />
@@ -157,7 +157,7 @@ const App: React.FC = () => {
                          <button 
                            type="submit"
                            disabled={status === AnalysisStatus.FETCHING_DATA || status === AnalysisStatus.ANALYZING}
-                           className="bg-claw-700 hover:bg-claw-600 text-white px-8 py-3 md:py-0 font-bold font-mono text-xs tracking-widest disabled:opacity-50 transition-colors clip-hex mr-1 my-1"
+                           className="bg-blob-700 hover:bg-blob-600 text-white px-8 py-3 md:py-0 font-bold font-mono text-xs tracking-widest disabled:opacity-50 transition-colors clip-hex mr-1 my-1"
                          >
                            {status === AnalysisStatus.FETCHING_DATA ? 'SCANNING' : 'EXECUTE'}
                          </button>
@@ -189,7 +189,7 @@ const App: React.FC = () => {
                                <div className="text-center sm:text-left">
                                   <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase">{data.baseToken.name}</h2>
                                   <div className="flex items-center justify-center sm:justify-start gap-4 mt-1">
-                                      <span className="text-claw-500 font-mono text-sm font-bold tracking-widest">$ {data.baseToken.symbol}</span>
+                                      <span className="text-blob-500 font-mono text-sm font-bold tracking-widest">$ {data.baseToken.symbol}</span>
                                       <span className="text-stone-600 text-[10px] font-mono border border-stone-800 px-2 py-0.5 rounded-full">SOLANA_L1</span>
                                   </div>
                                </div>
@@ -199,250 +199,100 @@ const App: React.FC = () => {
                             </div>
                          </div>
 
-                         {/* Chart Frame */}
-                         <div className="lg:col-span-7 h-[350px] md:h-[500px] border border-stone-800 bg-black/80 relative group clip-corner-1">
-                             <div className="absolute inset-0 flex items-center justify-center text-stone-700 font-mono text-xs uppercase tracking-widest pointer-events-none z-0">
-                                Loading Chart Stream...
+                         {/* Chart */}
+                         <div className="lg:col-span-8 bg-black/50 border border-stone-800 p-1 clip-corner-1 min-h-[500px] relative">
+                             <div className="absolute top-2 left-2 z-10 flex gap-2">
+                                <div className="px-2 py-1 bg-blob-900/30 border border-blob-500/30 text-[10px] text-blob-400 font-mono">LIVE_FEED</div>
                              </div>
-                             <iframe
+                             <iframe 
                                src={`https://dexscreener.com/solana/${data.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
-                               className="w-full h-full border-0 relative z-10 opacity-90 group-hover:opacity-100 transition-opacity"
+                               className="w-full h-full"
+                               style={{ border: 0 }}
                              ></iframe>
-                             
-                             {/* Overlay decorations */}
-                             <div className="absolute top-0 left-0 p-2 z-20 pointer-events-none">
-                                <div className="text-[9px] text-claw-500 font-mono bg-black/80 px-1 border border-claw-900/50">LIVE_FEED</div>
-                             </div>
                          </div>
 
-                         {/* AI Analysis */}
-                         <div className="lg:col-span-5 h-[400px] md:h-[500px]">
-                            <AnalysisBox analysis={analysis} status={status} />
+                         {/* AI Analysis Terminal */}
+                         <div className="lg:col-span-4 bg-black border border-stone-800 clip-corner-1 flex flex-col relative overflow-hidden">
+                             <div className="p-3 border-b border-stone-800 bg-stone-950 flex justify-between items-center">
+                                <span className="text-xs font-mono text-blob-500 font-bold flex items-center gap-2">
+                                   <Hexagon size={12} /> BLOB_CORE
+                                </span>
+                                <div className="w-2 h-2 bg-blob-500 rounded-full animate-pulse"></div>
+                             </div>
+                             <div className="flex-1 p-4 font-mono text-xs leading-relaxed overflow-y-auto custom-scrollbar relative">
+                                {status === AnalysisStatus.ANALYZING ? (
+                                   <div className="space-y-2 text-blob-400">
+                                      <p className="animate-pulse">{'>'} ESTABLISHING_UPLINK...</p>
+                                      <p className="animate-pulse delay-75">{'>'} PARSING_ON_CHAIN_DATA...</p>
+                                      <p className="animate-pulse delay-150">{'>'} CALCULATING_RISK_VECTORS...</p>
+                                      <p className="animate-pulse delay-300">{'>'} CONSULTING_THE_BLUE_ORACLE...</p>
+                                   </div>
+                                ) : (
+                                   <div className="relative z-10">
+                                      <div className="text-stone-500 mb-4 border-b border-stone-800 pb-2">
+                                         TERMINAL ACCESS GRANTED. **ENACTING PROTOCOL: BLOB_SENTINEL_
+                                      </div>
+                                      <AnalysisBox analysis={analysis} />
+                                   </div>
+                                )}
+                                {/* Scanline effect */}
+                                <div className="absolute inset-0 bg-repeat-y pointer-events-none opacity-5 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+                             </div>
                          </div>
                       </div>
                     ) : (
-                       <div className="flex-1 flex flex-col items-center justify-center text-stone-700 opacity-40">
-                           <div className="w-24 h-24 md:w-32 md:h-32 border border-dashed border-stone-700 rounded-full flex items-center justify-center mb-6 animate-spin-slow">
-                               <Terminal size={48} />
-                           </div>
-                           <p className="font-mono text-xs md:text-sm tracking-[0.2em]">AWAITING TARGET INPUT</p>
-                           <p className="text-[10px] font-mono mt-2 text-stone-800">SYSTEM IDLE</p>
+                       <div className="flex-1 flex flex-col items-center justify-center text-stone-700 opacity-50">
+                          <Activity size={64} className="mb-4 opacity-20" />
+                          <p className="font-mono text-xs tracking-widest">AWAITING_TARGET_COORDINATES</p>
                        </div>
                     )}
                  </div>
              </div>
           </div>
         );
-      case View.LANDING:
       default:
         return (
-          <div className="w-full min-h-screen flex flex-col relative z-10 pt-24 md:pt-32 px-4 overflow-x-hidden">
-             
-             {/* Center Hero */}
-             <div className="max-w-4xl mx-auto w-full text-center relative z-10 mb-12 md:mb-32">
-                
-                {/* Background Logo */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] md:w-[600px] pointer-events-none z-0 opacity-20 blur-sm mix-blend-screen animate-pulse-slow">
-                   <img src={LOGO_URL} className="w-full h-full object-contain" />
-                </div>
-
-                <div className="inline-flex items-center gap-2 mb-6 md:mb-8 px-4 md:px-6 py-2 border-x border-claw-500/30 bg-black/60 text-claw-400 text-[9px] md:text-[10px] font-mono tracking-[0.3em] uppercase animate-fade-in backdrop-blur-md relative z-10">
-                   <Zap size={10} /> Pincer Algorithms Online
-                </div>
-                
-                <h1 className="text-5xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-6 md:mb-8 leading-[0.9] relative animate-slide-up select-none z-10">
-                   <span className="text-claw-500 filter drop-shadow-[0_0_25px_rgba(220,38,38,0.4)]">Molt</span>
-                   <span className="text-white">GPT</span>
-                </h1>
-                
-                <p className="max-w-2xl mx-auto text-stone-300 font-mono text-xs md:text-base leading-relaxed mb-6 md:mb-8 animate-slide-up [animation-delay:0.1s] bg-black/40 backdrop-blur-sm p-4 border-l-2 border-claw-500 relative z-10">
-                   A next-generation <span className="text-claw-400 font-bold">Vibe Coder AI Agent</span>. 
-                   We build autonomous web apps instantly, analyze Solana memecoins with surgical precision, and generate high-fidelity AI images.
-                   The singularity is here.
-                </p>
-
-                {/* CA Display */}
-                <div 
-                  onClick={handleCopyCa}
-                  className="mx-auto mb-8 md:mb-12 max-w-full md:max-w-xl cursor-pointer group animate-slide-up [animation-delay:0.15s] relative z-10"
-                >
-                    <div className="bg-stone-900/40 border border-stone-800 hover:border-claw-500/50 backdrop-blur-md rounded-full px-4 py-2 flex items-center justify-between gap-4 transition-all hover:bg-stone-900/60 shadow-lg">
-                       <span className="text-claw-500 font-mono text-[10px] font-bold tracking-widest uppercase shrink-0">CA</span>
-                       <code className="text-stone-300 font-mono text-[10px] md:text-xs truncate">
-                         {CA}
-                       </code>
-                       <div className="flex items-center justify-center w-6 h-6 rounded-full bg-black border border-stone-700 group-hover:border-claw-500 transition-colors shrink-0">
-                          {copiedCa ? <Check size={12} className="text-green-500" /> : <Copy size={12} className="text-stone-400 group-hover:text-claw-500" />}
-                       </div>
-                    </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center animate-slide-up [animation-delay:0.2s] relative z-10">
-                   <button 
-                     onClick={() => setCurrentView(View.VIBE_CODER)}
-                     className="relative group bg-white text-black px-6 md:px-10 py-4 md:py-5 font-bold font-mono text-xs md:text-sm tracking-widest clip-corner-1 hover:bg-claw-100 transition-all hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.3)] w-full sm:w-auto"
-                   >
-                      <div className="flex items-center justify-center gap-3 relative z-10">
-                        <Code size={18} /> LAUNCH VIBE CODER
-                      </div>
-                   </button>
-                   
-                   <button 
-                     onClick={() => setCurrentView(View.TERMINAL)}
-                     className="relative group bg-black/80 text-white px-6 md:px-10 py-4 md:py-5 font-bold font-mono text-xs md:text-sm tracking-widest border border-stone-600 clip-corner-1 hover:border-claw-500 transition-all hover:bg-claw-900/20 w-full sm:w-auto"
-                   >
-                      <div className="flex items-center justify-center gap-3 relative z-10">
-                        <Terminal size={18} /> TERMINAL_ACCESS
-                      </div>
-                   </button>
-                </div>
-             </div>
-
-             {/* Feature Cards - Updated to show all 4 tools */}
-             <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-20 md:mb-32 animate-slide-up [animation-delay:0.3s] relative z-10">
-                
-                {/* Vibe Coder */}
-                <div onClick={() => setCurrentView(View.VIBE_CODER)} className="cursor-pointer bg-obsidian-900/90 border border-stone-800 p-6 md:p-8 clip-corner-2 relative overflow-hidden group hover:border-claw-500/50 transition-colors backdrop-blur-md">
-                   <div className="absolute top-0 right-0 w-40 h-40 bg-claw-900/10 blur-[60px] rounded-full group-hover:bg-claw-600/20 transition-colors"></div>
-                   <div className="flex items-center gap-3 mb-4 md:mb-6 relative z-10">
-                      <div className="w-10 h-10 bg-black border border-claw-900 flex items-center justify-center text-claw-500 clip-hex">
-                         <Code size={20} />
-                      </div>
-                      <div>
-                        <h3 className="text-base md:text-lg font-bold text-white font-mono tracking-tight uppercase">Vibe Coder</h3>
-                        <div className="h-0.5 w-12 bg-claw-600 mt-1"></div>
-                      </div>
-                   </div>
-                   <p className="text-stone-400 text-xs md:text-sm leading-relaxed mb-4 md:mb-6 font-mono relative z-10">
-                      Autonomous frontend engineer. Describe a web app and watch it build itself instantly. Supports iterative updates with live preview.
-                   </p>
-                </div>
-
-                {/* Market Scanner */}
-                <div onClick={() => setCurrentView(View.TERMINAL)} className="cursor-pointer bg-obsidian-900/90 border border-stone-800 p-6 md:p-8 clip-corner-2 relative overflow-hidden group hover:border-claw-500/50 transition-colors backdrop-blur-md">
-                   <div className="absolute top-0 right-0 w-40 h-40 bg-claw-900/10 blur-[60px] rounded-full group-hover:bg-claw-600/20 transition-colors"></div>
-                   <div className="flex items-center gap-3 mb-4 md:mb-6 relative z-10">
-                      <div className="w-10 h-10 bg-black border border-claw-900 flex items-center justify-center text-claw-500 clip-hex">
-                         <Terminal size={20} />
-                      </div>
-                      <div>
-                        <h3 className="text-base md:text-lg font-bold text-white font-mono tracking-tight uppercase">Market Scanner</h3>
-                        <div className="h-0.5 w-12 bg-claw-600 mt-1"></div>
-                      </div>
-                   </div>
-                   <p className="text-stone-400 text-xs md:text-sm leading-relaxed mb-4 md:mb-6 font-mono relative z-10">
-                      Deep analysis of Solana tokens. Enter a CA to get liquidity depth, volume analysis, and AI risk assessment.
-                   </p>
-                </div>
-
-                {/* Visual Synthesis */}
-                <div onClick={() => setCurrentView(View.IMAGEN)} className="cursor-pointer bg-obsidian-900/90 border border-stone-800 p-6 md:p-8 clip-corner-2 relative overflow-hidden group hover:border-claw-500/50 transition-colors backdrop-blur-md">
-                   <div className="absolute top-0 right-0 w-40 h-40 bg-claw-900/10 blur-[60px] rounded-full group-hover:bg-claw-600/20 transition-colors"></div>
-                   <div className="flex items-center gap-3 mb-4 md:mb-6 relative z-10">
-                      <div className="w-10 h-10 bg-black border border-claw-900 flex items-center justify-center text-claw-500 clip-hex">
-                         <ImageIcon size={20} />
-                      </div>
-                      <div>
-                        <h3 className="text-base md:text-lg font-bold text-white font-mono tracking-tight uppercase">Visual Synthesis</h3>
-                        <div className="h-0.5 w-12 bg-claw-600 mt-1"></div>
-                      </div>
-                   </div>
-                   <p className="text-stone-400 text-xs md:text-sm leading-relaxed mb-4 md:mb-6 font-mono relative z-10">
-                      Generate high-fidelity AI images and memes using the Molt-V2-IMG model (Gemini 2.5).
-                   </p>
-                </div>
-
-             </div>
-
-             {/* Bottom Tech Specs */}
-             <div className="max-w-4xl mx-auto w-full border-t border-stone-800 pt-8 md:pt-12 pb-20 relative z-10">
-                <div className="flex justify-between items-end mb-6 md:mb-8">
-                   <h3 className="text-stone-500 font-mono text-[10px] md:text-xs tracking-[0.3em] uppercase">Architecture Overview</h3>
-                   <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-claw-600"></div>
-                      <div className="w-2 h-2 bg-stone-800"></div>
-                      <div className="w-2 h-2 bg-stone-800"></div>
-                   </div>
-                </div>
-                
-                <div className="flex flex-col sm:flex-row flex-wrap justify-center md:justify-between gap-6 md:gap-8 opacity-80 hover:opacity-100 transition-opacity">
-                   <div className="flex items-center gap-4 group cursor-help">
-                      <div className="p-3 bg-stone-900 border border-stone-700 group-hover:border-claw-500 transition-colors">
-                        <Hexagon size={20} className="text-stone-400 group-hover:text-claw-500" />
-                      </div>
-                      <div>
-                         <div className="text-xs font-bold text-white tracking-widest">SOLANA L1</div>
-                         <div className="text-[9px] text-stone-500 font-mono">INFRASTRUCTURE</div>
-                      </div>
-                   </div>
-                   <div className="flex items-center gap-4 group cursor-help">
-                      <div className="p-3 bg-stone-900 border border-stone-700 group-hover:border-claw-500 transition-colors">
-                        <BarChart3 size={20} className="text-stone-400 group-hover:text-claw-500" />
-                      </div>
-                      <div>
-                         <div className="text-xs font-bold text-white tracking-widest">DEXSCREENER</div>
-                         <div className="text-[9px] text-stone-500 font-mono">DATA ORACLE</div>
-                      </div>
-                   </div>
-                   <div className="flex items-center gap-4 group cursor-help">
-                      <div className="p-3 bg-stone-900 border border-stone-700 group-hover:border-claw-500 transition-colors">
-                        <Cpu size={20} className="text-stone-400 group-hover:text-claw-500" />
-                      </div>
-                      <div>
-                         <div className="text-xs font-bold text-white tracking-widest">NEURAL CORE</div>
-                         <div className="text-[9px] text-stone-500 font-mono">GEMINI ENGINE</div>
-                      </div>
-                   </div>
-                </div>
-             </div>
-          </div>
+           <div className="min-h-screen flex items-center justify-center text-white">
+              <div className="text-center">
+                 <h1 className="text-4xl font-black mb-4">SYSTEM_ERROR</h1>
+                 <p className="font-mono text-stone-500">VIEW_MODULE_NOT_FOUND</p>
+                 <button onClick={() => setCurrentView(View.TERMINAL)} className="mt-8 px-6 py-2 border border-blob-500 text-blob-500 font-mono hover:bg-blob-500 hover:text-white transition-colors">
+                    RETURN_TO_TERMINAL
+                 </button>
+              </div>
+           </div>
         );
     }
   };
 
   return (
-    <div className="min-h-screen font-sans bg-black text-stone-300 relative selection:bg-claw-900 selection:text-white overflow-hidden scroll-smooth">
+    <div className="min-h-screen bg-obsidian-900 text-stone-300 selection:bg-blob-500/30 selection:text-blob-200 font-sans relative overflow-x-hidden">
       
-      {/* Global Background Elements */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* Moving Grid */}
-        <div className="absolute inset-0 bg-cyber-grid bg-[length:50px_50px] opacity-[0.07] animate-grid transform perspective-1000 rotate-x-60"></div>
-        
-        {/* Static Noise */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay"></div>
-        
-        {/* Glow Orbs */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] md:w-[1000px] h-[600px] bg-claw-900/10 blur-[120px] rounded-full animate-pulse-slow"></div>
-        <div className="absolute bottom-0 right-0 w-[400px] md:w-[800px] h-[800px] bg-obsidian-800/40 blur-[100px] rounded-full"></div>
-        
-        {/* Scanlines */}
-        <div className="absolute inset-0 bg-transparent bg-[linear-gradient(to_bottom,rgba(0,0,0,0)_50%,rgba(0,0,0,0.4)_50%)] bg-[length:100%_4px] z-50 opacity-20 pointer-events-none"></div>
+      {/* Fixed CA Banner */}
+      <div className="fixed top-0 left-0 w-full z-50 bg-blob-900/20 backdrop-blur-sm border-b border-blob-500/20 py-2 text-center">
+          <div className="flex items-center justify-center gap-3 font-mono text-xs md:text-sm">
+             <span className="text-blob-400 font-bold">CA:</span>
+             <span className="text-white tracking-wider">{CA}</span>
+             <button 
+               onClick={handleCopyCa}
+               className="ml-2 p-1 hover:bg-blob-500/20 rounded transition-colors text-blob-400"
+             >
+               {copiedCa ? <Check size={14} /> : <Copy size={14} />}
+             </button>
+          </div>
       </div>
 
-      <TopBar currentView={currentView} setView={setCurrentView} />
+      <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none z-0"></div>
+      <div className="fixed inset-0 bg-cyber-grid bg-[length:50px_50px] opacity-[0.03] pointer-events-none z-0"></div>
+      
+      {/* Navigation */}
+      <TopBar currentView={currentView} setCurrentView={setCurrentView} />
 
-      <main className="relative z-10 flex flex-col min-h-screen">
-        {renderContent()}
+      {/* Main Content */}
+      <main className="relative z-10">
+         {renderContent()}
       </main>
 
-      {/* Persistent Footer */}
-      <footer className="border-t border-stone-900 bg-black/90 backdrop-blur py-4 relative z-10 mt-auto">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-               <span className="w-2 h-2 bg-green-500 rounded-full animate-blink"></span>
-               <p className="text-stone-600 text-[10px] font-mono uppercase tracking-widest">
-                 SYSTEM STATUS: OPTIMAL
-               </p>
-            </div>
-            <div className="flex gap-6">
-                <span className="text-stone-800 text-[10px] font-mono uppercase">Node: US-EAST-1</span>
-                <span className="text-stone-800 text-[10px] font-mono uppercase">Ver: 2.6.1</span>
-            </div>
-            <p className="text-stone-700 text-[10px] font-mono">
-              © 2026 MOLT PROTOCOL | $<span className="text-claw-500">Molt</span>GPT
-            </p>
-        </div>
-      </footer>
     </div>
   );
 };

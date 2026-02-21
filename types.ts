@@ -59,8 +59,5 @@ export enum AnalysisStatus {
 }
 
 export enum View {
-  LANDING,
-  VIBE_CODER,
-  TERMINAL,
-  IMAGEN
+  TERMINAL
 }

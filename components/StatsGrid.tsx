@@ -25,7 +25,7 @@ const TimeframeRow = ({ label, change, vol, buys, sells }: { label: string, chan
   const buyPercentage = total > 0 ? (buys / total) * 100 : 0;
   
   return (
-    <tr className="border-b border-claw-900/20 last:border-0 hover:bg-claw-900/5 transition-colors group">
+    <tr className="border-b border-blob-900/20 last:border-0 hover:bg-blob-900/5 transition-colors group">
       <td className="py-3 px-4 font-mono text-[10px] md:text-xs font-bold text-stone-500 uppercase tracking-wider">{label}</td>
       <td className={`py-3 px-4 font-mono text-xs font-bold ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
         <div className="flex items-center gap-1">
@@ -42,7 +42,7 @@ const TimeframeRow = ({ label, change, vol, buys, sells }: { label: string, chan
            </div>
            
            <div className="w-full h-1 bg-obsidian-800 rounded-sm overflow-hidden flex relative">
-             <div className="h-full bg-claw-600 shadow-[0_0_5px_rgba(220,38,38,0.5)]" style={{ width: `${buyPercentage}%` }}></div>
+             <div className="h-full bg-blob-600 shadow-[0_0_5px_rgba(14,165,233,0.5)]" style={{ width: `${buyPercentage}%` }}></div>
            </div>
         </div>
       </td>
@@ -63,11 +63,11 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           
           {/* Price Card */}
-          <div className="bg-obsidian-900/80 border border-claw-900/30 p-4 rounded-sm relative overflow-hidden group">
+          <div className="bg-obsidian-900/80 border border-blob-900/30 p-4 rounded-sm relative overflow-hidden group">
              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-transform">
-               <DollarSign size={64} className="text-claw-700" />
+               <DollarSign size={64} className="text-blob-700" />
              </div>
-             <p className="text-[10px] font-bold uppercase tracking-widest text-claw-500 mb-2">Asset Price</p>
+             <p className="text-[10px] font-bold uppercase tracking-widest text-blob-500 mb-2">Asset Price</p>
              <p className="text-xl md:text-2xl font-mono font-black text-white">
                 {formatPrice(pair.priceUsd)}
              </p>
@@ -79,30 +79,30 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
           </div>
 
           {/* Market Cap */}
-          <div className="bg-obsidian-900/80 border border-claw-900/30 p-4 rounded-sm relative overflow-hidden group">
+          <div className="bg-obsidian-900/80 border border-blob-900/30 p-4 rounded-sm relative overflow-hidden group">
              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-transform">
-               <Activity size={64} className="text-claw-700" />
+               <Activity size={64} className="text-blob-700" />
              </div>
-             <p className="text-[10px] font-bold uppercase tracking-widest text-claw-500 mb-2">Valuation (MC)</p>
+             <p className="text-[10px] font-bold uppercase tracking-widest text-blob-500 mb-2">Valuation (MC)</p>
              <p className="text-xl font-mono font-black text-white">{formatCurrency(mcap)}</p>
              <p className="text-[9px] text-stone-600 font-mono mt-1">FDV: {formatCurrency(pair.fdv)}</p>
           </div>
 
           {/* Liquidity */}
-          <div className="bg-obsidian-900/80 border border-claw-900/30 p-4 rounded-sm relative overflow-hidden group">
+          <div className="bg-obsidian-900/80 border border-blob-900/30 p-4 rounded-sm relative overflow-hidden group">
              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-transform">
-               <Layers size={64} className="text-claw-700" />
+               <Layers size={64} className="text-blob-700" />
              </div>
-             <p className="text-[10px] font-bold uppercase tracking-widest text-claw-500 mb-2">Liquidity Depth</p>
+             <p className="text-[10px] font-bold uppercase tracking-widest text-blob-500 mb-2">Liquidity Depth</p>
              <p className="text-xl font-mono font-black text-white">{formatCurrency(pair.liquidity.usd)}</p>
           </div>
 
           {/* Age */}
-          <div className="bg-obsidian-900/80 border border-claw-900/30 p-4 rounded-sm relative overflow-hidden group">
+          <div className="bg-obsidian-900/80 border border-blob-900/30 p-4 rounded-sm relative overflow-hidden group">
              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-transform">
-               <Clock size={64} className="text-claw-700" />
+               <Clock size={64} className="text-blob-700" />
              </div>
-             <p className="text-[10px] font-bold uppercase tracking-widest text-claw-500 mb-2">Inception Date</p>
+             <p className="text-[10px] font-bold uppercase tracking-widest text-blob-500 mb-2">Inception Date</p>
              <p className="text-sm font-mono font-bold text-white mt-1">
                 {new Date(pair.pairCreatedAt).toLocaleDateString()}
              </p>
@@ -110,17 +110,17 @@ export const StatsGrid: React.FC<StatsGridProps> = ({ pair }) => {
        </div>
 
        {/* Detailed Data Table */}
-       <div className="bg-obsidian-900/80 border border-claw-900/30 rounded-sm overflow-hidden backdrop-blur-sm">
-         <div className="px-4 py-3 bg-obsidian-950 border-b border-claw-900/30 flex items-center justify-between">
+       <div className="bg-obsidian-900/80 border border-blob-900/30 rounded-sm overflow-hidden backdrop-blur-sm">
+         <div className="px-4 py-3 bg-obsidian-950 border-b border-blob-900/30 flex items-center justify-between">
             <div className="flex items-center gap-2">
-                <BarChart2 size={16} className="text-claw-500" />
+                <BarChart2 size={16} className="text-blob-500" />
                 <h3 className="text-[10px] font-bold text-stone-300 uppercase tracking-widest">Momentum Matrix</h3>
             </div>
          </div>
          <div className="overflow-x-auto">
            <table className="w-full text-left border-collapse">
              <thead>
-               <tr className="bg-obsidian-950 border-b border-claw-900/20">
+               <tr className="bg-obsidian-950 border-b border-blob-900/20">
                  <th className="py-2 px-4 text-[9px] uppercase text-stone-500 font-bold tracking-wider">Interval</th>
                  <th className="py-2 px-4 text-[9px] uppercase text-stone-500 font-bold tracking-wider">Net Change</th>
                  <th className="py-2 px-4 text-[9px] uppercase text-stone-500 font-bold tracking-wider">Volume</th>

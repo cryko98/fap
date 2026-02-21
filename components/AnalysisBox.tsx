@@ -18,11 +18,11 @@ interface AnalysisBoxProps {
 }
 
 const INIT_STEPS = [
-  "Initializing Neural Link...",
-  "Accessing Global Market Database (2026)...",
-  "Scanning Blockchain Ledger...",
-  "Calculating Predictive Outcomes...",
-  "Synthesizing Strategic Verdict..."
+  "Calibrating Hydro-Sensors...",
+  "Scanning Ocean Floor (Solana L1)...",
+  "Detecting Whale Movements...",
+  "Analyzing Bubble Patterns...",
+  "Preparing Pinchers..."
 ];
 
 export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) => {
@@ -64,22 +64,22 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
   if (status === AnalysisStatus.IDLE || status === AnalysisStatus.ERROR) return null;
 
   return (
-    <div className="w-full h-full bg-black border border-claw-900/50 flex flex-col shadow-[0_0_30px_rgba(220,38,38,0.1)]">
+    <div className="w-full h-full bg-black border border-blob-900/50 flex flex-col shadow-[0_0_30px_rgba(14,165,233,0.1)]">
       
       {/* Decorative Grid Background */}
       <div className="absolute inset-0 opacity-10 bg-grid-pattern pointer-events-none"></div>
 
       {/* Header */}
-      <div className="bg-obsidian-900 px-4 py-2 border-b border-claw-900/30 flex items-center justify-between flex-shrink-0 z-30">
+      <div className="bg-obsidian-900 px-4 py-2 border-b border-blob-900/30 flex items-center justify-between flex-shrink-0 z-30">
         <div className="flex items-center gap-2">
-            <Cpu size={14} className="text-claw-500 animate-pulse" />
+            <Cpu size={14} className="text-blob-500 animate-pulse" />
             <span className="font-mono text-xs text-white tracking-widest">
-               <span className="text-claw-500">MOLT</span>GPT_CORE
+               <span className="text-blob-500">BLOB</span>_CORE
             </span>
         </div>
-        <div className="flex items-center gap-2 px-2 py-0.5 bg-claw-900/20 border border-claw-900/50 rounded">
-             <span className="w-1.5 h-1.5 bg-claw-500 rounded-full animate-blink"></span>
-             <span className="text-[9px] text-claw-400 font-mono">LIVE_FEED</span>
+        <div className="flex items-center gap-2 px-2 py-0.5 bg-blob-900/20 border border-blob-900/50 rounded">
+             <span className="w-1.5 h-1.5 bg-blob-500 rounded-full animate-blink"></span>
+             <span className="text-[9px] text-blob-400 font-mono">LIVE_FEED</span>
         </div>
       </div>
       
@@ -88,7 +88,7 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
             
             {/* Scanline */}
             <div className="pointer-events-none absolute inset-0 w-full h-full overflow-hidden z-0 opacity-10">
-                <div className="w-full h-0.5 bg-claw-500 absolute top-0 animate-scanline blur-[1px]"></div>
+                <div className="w-full h-0.5 bg-blob-500 absolute top-0 animate-scanline blur-[1px]"></div>
             </div>
 
             {/* Loading State */}
@@ -97,34 +97,34 @@ export const AnalysisBox: React.FC<AnalysisBoxProps> = ({ analysis, status }) =>
                  <div className="w-full max-w-sm font-mono text-xs">
                     {INIT_STEPS.map((step, index) => (
                       <div key={index} className={`flex items-center gap-3 mb-2 transition-all duration-100 ${index > initStep ? 'opacity-20' : 'opacity-100'}`}>
-                         <span className={`text-[10px] ${index === initStep ? 'text-claw-500' : 'text-stone-600'}`}>
+                         <span className={`text-[10px] ${index === initStep ? 'text-blob-500' : 'text-stone-600'}`}>
                             {index === initStep ? '>' : '#'}
                          </span>
-                         <span className={index === initStep ? 'text-claw-400 font-bold' : 'text-stone-500'}>
+                         <span className={index === initStep ? 'text-blob-400 font-bold' : 'text-stone-500'}>
                            {step}
                          </span>
                       </div>
                     ))}
                     <div className="mt-6 h-0.5 w-full bg-obsidian-800">
-                        <div className="h-full bg-claw-600 animate-[chart-flow_1s_ease-in-out_infinite]" style={{width: '50%'}}></div>
+                        <div className="h-full bg-blob-600 animate-[chart-flow_1s_ease-in-out_infinite]" style={{width: '50%'}}></div>
                     </div>
                  </div>
               </div>
             ) : (
               /* Analysis Text */
               <div className="font-mono text-stone-300 text-xs md:text-sm leading-relaxed relative z-20">
-                 <div className="prose prose-invert prose-p:my-2 prose-headings:text-claw-500 prose-headings:font-bold prose-headings:text-sm prose-strong:text-claw-400 prose-strong:font-normal max-w-none">
+                 <div className="prose prose-invert prose-p:my-2 prose-headings:text-blob-500 prose-headings:font-bold prose-headings:text-sm prose-strong:text-blob-400 prose-strong:font-normal max-w-none">
                      <ReactMarkdown>{displayedText}</ReactMarkdown>
                  </div>
-                 <span className="inline-block w-2 h-4 bg-claw-500 ml-1 animate-blink align-middle"></span>
+                 <span className="inline-block w-2 h-4 bg-blob-500 ml-1 animate-blink align-middle"></span>
               </div>
             )}
         </div>
       </div>
       
       {/* Footer */}
-      <div className="bg-obsidian-950 px-4 py-1 border-t border-claw-900/30 flex justify-between items-center text-[9px] text-stone-600 font-mono flex-shrink-0 z-30">
-         <span>SENTINEL_ID: MOLT-8821</span>
+      <div className="bg-obsidian-950 px-4 py-1 border-t border-blob-900/30 flex justify-between items-center text-[9px] text-stone-600 font-mono flex-shrink-0 z-30">
+         <span>SENTINEL_ID: BLOB-8821</span>
          <span>ENCRYPTION: AES-256</span>
       </div>
     </div>
